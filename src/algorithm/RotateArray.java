@@ -29,4 +29,19 @@ public class RotateArray {
         nums[i] = nums[j];
         nums[j] = temp;
     }
+
+    public void rotateMy(int[] nums,int k){
+        if (nums == null || nums.length == 0 || k == 0)
+            return;
+        k = k % nums.length;
+        for(int i = 0; i < nums.length / 2; i++){
+            swap(nums,i,nums.length - 1 - i);
+        }
+        for(int i = 0; i < k / 2; i++){
+            swap(nums,i,k - 1 - i);
+        }
+        for(int i = k; i < (nums.length + k) / 2; i++){
+            swap(nums,i,nums.length + k - i - 1);
+        }
+    }
 }
