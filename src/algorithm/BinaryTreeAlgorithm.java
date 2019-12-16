@@ -3,6 +3,9 @@ package algorithm;
 
 import data.TreeNode;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * created by Sven
  * on 2019-12-14
@@ -73,5 +76,33 @@ public class BinaryTreeAlgorithm {
         if(root.left == null && root.right == null)
             return 1;
         return Math.max(maxDepth(root.left),maxDepth(root.right)) + 1;
+    }
+
+    /**
+     * created by Sven
+     * on 2019-12-14
+     *
+     * 二叉树的层次遍历
+     *
+     * 给定一个二叉树，返回其节点值自底向上的层次遍历。 （即按从叶子节点所在层到根节点所在的层，逐层从左向右遍历）
+     */
+    public List<List<Integer>> levelOrderBottom(TreeNode root){
+        List<List<Integer>> ans = new ArrayList<>();
+        DFS(root,0,ans);
+        return ans;
+    }
+
+    private void DFS(TreeNode root,int level,List<List<Integer>> ans){
+        if(root == null){
+            return;
+        }
+
+        //当前层如果还没有元素，先new一个空列表
+        if(ans.size() <= level){
+            ans.add(0,new ArrayList<>());
+        }
+        ans.get(ans.size() - 1 - level).add(root.val);
+        DFS(root.left,level + 1,ans);
+        DFS(root.right,level + 1,ans);
     }
 }

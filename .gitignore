@@ -7,6 +7,8 @@
 
 # Java class 文件
 *.class
+.idea/
+
 
 # Generated 文件夹
 bin/
