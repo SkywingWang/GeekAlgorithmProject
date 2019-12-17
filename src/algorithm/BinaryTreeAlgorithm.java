@@ -80,7 +80,7 @@ public class BinaryTreeAlgorithm {
 
     /**
      * created by Sven
-     * on 2019-12-14
+     * on 2019-12-16
      *
      * 二叉树的层次遍历
      *
@@ -104,5 +104,36 @@ public class BinaryTreeAlgorithm {
         ans.get(ans.size() - 1 - level).add(root.val);
         DFS(root.left,level + 1,ans);
         DFS(root.right,level + 1,ans);
+    }
+
+    /**
+     * 将有序数组转换为二叉搜索树
+     *
+     * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+     *
+     * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+     *
+     * 二叉搜索树 实质相当于 二分法
+     * 每次都将nums[0 ... length-1]从中间截断，分成两半。
+     * 取中间的nums[mid]为root.val :mid = (l+r+1)/2
+     * root.letf 根据左半边数据按上述思想生成
+     * root.right 根据右半边数据按上述思想生成
+     *
+     */
+
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return createTree(nums,0,nums.length-1);
+    }
+
+    private TreeNode createTree(int[] tmp,int l, int r){
+        if(l == r)
+            return new TreeNode(tmp[l]);
+        else if(l > r)
+            return null;
+        int mid = (l + r + 1) >> 1;
+        TreeNode t = new TreeNode(tmp[mid]);
+        t.left = createTree(tmp,l,mid -1);
+        t.right = createTree(tmp,mid + 1,r);
+        return t;
     }
 }
