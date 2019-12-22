@@ -2,6 +2,10 @@ package algorithm;
 
 import data.ListNode;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * created by Sven
  * on 2019-12-14
@@ -71,6 +75,37 @@ public class ListAlgorithm {
             index.next = l1;
         else
             index.next = l2;
+        return result;
+    }
+
+    /**
+     * created by Sven
+     * on 2019-12-14
+     *
+     * 杨辉三角
+     *
+     * 给定一个非负整数 numRows，生成杨辉三角的前 numRows 行。
+     */
+    public List<List<Integer>> generate(int numRows) {
+        List<List<Integer>> result = new ArrayList<>();
+        if(numRows <= 0)
+            return result;
+        for(int i = 0; i < numRows; i ++){
+            Integer []tmp = new Integer[i + 1];
+            if(i == 0){
+                tmp[0] = 1;
+            }else if(i == 1){
+                tmp[0] = 1;
+                tmp[1] = 1;
+            }else{
+                tmp[0] = 1;
+                tmp[i] = 1;
+                for(int j = 1; j < i;j++){
+                    tmp[j] = result.get(i - 1).get(j - 1) + result.get(i - 1).get(j);
+                }
+            }
+            result.add(Arrays.asList(tmp));
+        }
         return result;
     }
 }
