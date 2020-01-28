@@ -2,9 +2,7 @@ package algorithm;
 
 import data.ListNode;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * created by Sven
@@ -160,5 +158,27 @@ public class ListAlgorithm {
         return true;
     }
 
+    /**
+     * 相交链表
+     *
+     * 编写一个程序，找到两个单链表相交的起始节点。
+     */
+    public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
+        if(headA == null || headB == null)
+            return null;
+        ListNode indexNode = headA;
+        Set<ListNode> aNodeSet = new HashSet<>();
+        while (indexNode != null){
+            aNodeSet.add(indexNode);
+            indexNode = indexNode.next;
+        }
+        indexNode = headB;
+        while (indexNode != null){
+            if(aNodeSet.contains(indexNode))
+                return indexNode;
+            indexNode = indexNode.next;
+        }
+        return null;
+    }
 
 }
