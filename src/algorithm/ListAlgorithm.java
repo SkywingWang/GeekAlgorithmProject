@@ -181,4 +181,43 @@ public class ListAlgorithm {
         return null;
     }
 
+    /**
+     * 双指针法
+     * @param headA
+     * @param headB
+     * @return
+     */
+    public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
+        if(headA == null || headB == null)
+            return null;
+        ListNode indexNodeA = headA,indexNodeB = headB;
+        boolean indexNodeAInA = true,indexNodeBInB = true;
+        while (indexNodeA != null && indexNodeB != null){
+            if(indexNodeB == indexNodeA)
+                return indexNodeA;
+            if(indexNodeA.next == null){
+                if(indexNodeAInA) {
+                    indexNodeA = headB;
+                    indexNodeAInA = false;
+                }
+                else{
+                    indexNodeA = indexNodeA.next;
+                }
+            }else{
+                indexNodeA = indexNodeA.next;
+            }
+            if(indexNodeB.next == null){
+                if(indexNodeBInB){
+                    indexNodeB = headA;
+                    indexNodeBInB = false;
+                }else{
+                    indexNodeB = indexNodeB.next;
+                }
+            }else{
+                indexNodeB = indexNodeB.next;
+            }
+        }
+        return null;
+    }
+
 }
