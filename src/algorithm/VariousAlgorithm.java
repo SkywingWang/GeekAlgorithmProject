@@ -161,6 +161,29 @@ public class VariousAlgorithm {
             spreadPriceCount = spreadPriceCount + prices[prices.length - 1] - buyPrice;
         }
         return spreadPriceCount;
+    }
 
+    /**
+     * Excel表列名称
+     *
+     * 给定一个正整数，返回它在 Excel 表中相对应的列名称。
+     *
+     * @param n
+     * @return
+     */
+    public String convertToTitle(int n) {
+        if(n <=0)
+            return null;
+        StringBuffer resultStringBuffer = new StringBuffer();
+        while (n > 0){
+            int remainder = n % 26;
+            if(remainder == 0){
+                remainder = 26;
+                n--;
+            }
+            resultStringBuffer.insert(0,(char)('A' + remainder - 1));
+            n = n / 26;
+        }
+        return resultStringBuffer.toString();
     }
 }
