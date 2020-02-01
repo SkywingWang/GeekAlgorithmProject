@@ -205,4 +205,32 @@ public class VariousAlgorithm {
         }
         return result;
     }
+
+    /**
+     * 阶乘后的零
+     *
+     * 给定一个整数 n，返回 n! 结果尾数中零的数量。
+     * @param n
+     * @return
+     */
+    public int trailingZeroes(int n) {
+        if(n < 5)
+            return 0;
+        long i = 5;
+        int count = 0;
+        while(i <= n){
+            long N = i;
+            while (N > 0){
+                if(N % 5 == 0){
+                    count ++;
+                    N /= 5;
+                }else{
+                    break;
+                }
+            }
+            i += 5;
+        }
+
+        return count;
+    }
 }
