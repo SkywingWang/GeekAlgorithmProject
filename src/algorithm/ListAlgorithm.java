@@ -220,4 +220,29 @@ public class ListAlgorithm {
         return null;
     }
 
+    /**
+     * 移除链表元素
+     *
+     * 删除链表中等于给定值 val 的所有节点。
+     *
+     * @param head
+     * @param val
+     * @return
+     */
+    public ListNode removeElements(ListNode head, int val) {
+        if(head == null)
+            return null;
+        ListNode indexNode = head;
+        while (indexNode != null){
+            if(indexNode.next.val == val){
+                indexNode.next = indexNode.next.next;
+            }else{
+                indexNode = indexNode.next;
+            }
+        }
+        if(head.val == val)
+            head = head.next;
+        return head;
+    }
+
 }
