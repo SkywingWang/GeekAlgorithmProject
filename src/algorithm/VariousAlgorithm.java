@@ -1,5 +1,7 @@
 package algorithm;
 
+import java.util.Arrays;
+
 public class VariousAlgorithm {
 
     /**
@@ -303,5 +305,30 @@ public class VariousAlgorithm {
             n /= 10;
         }
         return sum;
+    }
+
+    /**
+     * 计数质数
+     *
+     * 统计所有小于非负整数 n 的质数的数量。
+     *
+     * @param n
+     * @return
+     */
+    public int countPrimes(int n) {
+        if(n < 2)
+            return 0;
+        boolean[] isPrime = new boolean[n];
+        Arrays.fill(isPrime,true);
+        for(int i = 2; i * i <= n; i++){
+            for(int j = 2 * i; j < n; j += i)
+                isPrime[j] = false;
+        }
+        int count = 0;
+        for(int i = 2; i < n; i++){
+            if(isPrime[i])
+                count++;
+        }
+        return count;
     }
 }
