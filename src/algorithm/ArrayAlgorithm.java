@@ -422,6 +422,7 @@ public class ArrayAlgorithm {
      * @param nums
      * @return
      */
+
     public int rob(int[] nums) {
         int preMax = 0, currentMax = 0;
         if(nums == null)
