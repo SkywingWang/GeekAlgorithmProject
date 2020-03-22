@@ -1,8 +1,6 @@
 package algorithm;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * created by Sven
@@ -152,6 +150,41 @@ public class StringAlgorithm {
                 return false;
             }
 
+        }
+        return true;
+    }
+
+    /**
+     * 205. 同构字符串
+     *
+     *
+     * 给定两个字符串 s 和 t，判断它们是否是同构的。
+     * 如果 s 中的字符可以被替换得到 t ，那么这两个字符串是同构的。
+     * 所有出现的字符都必须用另一个字符替换，同时保留字符的顺序。两个字符不能映射到同一个字符上，但字符可以映射自己本身。
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isIsomorphic(String s, String t) {
+        if(s == null && t == null)
+            return true;
+        if(s == null || t == null)
+            return false;
+        if(s.length() != t.length())
+            return false;
+        Map<Character,Character> sToTMap = new HashMap<>();
+        Map<Character,Character> tToSMap = new HashMap<>();
+        int length = s.length();
+        for(int i = 0; i < length; i++){
+            if(!sToTMap.containsKey(s.charAt(i)) && !tToSMap.containsKey(t.charAt(i))){
+                sToTMap.put(s.charAt(i),t.charAt(i));
+                tToSMap.put(t.charAt(i),s.charAt(i));
+            }
+            else if(!sToTMap.containsKey(s.charAt(i)) || !tToSMap.containsKey(t.charAt(i)))
+                return false;
+            else if(!sToTMap.get(s.charAt(i)).equals(t.charAt(i))){
+                return false;
+            }
         }
         return true;
     }
