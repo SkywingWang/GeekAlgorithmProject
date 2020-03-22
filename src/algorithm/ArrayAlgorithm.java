@@ -470,4 +470,44 @@ public class ArrayAlgorithm {
         nums[j] = v;
         return j;
     }
+
+    /**
+     * 使数组唯一的最小增量
+     *
+     * 给定整数数组 A，每次 move 操作将会选择任意 A[i]，并将其递增 1。
+     *
+     * 返回使 A 中的每个值都是唯一的最少操作次数。
+     *
+     * 提示：
+     *
+     * 0 <= A.length <= 40000
+     * 0 <= A[i] < 40000
+     *
+     * @param A
+     * @return
+     */
+    public int minIncrementForUnique(int[] A) {
+        if(A == null || A.length == 0)
+            return 0;
+        // 极限情况，A中有40000个40000，需要一个80000大小的数组
+        int[] count = new int[80000];
+        // repeatCount 统计当前重复的个数
+        int result = 0, repeatCount = 0;
+        for(int x:A)
+            count[x]++;
+        for(int i = 0;i<count.length;i++){
+            if(count[i] > 1){
+                repeatCount += (count[i] - 1);
+                result = result - (count[i] - 1) * i;
+            }
+            if(repeatCount > 0 && count[i] == 0){
+                result += i;
+                repeatCount--;
+            }
+            if(repeatCount == 0 && i > 40000)
+                break;
+
+        }
+        return result;
+    }
 }
