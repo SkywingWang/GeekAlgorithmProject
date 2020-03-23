@@ -245,4 +245,28 @@ public class ListAlgorithm {
         return head;
     }
 
+
+    /**
+     * 876. 链表的中间结点
+     * 给定一个带有头结点 head 的非空单链表，返回链表的中间结点。
+     *
+     * 如果有两个中间结点，则返回第二个中间结点。
+     * @param head
+     * @return
+     */
+    public ListNode middleNode(ListNode head) {
+        if(head == null || head.next == null)
+            return head;
+        ListNode index = head;
+        ListNode doubleStepIndex = head;
+        while (true){
+            if(doubleStepIndex.next == null)
+                return index;
+            if(doubleStepIndex.next.next == null)
+                return index.next;
+            index = index.next;
+            doubleStepIndex = doubleStepIndex.next.next;
+        }
+    }
+
 }
