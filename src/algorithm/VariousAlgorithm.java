@@ -473,4 +473,120 @@ public class VariousAlgorithm {
         }
         return result[nums.length - 1];
     }
+
+    /**
+     * 892. 三维形体的表面积
+     *
+     * 在 N * N 的网格上，我们放置一些 1 * 1 * 1  的立方体。
+     *
+     * 每个值 v = grid[i][j] 表示 v 个正方体叠放在对应单元格 (i, j) 上。
+     *
+     * 请你返回最终形体的表面积。
+     *
+     * @param grid
+     * @return
+     */
+    public int surfaceArea(int[][] grid) {
+        int[] dr = new int[]{0,1,0,-1};
+        int[] dc = new int[]{1,0,-1,0};
+
+        int length = grid.length;
+        int result = 0;
+        for(int r = 0;r<length;r++){
+            for(int c=0;c < length;c++){
+                if(grid[r][c] > 0){
+                    result+=2;
+                    for(int k = 0;k<4;k++){
+                        int nr = r + dr[k];
+                        int nc = c + dc[k];
+                        int nv = 0;
+
+                        if (0 <= nr && nr < length && 0 <= nc && nc < length)
+                            nv = grid[nr][nc];
+                        result += Math.max(grid[r][c] - nv, 0);
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 999. 车的可用捕获量
+     *
+     * @param board
+     * @return
+     */
+    public int numRookCaptures(char[][] board) {
+        if(board == null || board.length == 0)
+            return 0;
+        // 先找到R
+        int i = 0,j = 0,result = 0;
+        boolean isFind = false;
+        while (i < board.length){
+            while (j < board[i].length){
+                if(board[i][j] == 'R'){
+                    isFind = true;
+                    break;
+                }
+                j++;
+            }
+            if(isFind){
+                break;
+            }
+            j = 0;
+            i++;
+        }
+        int k = j + 1;
+        while (k < board[i].length){
+
+            if(board[i][k] == '.'){
+
+            }else if(board[i][k] == 'B')
+                break;
+            else if(board[i][k] == 'p'){
+                result++;
+                break;
+            }
+            k++;
+        }
+        k = j - 1;
+        while (k >= 0){
+            if(board[i][k] == '.'){
+
+            }else if(board[i][k] == 'B')
+                break;
+            if(board[i][k] == 'p'){
+                result++;
+                break;
+            }
+            k--;
+        }
+        k = i + 1;
+        while (k < board.length){
+            if(board[k][j] == '.'){
+
+            }else if(board[k][j] == 'B')
+                break;
+            if(board[k][j] == 'p'){
+                result++;
+                break;
+            }
+            k ++;
+        }
+        k = i - 1;
+        while (k >= 0){
+            if(board[k][j] == '.'){
+
+            }else if(board[k][j] == 'B')
+                break;
+            if(board[k][j] == 'p'){
+                result++;
+                break;
+            }
+            k --;
+        }
+        return result;
+    }
+
 }
