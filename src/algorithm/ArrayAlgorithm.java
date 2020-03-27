@@ -510,4 +510,47 @@ public class ArrayAlgorithm {
         }
         return result;
     }
+
+    /**
+     * 914. 卡牌分组
+     * 给定一副牌，每张牌上都写着一个整数。
+     *
+     * 此时，你需要选定一个数字 X，使我们可以将整副牌按下述规则分成 1 组或更多组：
+     *
+     * 每组都有 X 张牌。
+     * 组内所有的牌上都写着相同的整数。
+     * 仅当你可选的 X >= 2 时返回 true。
+     *
+     * @param deck
+     * @return
+     */
+    public boolean hasGroupsSizeX(int[] deck) {
+        if(deck == null || deck.length <= 1)
+            return false;
+        Map<Integer,Integer> digitalStatistic = new HashMap<>();
+        for(int n : deck){
+            if(digitalStatistic.containsKey(n)){
+                digitalStatistic.put(n,digitalStatistic.get(n) + 1);
+            }else{
+                digitalStatistic.put(n,1);
+            }
+        }
+        int x = 2;
+        boolean hasX = true;
+        while (true){
+            for(Integer i : digitalStatistic.keySet()){
+                if(digitalStatistic.get(i) < x)
+                    return false;
+                if(digitalStatistic.get(i) % x != 0)
+                {
+                    hasX = false;
+                    break;
+                }
+            }
+            if(hasX)
+                return true;
+            hasX = true;
+            x++;
+        }
+    }
 }
