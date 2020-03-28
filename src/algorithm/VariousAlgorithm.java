@@ -598,6 +598,23 @@ public class VariousAlgorithm {
      * @return
      */
     public int numberOfSteps (int num) {
-        return 0;
+        int result = 0;
+        while (num > 0){
+            if(num % 2 == 0){
+                num = num >> 1;
+                result++;
+            }else{
+                num--;
+                if(num == 0){
+                    result ++;
+                    return result;
+                }else{
+                    num = num >> 1;
+                    result += 2;
+                }
+            }
+
+        }
+        return result;
     }
 }
