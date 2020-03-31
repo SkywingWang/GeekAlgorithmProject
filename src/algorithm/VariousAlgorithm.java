@@ -447,56 +447,56 @@ public class VariousAlgorithm {
 
     /**
      * 面试题 17.16. 按摩师
-     *
+     * <p>
      * 一个有名的按摩师会收到源源不断的预约请求，每个预约都可以选择接或不接。
      * 在每次预约服务之间要有休息时间，因此她不能接受相邻的预约。给定一个预约请求序列，
      * 替按摩师找到最优的预约集合（总预约时间最长），返回总的分钟数。
-     *
+     * <p>
      * 动态规划
      *
      * @param nums
      * @return
      */
     public int massage(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return 0;
-        if(nums.length == 1)
+        if (nums.length == 1)
             return nums[0];
 
-        if(nums.length == 2)
-            return Math.max(nums[0],nums[1]);
+        if (nums.length == 2)
+            return Math.max(nums[0], nums[1]);
         int[] result = new int[nums.length];
         result[0] = nums[0];
-        result[1] = Math.max(nums[0],nums[1]);
-        for(int i = 2; i < nums.length;i++){
-            result[i] = Math.max(result[i - 1],result[i - 2] + nums[i]);
+        result[1] = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < nums.length; i++) {
+            result[i] = Math.max(result[i - 1], result[i - 2] + nums[i]);
         }
         return result[nums.length - 1];
     }
 
     /**
      * 892. 三维形体的表面积
-     *
+     * <p>
      * 在 N * N 的网格上，我们放置一些 1 * 1 * 1  的立方体。
-     *
+     * <p>
      * 每个值 v = grid[i][j] 表示 v 个正方体叠放在对应单元格 (i, j) 上。
-     *
+     * <p>
      * 请你返回最终形体的表面积。
      *
      * @param grid
      * @return
      */
     public int surfaceArea(int[][] grid) {
-        int[] dr = new int[]{0,1,0,-1};
-        int[] dc = new int[]{1,0,-1,0};
+        int[] dr = new int[]{0, 1, 0, -1};
+        int[] dc = new int[]{1, 0, -1, 0};
 
         int length = grid.length;
         int result = 0;
-        for(int r = 0;r<length;r++){
-            for(int c=0;c < length;c++){
-                if(grid[r][c] > 0){
-                    result+=2;
-                    for(int k = 0;k<4;k++){
+        for (int r = 0; r < length; r++) {
+            for (int c = 0; c < length; c++) {
+                if (grid[r][c] > 0) {
+                    result += 2;
+                    for (int k = 0; k < 4; k++) {
                         int nr = r + dr[k];
                         int nc = c + dc[k];
                         int nv = 0;
@@ -518,97 +518,97 @@ public class VariousAlgorithm {
      * @return
      */
     public int numRookCaptures(char[][] board) {
-        if(board == null || board.length == 0)
+        if (board == null || board.length == 0)
             return 0;
         // 先找到R
-        int i = 0,j = 0,result = 0;
+        int i = 0, j = 0, result = 0;
         boolean isFind = false;
-        while (i < board.length){
-            while (j < board[i].length){
-                if(board[i][j] == 'R'){
+        while (i < board.length) {
+            while (j < board[i].length) {
+                if (board[i][j] == 'R') {
                     isFind = true;
                     break;
                 }
                 j++;
             }
-            if(isFind){
+            if (isFind) {
                 break;
             }
             j = 0;
             i++;
         }
         int k = j + 1;
-        while (k < board[i].length){
+        while (k < board[i].length) {
 
-            if(board[i][k] == '.'){
+            if (board[i][k] == '.') {
 
-            }else if(board[i][k] == 'B')
+            } else if (board[i][k] == 'B')
                 break;
-            else if(board[i][k] == 'p'){
+            else if (board[i][k] == 'p') {
                 result++;
                 break;
             }
             k++;
         }
         k = j - 1;
-        while (k >= 0){
-            if(board[i][k] == '.'){
+        while (k >= 0) {
+            if (board[i][k] == '.') {
 
-            }else if(board[i][k] == 'B')
+            } else if (board[i][k] == 'B')
                 break;
-            if(board[i][k] == 'p'){
+            if (board[i][k] == 'p') {
                 result++;
                 break;
             }
             k--;
         }
         k = i + 1;
-        while (k < board.length){
-            if(board[k][j] == '.'){
+        while (k < board.length) {
+            if (board[k][j] == '.') {
 
-            }else if(board[k][j] == 'B')
+            } else if (board[k][j] == 'B')
                 break;
-            if(board[k][j] == 'p'){
+            if (board[k][j] == 'p') {
                 result++;
                 break;
             }
-            k ++;
+            k++;
         }
         k = i - 1;
-        while (k >= 0){
-            if(board[k][j] == '.'){
+        while (k >= 0) {
+            if (board[k][j] == '.') {
 
-            }else if(board[k][j] == 'B')
+            } else if (board[k][j] == 'B')
                 break;
-            if(board[k][j] == 'p'){
+            if (board[k][j] == 'p') {
                 result++;
                 break;
             }
-            k --;
+            k--;
         }
         return result;
     }
 
     /**
      * 1342. 将数字变成 0 的操作次数
-     *
+     * <p>
      * 给你一个非负整数 num ，请你返回将它变成 0 所需要的步数。 如果当前数字是偶数，你需要把它除以 2 ；否则，减去 1 。
      *
      * @param num
      * @return
      */
-    public int numberOfSteps (int num) {
+    public int numberOfSteps(int num) {
         int result = 0;
-        while (num > 0){
-            if(num % 2 == 0){
+        while (num > 0) {
+            if (num % 2 == 0) {
                 num = num >> 1;
                 result++;
-            }else{
+            } else {
                 num--;
-                if(num == 0){
-                    result ++;
+                if (num == 0) {
+                    result++;
                     return result;
-                }else{
+                } else {
                     num = num >> 1;
                     result += 2;
                 }
@@ -617,4 +617,39 @@ public class VariousAlgorithm {
         }
         return result;
     }
+
+    /**
+     * 面试题62. 圆圈中最后剩下的数字
+     * 0,1,,n-1这n个数字排成一个圆圈，从数字0开始，每次从这个圆圈里删除第m个数字。求出这个圆圈里剩下的最后一个数字。
+     * <p>
+     * 例如，0、1、2、3、4这5个数字组成一个圆圈，从数字0开始每次删除第3个数字，则删除的前4个数字依次是2、0、4、1，因此最后剩下的数字是3。
+     *
+     * @param n
+     * @param m
+     * @return
+     */
+    public int lastRemaining(int n, int m) {
+        if (m == 0)
+            return 0;
+        ArrayList<Integer> list = new ArrayList<>(n);
+        for(int i = 0; i < n; i++){
+            list.add(i);
+        }
+        int idx = 0;
+        while (n > 1){
+            idx = (idx + m -1)%n;
+            list.remove(idx);
+            n--;
+        }
+        return list.get(0);
+    }
+
+    public int lastRemaining_2(int n, int m) {
+        int result = 0;
+        for(int i = 2; i <= n ;i++){
+            result = (result + m) % i;
+        }
+        return result;
+    }
+
 }
