@@ -701,4 +701,32 @@ public class ArrayAlgorithm {
             }
         }
     }
+
+    /**
+     * 42. 接雨水
+     * 给定 n 个非负整数表示每个宽度为 1 的柱子的高度图，计算按此排列的柱子，下雨之后能接多少雨水。
+     *
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+        if(height == null || height.length == 0)
+            return 0;
+        int heightSize = height.length;
+        int result = 0;
+        int[] leftMax = new int[heightSize],rightMax = new int[heightSize];
+        leftMax[0] = height[0];
+        for(int i = 1; i < heightSize; i++){
+            leftMax[i] = Math.max(height[i],leftMax[i - 1]);
+        }
+        rightMax[heightSize - 1] = height[heightSize - 1];
+        for(int i = heightSize - 2; i >= 0; i--){
+            rightMax[i] = Math.max(height[i],rightMax[i + 1]);
+        }
+        for(int i = 1; i < heightSize - 1;i++){
+            result += Math.min(leftMax[i],rightMax[i]) - height[i];
+        }
+        return result;
+
+    }
 }
