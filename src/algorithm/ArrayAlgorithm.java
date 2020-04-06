@@ -729,4 +729,52 @@ public class ArrayAlgorithm {
         return result;
 
     }
+
+    /**
+     * 72. 编辑距离
+     * 给你两个单词 word1 和 word2，请你计算出将 word1 转换成 word2 所使用的最少操作数 。
+     *
+     * 你可以对一个单词进行如下三种操作：
+     *
+     * 插入一个字符
+     * 删除一个字符
+     * 替换一个字符
+     *
+     * @param word1
+     * @param word2
+     * @return
+     */
+    public int minDistance(String word1, String word2) {
+        if(word1 == null && word2 == null)
+            return 0;
+        if(word1 == null)
+            return word2.length();
+        if(word2 == null)
+            return word1.length();
+
+        int lengthWord1 = word1.length();
+        int lengthWord2 = word2.length();
+
+        if(lengthWord1 * lengthWord2 == 0)
+            return lengthWord1 + lengthWord2;
+
+        int [][] dp = new int[lengthWord1 + 1][lengthWord2 + 1];
+        for(int i = 0; i < lengthWord1 + 1; i++){
+            dp[i][0] = i;
+        }
+        for(int j = 0; j < lengthWord2 + 1; j++){
+            dp[0][j] = j;
+        }
+        for(int i = 1; i < lengthWord1 + 1; i++){
+            for(int j = 1; j < lengthWord2 + 1; j++){
+                int left = dp[i - 1][j] + 1;
+                int down = dp[i][j - 1] + 1;
+                int left_down = dp[i-1][j-1];
+                if(word1.charAt(i - 1) != word2.charAt(j -1))
+                    left_down += 1;
+                dp[i][j] = Math.min(left,Math.min(down,left_down));
+            }
+        }
+        return dp[lengthWord1][lengthWord2];
+    }
 }
