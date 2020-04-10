@@ -277,10 +277,31 @@ public class StringAlgorithm {
      */
     public String reverseWords(String s) {
         if(s == null || s.trim().length() == 0)
-            return "null";
+            return "";
         s = s.trim();
         List<String> wordList = Arrays.asList(s.split("\\s+"));
         Collections.reverse(wordList);
         return String.join(" ",wordList);
+    }
+
+    public String reverseWords_2(String s) {
+        if(s == null || s.trim().length() == 0)
+            return "";
+        s = s.trim();
+        StringBuilder stringBuilder = new StringBuilder();
+        Deque<String> d = new ArrayDeque<>();
+        int left = 0, right = s.length() - 1;
+        while (left <= right){
+            char c = s.charAt(left);
+            if((stringBuilder.length() != 0) && (c == ' ')){
+                d.offerFirst(stringBuilder.toString());
+                stringBuilder.setLength(0);
+            }else if(c!= ' '){
+                stringBuilder.append(c);
+            }
+            ++left;
+        }
+        d.offerFirst(stringBuilder.toString());
+        return String.join(" ",d);
     }
 }
