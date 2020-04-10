@@ -268,4 +268,19 @@ public class StringAlgorithm {
         return negative ? -(int) result : (int)result;
     }
 
+    /**
+     * 151. 翻转字符串里的单词
+     * 给定一个字符串，逐个翻转字符串中的每个单词。
+     *
+     * @param s
+     * @return
+     */
+    public String reverseWords(String s) {
+        if(s == null || s.trim().length() == 0)
+            return "null";
+        s = s.trim();
+        List<String> wordList = Arrays.asList(s.split("\\s+"));
+        Collections.reverse(wordList);
+        return String.join(" ",wordList);
+    }
 }
