@@ -632,12 +632,12 @@ public class VariousAlgorithm {
         if (m == 0)
             return 0;
         ArrayList<Integer> list = new ArrayList<>(n);
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             list.add(i);
         }
         int idx = 0;
-        while (n > 1){
-            idx = (idx + m -1)%n;
+        while (n > 1) {
+            idx = (idx + m - 1) % n;
             list.remove(idx);
             n--;
         }
@@ -646,7 +646,7 @@ public class VariousAlgorithm {
 
     public int lastRemaining_2(int n, int m) {
         int result = 0;
-        for(int i = 2; i <= n ;i++){
+        for (int i = 2; i <= n; i++) {
             result = (result + m) % i;
         }
         return result;
@@ -665,22 +665,22 @@ public class VariousAlgorithm {
      * @return
      */
     public int movingCount(int m, int n, int k) {
-        if(m <0 || n < 0)
+        if (m < 0 || n < 0)
             return 0;
         boolean[][] visited = new boolean[m][n];
         int res = 0;
         Queue<int[]> queue = new LinkedList<int[]>();
-        queue.add(new int[]{0,0,0,0});
-        while (queue.size() > 0){
-            int[] x= queue.poll();
-            int i = x[0],j = x[1], si = x[2] , sj = x[3];
-            if(i >= m || j >= n || k < sj + si || visited[i][j])
+        queue.add(new int[]{0, 0, 0, 0});
+        while (queue.size() > 0) {
+            int[] x = queue.poll();
+            int i = x[0], j = x[1], si = x[2], sj = x[3];
+            if (i >= m || j >= n || k < sj + si || visited[i][j])
                 continue;
             visited[i][j] = true;
-            res ++;
+            res++;
 
-            queue.add(new int[] { i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj });
-            queue.add(new int[] { i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8 });
+            queue.add(new int[]{i + 1, j, (i + 1) % 10 != 0 ? si + 1 : si - 8, sj});
+            queue.add(new int[]{i, j + 1, si, (j + 1) % 10 != 0 ? sj + 1 : sj - 8});
         }
         return res;
 
@@ -689,38 +689,165 @@ public class VariousAlgorithm {
     /**
      * 22. 括号生成
      * 给出 n 代表生成括号的对数，请你写出一个函数，使其能够生成所有可能的并且有效的括号组合。
-     *
+     * <p>
      * 例如，给出 n = 3，生成结果为：
-     * @param n
-     * [
-     *   "((()))",
-     *   "(()())",
-     *   "(())()",
-     *   "()(())",
-     *   "()()()"
-     * ]
+     *
+     * @param n [
+     *          "((()))",
+     *          "(()())",
+     *          "(())()",
+     *          "()(())",
+     *          "()()()"
+     *          ]
      * @return
      */
     public List<String> generateParenthesis(int n) {
         List<String> result = new ArrayList<>();
-        backtrack(result,new StringBuilder(),0,0,n);
+        backtrack(result, new StringBuilder(), 0, 0, n);
         return result;
     }
 
-    private void backtrack(List<String> result,StringBuilder cur,int open,int close,int max){
-        if(cur.length() == max * 2){
+    private void backtrack(List<String> result, StringBuilder cur, int open, int close, int max) {
+        if (cur.length() == max * 2) {
             result.add(cur.toString());
             return;
         }
-        if(open<max){
+        if (open < max) {
             cur.append('(');
-            backtrack(result,cur,open + 1,close,max);
+            backtrack(result, cur, open + 1, close, max);
             cur.deleteCharAt(cur.length() - 1);
         }
-        if(close < open){
+        if (close < open) {
             cur.append(')');
-            backtrack(result,cur,open,close+1,max);
+            backtrack(result, cur, open, close + 1, max);
             cur.deleteCharAt(cur.length() - 1);
+        }
+    }
+
+    /**
+     * 887. 鸡蛋掉落
+     * 你将获得 K 个鸡蛋，并可以使用一栋从 1 到 N  共有 N 层楼的建筑。
+     * <p>
+     * 每个蛋的功能都是一样的，如果一个蛋碎了，你就不能再把它掉下去。
+     * <p>
+     * 你知道存在楼层 F ，满足 0 <= F <= N 任何从高于 F 的楼层落下的鸡蛋都会碎，从 F 楼层或比它低的楼层落下的鸡蛋都不会破。
+     * <p>
+     * 每次移动，你可以取一个鸡蛋（如果你有完整的鸡蛋）并把它从任一楼层 X 扔下（满足 1 <= X <= N）。
+     * <p>
+     * 你的目标是确切地知道 F 的值是多少。
+     * <p>
+     * 无论 F 的初始值如何，你确定 F 的值的最小移动次数是多少？
+     *
+     * @param K
+     * @param N
+     * @return
+     */
+    public int superEggDrop(int K, int N) {
+        return superEggDropDp(K, N);
+    }
+
+    Map<Integer, Integer> superMemo = new HashMap<>();
+
+    private int superEggDropDp(int K, int N) {
+        if (!superMemo.containsKey(N * 100 + K)) {
+            int ans;
+            if (N == 0)
+                ans = 0;
+            else if (K == 1)
+                ans = N;
+            else {
+                int lo = 1, hi = N;
+                while (lo + 1 < hi) {
+                    int x = (lo + hi) / 2;
+                    int t1 = superEggDrop(K - 1, x - 1);
+                    int t2 = superEggDrop(K, N - x);
+                    if (t1 < t2)
+                        lo = x;
+                    else if (t1 > t2)
+                        hi = x;
+                    else
+                        lo = hi = x;
+                }
+                ans = 1 + Math.min(Math.max(superEggDropDp(K - 1, lo - 1), superEggDropDp(K, N - lo)), Math.max(superEggDropDp(K - 1, hi - 1), superEggDropDp(K, N - hi)));
+            }
+            superMemo.put(N * 100 + K, ans);
+        }
+        return superMemo.get(N * 100 + K);
+    }
+
+
+    /**
+     * 面试题 16.03. 交点
+     * <p>
+     * 给定两条线段（表示为起点start = {X1, Y1}和终点end = {X2, Y2}），如果它们有交点，请计算其交点，没有交点则返回空值。
+     * <p>
+     * 要求浮点型误差不超过10^-6。若有多个交点（线段重叠）则返回 X 值最小的点，X 坐标相同则返回 Y 值最小的点。
+     *
+     * @param start1
+     * @param end1
+     * @param start2
+     * @param end2
+     * @return
+     */
+    public double[] intersection(int[] start1, int[] end1, int[] start2, int[] end2) {
+        int x1 = start1[0], y1 = start1[1];
+        int x2 = end1[0], y2 = end1[1];
+        int x3 = start2[0], y3 = start2[1];
+        int x4 = end2[0], y4 = end2[1];
+
+        double[] ans = new double[2];
+        Arrays.fill(ans, Double.MAX_VALUE);
+        // 判断两直线是否平行
+        if ((y4-y3)*(x2-x1) == (y2-y1)*(x4-x3)) {
+            // 判断两直线是否重叠
+            if ((y2-y1)*(x3-x1) == (y3-y1)*(x2-x1)) {
+                // 判断 (x3, y3) 是否在「线段」(x1, y1)~(x2, y2) 上
+                if (isInside(x1, y1, x2, y2, x3, y3)) {
+                    updateRes(ans, x3, y3);
+                }
+                // 判断 (x4, y4) 是否在「线段」(x1, y1)~(x2, y2) 上
+                if (isInside(x1, y1, x2, y2, x4, y4)) {
+                    updateRes(ans, (double)x4, (double)y4);
+                }
+                // 判断 (x1, y1) 是否在「线段」(x3, y3)~(x4, y4) 上
+                if (isInside(x3, y3, x4, y4, x1, y1)) {
+                    updateRes(ans, (double)x1, (double)y1);
+                }
+                // 判断 (x2, y2) 是否在「线段」(x3, y3)~(x4, y4) 上
+                if (isInside(x3, y3, x4, y4, x2, y2)) {
+                    updateRes(ans, (double)x2, (double)y2);
+                }
+            }
+        } else {
+            // 联立方程得到 t1 和 t2 的值
+            double t1 = (double)(x3 * (y4 - y3) + y1 * (x4 - x3) - y3 * (x4 - x3) - x1 * (y4 - y3)) / ((x2 - x1) * (y4 - y3) - (x4 - x3) * (y2 - y1));
+            double t2 = (double)(x1 * (y2 - y1) + y3 * (x2 - x1) - y1 * (x2 - x1) - x3 * (y2 - y1)) / ((x4 - x3) * (y2 - y1) - (x2 - x1) * (y4 - y3));
+            // 判断 t1 和 t2 是否均在 [0, 1] 之间
+            if (t1 >= 0.0 && t1 <= 1.0 && t2 >= 0.0 && t2 <= 1.0) {
+                ans[0] = x1 + t1 * (x2 - x1);
+                ans[1] = y1 + t1 * (y2 - y1);
+            }
+        }
+        if (ans[0] == Double.MAX_VALUE) {
+            return new double[0];
+        }
+        return ans;
+    }
+
+    // 判断 (x, y) 是否在「线段」(x1, y1)~(x2, y2) 上
+    // 这里的前提是 (x, y) 一定在「直线」(x1, y1)~(x2, y2) 上
+    private boolean isInside(int x1, int y1, int x2, int y2, int x, int y) {
+        // 若与 x 轴平行，只需要判断 x 的部分
+        // 若与 y 轴平行，只需要判断 y 的部分
+        // 若为普通线段，则都要判断
+        return (x1 == x2 || (Math.min(x1, x2) <= x && x <= Math.max(x1, x2)))
+                && (y1 == y2 || (Math.min(y1, y2) <= y && y <= Math.max(y1, y2)));
+    }
+
+    private void updateRes(double[] ans, double x, double y) {
+        if (x < ans[0] || (x == ans[0] && y < ans[1])) {
+            ans[0] = x;
+            ans[1] = y;
         }
     }
 }
