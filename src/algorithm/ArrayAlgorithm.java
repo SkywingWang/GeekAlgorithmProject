@@ -851,4 +851,31 @@ public class ArrayAlgorithm {
         }
         return matrix;
     }
+
+    /**
+     * 56. 合并区间
+     * 给出一个区间的集合，请合并所有重叠的区间。
+     *
+     * @param intervals
+     * @return
+     */
+    public int[][] merge(int[][] intervals) {
+        if(intervals == null || intervals.length== 0)
+            return new int[0][0];
+        Arrays.parallelSort(intervals,Comparator.comparingInt(x -> x[0]));
+        LinkedList<int[]> list = new LinkedList<>();
+        for(int i = 0; i < intervals.length;i++){
+            if(list.size() == 0 || list.getLast()[1] < intervals[i][0]){
+                list.add(intervals[i]);
+            }else{
+                list.getLast()[1] = Math.max(list.getLast()[1],intervals[i][1]);
+            }
+        }
+        int[][]res = new int[list.size()][2];
+        int index = 0;
+        while (!list.isEmpty()){
+            res[index++] = list.removeFirst();
+        }
+        return res;
+    }
 }
