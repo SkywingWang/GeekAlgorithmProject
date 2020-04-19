@@ -304,4 +304,55 @@ public class StringAlgorithm {
         d.offerFirst(stringBuilder.toString());
         return String.join(" ",d);
     }
+
+    /**
+     * 466. 统计重复个数
+     * 由 n 个连接的字符串 s 组成字符串 S，记作 S = [s,n]。例如，["abc",3]=“abcabcabc”。
+     *
+     * 如果我们可以从 s2 中删除某些字符使其变为 s1，则称字符串 s1 可以从字符串 s2 获得。例如，根据定义，"abc" 可以从 “abdbec” 获得，但不能从 “acbbe” 获得。
+     *
+     * 现在给你两个非空字符串 s1 和 s2（每个最多 100 个字符长）和两个整数 0 ≤ n1 ≤ 106 和 1 ≤ n2 ≤ 106。现在考虑字符串 S1 和 S2，其中 S1=[s1,n1] 、S2=[s2,n2] 。
+     *
+     * 请你找出一个可以满足使[S2,M] 从 S1 获得的最大整数 M 。
+     *
+     * @param s1
+     * @param n1
+     * @param s2
+     * @param n2
+     * @return
+     */
+    public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
+        if(n1 == 0)
+            return 0;
+        char[] c1 = s1.toCharArray();
+        char[] c2 = s2.toCharArray();
+        int l1 = s1.length();
+        int l2 = s2.length();
+        int countS1 = 0; // 经历了多少个s1
+        int countS2 = 0; // 经历了多少个s2
+        int p=0;         // 当前在s2的位置
+        Map<Integer,int[]> mp = new HashMap<>(); //记录每一次s1 扫描结束后当前的状态，寻找循环
+        while (countS1 < n1){
+            for(int i = 0; i < l1;i++){
+                if(c1[i] == c2[p]){
+                    p++;
+                    if(p==l2){
+                        p =0 ;
+                        countS2++;
+                    }
+                }
+            }
+            countS1++;
+            if(!mp.containsKey(p)){
+                mp.put(p,new int[]{countS1,countS2}); //记录当前状态
+            }else{
+                int[] last = mp.get(p);
+                int circle1 = countS1 - last[0];
+                int circle2 = countS2 - last[1];
+                countS2 += circle2 * ((n1-countS1)/circle1);
+                countS1 = countS1 + ((n1-countS1)/circle1)*circle1;
+            }
+        }
+        return countS2/n2;
+    }
 }
