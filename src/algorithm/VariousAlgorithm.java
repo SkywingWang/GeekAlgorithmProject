@@ -850,4 +850,84 @@ public class VariousAlgorithm {
             ans[1] = y;
         }
     }
+
+    /**
+     * 面试题 08.11. 硬币
+     * 硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)
+     * @param n
+     * @return
+     */
+    public int waysToChange(int n) {
+        if(n <= 0)
+            return 0;
+        if(n < 5)
+            return 1;
+        int mod = 1000000007;
+        int result = 0;
+        for(int i = 0; i <= n / 25; i++){
+            int rest = n - i * 25;
+            int a = rest / 10;
+            int b = (rest % 10) / 5;
+            result += (a + 1) * (a + b + 1);
+        }
+        return result % mod;
+    }
+
+    /**
+     * 面试题51. 数组中的逆序对
+     *
+     * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
+     *
+     * @param nums
+     * @return
+     */
+    public int reversePairs(int[] nums) {
+        int length = nums.length;
+        if(length < 2)
+            return 0;
+        int[] copy = new int[length];
+        for(int i = 0; i < length; i++)
+            copy[i] = nums[i];
+        int[] temp = new int[length];
+        return reversePairs(copy,0,length - 1,temp);
+    }
+
+    private int reversePairs(int[] nums,int left,int right,int[] temp){
+        if(left == right)
+            return 0;
+        int mid = left + (right - left)/2;
+        int leftPairs = reversePairs(nums,left,mid,temp);
+        int rightPairs = reversePairs(nums,mid + 1, right,temp);
+        if(nums[mid] <= nums[mid + 1]){
+            return leftPairs + rightPairs;
+        }
+        int crossPairs = mergeAndCount(nums,left,mid,right,temp);
+        return leftPairs + rightPairs + crossPairs;
+    }
+
+    private int mergeAndCount(int[] nums,int left ,int mid,int right ,int[] temp){
+        for(int i = left; i <= right; i++){
+            temp[i] = nums[i];
+        }
+        int i = left;
+        int j = mid + 1;
+        int count = 0;
+        for(int k = left; k <= right;k++){
+            if(i== mid + 1){
+                nums[k] = temp[j];
+                j++;
+            }else if(j == right + 1){
+                nums[k] = temp[i];
+                i++;
+            }else if(temp[i] <= temp[j]){
+                nums[k] = temp[i];
+                i++;
+            }else {
+                nums[k] = temp[j];
+                j++;
+                count += (mid - i + 1);
+            }
+        }
+        return count;
+    }
 }

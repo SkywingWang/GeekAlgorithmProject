@@ -4,9 +4,7 @@ package algorithm;
 import data.TreeNode;
 import javafx.util.Pair;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 /**
  * created by Sven
@@ -242,5 +240,39 @@ public class BinaryTreeAlgorithm {
         }
         return hasPathSum(root.left,sum - root.val) || hasPathSum(root.right,sum-root.val);
 
+    }
+
+    /**
+     * 199. 二叉树的右视图
+     * 给定一棵二叉树，想象自己站在它的右侧，按照从顶部到底部的顺序，返回从右侧所能看到的节点值。
+     * @param root
+     * @return
+     */
+    public List<Integer> rightSideView(TreeNode root) {
+        Map<Integer,Integer> rightMostValueAtDepth = new HashMap<>();
+        int max_depth = -1;
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        Queue<Integer> depthQueue = new LinkedList<>();
+        nodeQueue.add(root);
+        depthQueue.add(0);
+        while (!nodeQueue.isEmpty()){
+            TreeNode node = nodeQueue.remove();
+            int depth = depthQueue.remove();
+
+            if(node != null){
+                max_depth = Math.max(max_depth,depth);
+                rightMostValueAtDepth.put(depth,node.val);
+
+                nodeQueue.add(node.left);
+                nodeQueue.add(node.right);
+                depthQueue.add(depth + 1);
+                depthQueue.add(depth + 1);
+            }
+        }
+        List<Integer> rightView = new ArrayList<>();
+        for(int depth = 0; depth <= max_depth; depth++){
+            rightView.add(rightMostValueAtDepth.get(depth));
+        }
+        return rightView;
     }
 }

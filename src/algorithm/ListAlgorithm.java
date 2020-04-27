@@ -303,4 +303,42 @@ public class ListAlgorithm {
         }
         return head;
     }
+
+    /**
+     * 23. 合并K个排序链表
+     *
+     * 合并 k 个排序链表，返回合并后的排序链表。请分析和描述算法的复杂度。
+     *
+     * @param lists
+     * @return
+     */
+    public ListNode mergeKLists(ListNode[] lists) {
+        if(lists == null || lists.length == 0)
+            return null;
+        PriorityQueue<ListNode> queue = new PriorityQueue<>(new Comparator<ListNode>() {
+            @Override
+            public int compare(ListNode o1, ListNode o2) {
+                return (o1.val - o2.val);
+            }
+        });
+        ListNode dummy = new ListNode(-1);
+        ListNode current = dummy;
+        for(int i = 0; i < lists.length;i++){
+            ListNode head = lists[i];
+            if(head!= null)
+                queue.add(head);
+        }
+        while (queue.size() > 0){
+            ListNode node = queue.poll();
+            current.next = node;
+            current = current.next;
+            if(node.next != null){
+                queue.add(node.next);
+            }
+        }
+        current.next = null;
+        return dummy.next;
+
+
+    }
 }
