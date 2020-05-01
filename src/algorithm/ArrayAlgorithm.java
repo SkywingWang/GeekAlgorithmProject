@@ -1181,4 +1181,34 @@ public class ArrayAlgorithm {
         }
         return -1;
     }
+
+    /**
+     * 1313. 解压缩编码列表
+     *
+     * 给你一个以行程长度编码压缩的整数列表 nums 。
+     *
+     * 考虑每对相邻的两个元素 [freq, val] = [nums[2*i], nums[2*i+1]] （其中 i >= 0 ），每一对都表示解压后子列表中有 freq 个值为 val 的元素，你需要从左到右连接所有子列表以生成解压后的列表。
+     *
+     * 请你返回解压后的列表。
+     *
+     * @param nums
+     * @return
+     */
+    public int[] decompressRLElist(int[] nums) {
+        if(nums == null || nums.length < 2)
+            return new int[0];
+        ArrayList<Integer> list = new ArrayList<>();
+        int i = 0;
+        while (2 * i < nums.length){
+            for(int n = 0; n < nums[2 * i]; n++){
+                list.add(nums[2 * i + 1]);
+            }
+            i ++;
+        }
+        int[] resultArray = new int[list.size()];
+        for(int n = 0; n < list.size();n++){
+            resultArray[n] = list.get(n);
+        }
+        return resultArray;
+    }
 }
