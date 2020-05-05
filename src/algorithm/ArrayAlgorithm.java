@@ -1267,4 +1267,77 @@ public class ArrayAlgorithm {
         return ans;
 
     }
+
+    /**
+     * 1389. 按既定顺序创建目标数组
+     * 给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：
+     *
+     * 目标数组 target 最初为空。
+     * 按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。
+     * 重复上一步，直到在 nums 和 index 中都没有要读取的元素。
+     * 请你返回目标数组。
+     *
+     * 题目保证数字插入位置总是存在。
+     *
+     * @param nums
+     * @param index
+     * @return
+     */
+    public int[] createTargetArray(int[] nums, int[] index) {
+        if(nums == null || nums.length == 0 || index == null || index.length == 0)
+            return new int[0];
+        ArrayList<Integer> resultList = new ArrayList<>();
+        for(int i = 0; i < index.length && i < nums.length; i++){
+            resultList.add(index[i],nums[i]);
+        }
+        int[] result = new int[resultList.size()];
+        for(int i = 0; i < resultList.size();i++){
+            result[i] = resultList.get(i);
+        }
+        return result;
+    }
+
+    /**
+     * 45. 跳跃游戏 II
+     * 给定一个非负整数数组，你最初位于数组的第一个位置。
+     *
+     * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
+     *
+     * 你的目标是使用最少的跳跃次数到达数组的最后一个位置。
+     *
+     * @param nums
+     * @return
+     */
+    public int jump(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int position = nums.length - 1;
+        int step = 0;
+        while (position > 0){
+            for(int i = 0 ; i < position; i++){
+                if(i + nums[i] >= position){
+                    position = i;
+                    step++;
+                    break;
+                }
+            }
+        }
+        return step;
+    }
+
+    public int jump2(int[] nums){
+        if(nums == null || nums.length == 0)
+            return 0;
+        int maxPosition = 0;
+        int step = 0;
+        int end = 0;
+        for(int i = 0; i < nums.length; i++){
+            maxPosition = Math.max(maxPosition,i + nums[i]);
+            if(end == i){
+                end = maxPosition;
+                step ++;
+            }
+        }
+        return step;
+    }
 }

@@ -275,4 +275,32 @@ public class BinaryTreeAlgorithm {
         }
         return rightView;
     }
+
+    /**
+     * 98. 验证二叉搜索树
+     * 给定一个二叉树，判断其是否是一个有效的二叉搜索树。
+     *
+     * 假设一个二叉搜索树具有如下特征：
+     *
+     * 节点的左子树只包含小于当前节点的数。
+     * 节点的右子树只包含大于当前节点的数。
+     * 所有左子树和右子树自身必须也是二叉搜索树。
+     *
+     * @param root
+     * @return
+     */
+    public boolean isValidBST(TreeNode root) {
+        return isValidBSTHelper(root,null,null);
+    }
+
+    private boolean isValidBSTHelper(TreeNode node,Integer lower,Integer upper){
+        if(node == null)
+            return true;
+        if(lower != null && node.val <= lower) return false;
+        if(upper != null && node.val >= upper) return false;
+        if(!isValidBSTHelper(node.left,lower,node.val)) return false;
+        if(!isValidBSTHelper(node.right,node.val,upper)) return false;
+        return true;
+
+    }
 }

@@ -930,4 +930,14 @@ public class VariousAlgorithm {
         }
         return count;
     }
+
+    public String randomStr(int n){
+        Random r = new Random();
+        StringBuilder strBuilder = new StringBuilder();
+        for(int i = 0;i < n; i++){
+            int number = r.nextInt(26);
+            strBuilder.append((char)(number + (int)('A')));
+        }
+        return strBuilder.toString();
+    }
 }
