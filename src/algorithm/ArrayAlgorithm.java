@@ -1340,4 +1340,62 @@ public class ArrayAlgorithm {
         }
         return step;
     }
+
+    /**
+     * 221. 最大正方形
+     *
+     * 在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
+     *
+     * @param matrix
+     * @return
+     */
+    public int maximalSquare(char[][] matrix) {
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        int maxSide = 0;
+        int rows = matrix.length, columns = matrix[0].length;
+        int [][] dp = new int[rows][columns];
+        for(int i = 0; i < rows;i++){
+            for(int j = 0; j < columns; j++){
+                if(matrix[i][j] == '1'){
+                    if(i == 0 || j == 0){
+                        dp[i][j] = 1;
+                    }else{
+                        dp[i][j] = Math.min(Math.min(dp[i-1][j],dp[i][j-1]),dp[i-1][j-1]) + 1;
+                    }
+                    maxSide = Math.max(maxSide,dp[i][j]);
+                }
+            }
+        }
+        return maxSide * maxSide;
+    }
+
+    /**
+     * 1431. 拥有最多糖果的孩子
+     *
+     * 给你一个数组 candies 和一个整数 extraCandies ，其中 candies[i] 代表第 i 个孩子拥有的糖果数目。
+     *
+     * 对每一个孩子，检查是否存在一种方案，将额外的 extraCandies 个糖果分配给孩子们之后，此孩子有 最多 的糖果。注意，允许有多个孩子同时拥有 最多 的糖果数目。
+     *
+     * @param candies
+     * @param extraCandies
+     * @return
+     */
+    public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
+        if(candies == null || candies.length == 0)
+            return new ArrayList<>();
+        List<Boolean> resultList = new ArrayList<>();
+        int max = 0;
+        for(int candy : candies){
+            if(max < candy)
+                max = candy;
+        }
+        for(int i = 0; i < candies.length; i++){
+            if(candies[i] + extraCandies >= max)
+                resultList.add(true);
+            else
+                resultList.add(false);
+        }
+        return resultList;
+    }
 }
