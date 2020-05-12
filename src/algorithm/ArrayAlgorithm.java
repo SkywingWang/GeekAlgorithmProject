@@ -1398,4 +1398,25 @@ public class ArrayAlgorithm {
         }
         return resultList;
     }
+
+    /**
+     * LCP 06. 拿硬币
+     *
+     * 桌上有 n 堆力扣币，每堆的数量保存在数组 coins 中。我们每次可以选择任意一堆，拿走其中的一枚或者两枚，求拿完所有力扣币的最少次数。
+     *
+     * @param coins
+     * @return
+     */
+    public int minCount(int[] coins) {
+        if(coins == null || coins.length == 0)
+            return 0;
+        int result = 0;
+        for(int i = 0; i < coins.length; i++){
+            result += coins[i] / 2;
+            if(coins[i] % 2 != 0)
+                result++;
+
+        }
+        return result;
+    }
 }

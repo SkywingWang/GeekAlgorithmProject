@@ -985,5 +985,35 @@ public class VariousAlgorithm {
         return memo[i];
     }
 
+    /**
+     * 实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+     * @param x
+     * @param n
+     * @return
+     */
+    public double myPow(double x, int n) {
+        long N = n;
+        return N >= 0 ? quickMulRecursive(x,N):1.0/quickMulRecursive(x,-N);
+//        return N >= 0 ? quickMulIterate(x,N) : 1.0 / quickMulIterate(x, -N);
+    }
 
+    public double quickMulRecursive(double x,long N){
+        if(N == 0)
+            return 1.0;
+        double y = quickMulRecursive(x,N / 2);
+        return N % 2 == 0 ? y* y : y * y * x;
+    }
+
+    public double quickMulIterate(double x,long N){
+        double result = 1.0;
+        double x_contribute = x;
+        while (N>0){
+            if(N % 2 == 1){
+                result *= x_contribute;
+            }
+            x_contribute *= x_contribute;
+            N /= 2;
+        }
+        return result;
+    }
 }
