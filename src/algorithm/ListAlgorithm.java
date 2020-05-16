@@ -401,4 +401,47 @@ public class ListAlgorithm {
         }
         return result;
     }
+
+    /**
+     * 25. K 个一组翻转链表
+     * 给你一个链表，每 k 个节点一组进行翻转，请你返回翻转后的链表。
+     *
+     * k 是一个正整数，它的值小于或等于链表的长度。
+     *
+     * 如果节点总数不是 k 的整数倍，那么请将最后剩余的节点保持原有顺序。
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode reverseKGroup(ListNode head, int k) {
+        ListNode hair = new ListNode(0);
+        hair.next = head;
+        ListNode pre = hair;
+        ListNode end = hair;
+        while(end.next != null){
+            for(int i = 0; i<k && end != null;i++) end = end.next;
+            if(end == null)break;
+            ListNode start = pre.next;
+            ListNode next = end.next;
+            end.next = null;
+            pre.next = reverseK(start);
+            start.next = next;
+            pre = start;
+            end = pre;
+        }
+        return hair.next;
+    }
+
+    private ListNode reverseK(ListNode head){
+        ListNode pre = null;
+        ListNode curr = head;
+        while (curr != null){
+            ListNode next = curr.next;
+            curr.next = pre;
+            pre = curr;
+            curr = next;
+        }
+        return pre;
+    }
 }
