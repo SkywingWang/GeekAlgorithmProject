@@ -1453,4 +1453,65 @@ public class ArrayAlgorithm {
         }
         return count;
     }
+
+    /**
+     * 210. 课程表 II
+     *
+     * 现在你总共有 n 门课需要选，记为 0 到 n-1。
+     *
+     * 在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们: [0,1]
+     *
+     * 给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。
+     *
+     * 可能会有多个正确的顺序，你只要返回一种就可以了。如果不可能完成所有课程，返回一个空数组。
+     *
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    public int[] findOrder(int numCourses, int[][] prerequisites) {
+        if(numCourses == 0) return new int[0];
+        int[] inDegrees = new int[numCourses];
+        for(int[] p : prerequisites){
+            inDegrees[p[0]]++;
+        }
+        Queue<Integer> queue = new LinkedList<>();
+        for(int i = 0; i < inDegrees.length; i++){
+            if(inDegrees[i] == 0) queue.offer(i);
+        }
+        int count = 0;
+        int[] res = new int[numCourses];
+        while (!queue.isEmpty()){
+            int curr = queue.poll();
+            res[count++] = curr;
+            for(int[]p : prerequisites){
+                if(p[1] == curr){
+                    inDegrees[p[0]]--;
+                    if(inDegrees[p[0]] == 0)queue.offer(p[0]);
+                }
+            }
+        }
+        if(count==numCourses)return res;
+        return new int[0];
+    }
+
+    /**
+     * 152. 乘积最大子数组
+     *
+     * 给你一个整数数组 nums ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+     * @param nums
+     * @return
+     */
+    public int maxProduct(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int maxF = nums[0], minF = nums[0], ans = nums[0];
+        for(int i = 1; i < nums.length;i++){
+            int mx = maxF,mn = minF;
+            maxF = Math.max(mx * nums[i],Math.max(nums[i],mn * nums[i]));
+            minF = Math.min(mn * nums[i],Math.min(nums[i],mx * nums[i]));
+            ans = Math.max(maxF,ans);
+        }
+        return ans;
+    }
 }
