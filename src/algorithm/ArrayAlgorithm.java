@@ -1514,4 +1514,83 @@ public class ArrayAlgorithm {
         }
         return ans;
     }
+
+    /**
+     * 4. 寻找两个正序数组的中位数
+     *
+     * 给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。
+     *
+     * 请你找出这两个正序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
+     *
+     * 你可以假设 nums1 和 nums2 不会同时为空。
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public double findMedianSortedArrays(int[] nums1, int[] nums2) {
+        if(nums1 == null && nums2 == null)
+            return 0.0;
+        if(nums1 == null || nums1.length == 0){
+            if(nums2.length == 0)
+                return 0.0;
+            else
+                return nums2[nums2.length / 2];
+        }
+        if(nums2 == null || nums2.length == 0){
+            if(nums1.length == 0)
+                return 0.0;
+            else
+                return nums1[nums1.length / 2];
+        }
+        if(nums1.length > nums2.length)
+            return findMedianSortedArrays(nums2,nums1);
+        int m = nums1.length;
+        int n = nums2.length;
+        int left = 0, right = m, ansi = -1;
+        int median1 = 0,median2 = 0;
+
+        while (left <= right){
+            int i = (left + right) / 2;
+            int j = (m + n + 1) / 2 - i;
+
+            int nums_im1 = (i == 0 ? Integer.MIN_VALUE : nums1[i - 1]);
+            int nums_i = (i == m ? Integer.MAX_VALUE : nums1[i]);
+            int nums_jm1 = (j == 0? Integer.MIN_VALUE : nums2[j - 1]);
+            int nums_j = (j == n ? Integer.MAX_VALUE : nums2[j]);
+
+            if( nums_im1 <= nums_j){
+                ansi = i;
+                median1 = Math.max(nums_im1,nums_jm1);
+                median2 = Math.min(nums_i,nums_j);
+                left = i + 1;
+            }else {
+                right = i - 1;
+            }
+        }
+        return (m + n) % 2 == 0 ? (median1 + median2) / 2.0:median1;
+
+    }
+
+    /**
+     * 287. 寻找重复数
+     *
+     * 给定一个包含 n + 1 个整数的数组 nums，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。
+     *
+     * @param nums
+     * @return
+     */
+    public int findDuplicate(int[] nums) {
+        int slow = 0, fast = 0;
+        do{
+            slow = nums[slow];
+            fast = nums[nums[fast]];
+        }while (slow != fast);
+        slow = 0;
+        while (slow != fast){
+            slow = nums[slow];
+            fast = nums[fast];
+        }
+        return slow;
+    }
 }
