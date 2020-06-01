@@ -418,4 +418,16 @@ public class BinaryTreeAlgorithm {
         }
         return root;
     }
+
+    public boolean isSymmetricV2(TreeNode root) {
+       return checkIsSymmetric(root,root);
+    }
+
+    private boolean checkIsSymmetric(TreeNode leftNode,TreeNode rightNode){
+        if(leftNode == null && rightNode == null)
+            return true;
+        if(leftNode == null || rightNode == null)
+            return false;
+        return leftNode.val == rightNode.val && checkIsSymmetric(leftNode.left,rightNode.right) && checkIsSymmetric(leftNode.right,rightNode.left);
+    }
 }

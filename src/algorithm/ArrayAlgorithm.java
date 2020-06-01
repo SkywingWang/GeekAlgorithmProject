@@ -1593,4 +1593,102 @@ public class ArrayAlgorithm {
         }
         return slow;
     }
+
+    /**
+     * 974. 和可被 K 整除的子数组
+     *
+     * 给定一个整数数组 A，返回其中元素之和可被 K 整除的（连续、非空）子数组的数目。
+     *
+     * @param A
+     * @param K
+     * @return
+     */
+    public int subarraysDivByK(int[] A, int K) {
+        Map<Integer,Integer> record = new HashMap<>();
+        record.put(0,1);
+        int sum = 0, ans = 0;
+        for(int elem : A){
+            sum += elem;
+            int modules = (sum % K + K) % K;
+            int same = record.getOrDefault(modules, 0);
+            ans += same;
+            record.put(modules,same + 1);
+        }
+        return ans;
+    }
+
+    /**
+     * 84. 柱状图中最大的矩形
+     * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
+     *
+     * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+     * @param heights
+     * @return
+     */
+
+    public int largestRectangleArea(int[] heights) {
+        int n = heights.length;
+        int[] left = new int[n];
+        int[] right = new int[n];
+
+        Stack<Integer> mono_stack = new Stack<Integer>();
+        for (int i = 0; i < n; ++i) {
+            while (!mono_stack.isEmpty() && heights[mono_stack.peek()] >= heights[i]) {
+                mono_stack.pop();
+            }
+            left[i] = (mono_stack.isEmpty() ? -1 : mono_stack.peek());
+            mono_stack.push(i);
+        }
+
+        mono_stack.clear();
+        for (int i = n - 1; i >= 0; --i) {
+            while (!mono_stack.isEmpty() && heights[mono_stack.peek()] >= heights[i]) {
+                mono_stack.pop();
+            }
+            right[i] = (mono_stack.isEmpty() ? n : mono_stack.peek());
+            mono_stack.push(i);
+        }
+
+        int ans = 0;
+        for (int i = 0; i < n; ++i) {
+            ans = Math.max(ans, (right[i] - left[i] - 1) * heights[i]);
+        }
+        return ans;
+    }
+
+    /**
+     * 1460. 通过翻转子数组使两个数组相等
+     * 给你两个长度相同的整数数组 target 和 arr 。
+     *
+     * 每一步中，你可以选择 arr 的任意 非空子数组 并将它翻转。你可以执行此过程任意次。
+     *
+     * 如果你能让 arr 变得与 target 相同，返回 True；否则，返回 False 。
+     *
+     * @param target
+     * @param arr
+     * @return
+     */
+    public boolean canBeEqual(int[] target, int[] arr) {
+        if(target == null && arr == null)
+            return true;
+        if(target == null || arr == null)
+            return false;
+        if(target.length != arr.length)
+            return false;
+        HashMap<Integer,Integer> hashMap = new HashMap();
+        for(int i = 0; i < target.length; i++){
+            hashMap.put(target[i],hashMap.getOrDefault(target[i],0) + 1);
+        }
+        for(int i = 0; i < arr.length; i++){
+            if(hashMap.containsKey(arr[i])){
+                if(hashMap.get(arr[i]) > 0){
+                    hashMap.put(arr[i],hashMap.get(arr[i]) - 1);
+                }else{
+                    return false;
+                }
+            }else
+                return false;
+        }
+        return true;
+    }
 }

@@ -534,4 +534,65 @@ public class StringAlgorithm {
         }
         return true;
     }
+
+    /**
+     * 394. 字符串解码
+     *
+     * 给定一个经过编码的字符串，返回它解码后的字符串。
+     *
+     * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
+     *
+     * 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
+     *
+     * 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
+     *
+     * @param s
+     * @return
+     */
+    int ptrDecodeString;
+    public String decodeString(String s) {
+        LinkedList<String> stk = new LinkedList<>();
+        ptrDecodeString = 0;
+        while (ptrDecodeString < s.length()){
+            char cur = s.charAt(ptrDecodeString);
+            if(Character.isDigit(cur)){
+                String digits = getDigitsDecodeString(s);
+                stk.addLast(digits);
+            }else if(Character.isLetter(cur) || cur == '['){
+                stk.addLast(String.valueOf(s.charAt(ptrDecodeString++)));
+            }else{
+                ++ptrDecodeString;
+                LinkedList<String> sub = new LinkedList<>();
+                while (!"[".equals(stk.peekLast())){
+                    sub.addLast(stk.removeLast());
+                }
+                Collections.reverse(sub);
+                stk.removeLast();
+                int repTime = Integer.parseInt(stk.removeLast());
+                StringBuffer t = new StringBuffer();
+                String o = getStringDecodeString(sub);
+                while (repTime-- > 0){
+                    t.append(o);
+                }
+                stk.addLast(t.toString());
+            }
+        }
+        return getStringDecodeString(stk);
+    }
+
+    private String getDigitsDecodeString(String s){
+        StringBuffer ret = new StringBuffer();
+        while (Character.isDigit(s.charAt(ptrDecodeString))){
+            ret.append(s.charAt(ptrDecodeString++));
+        }
+        return ret.toString();
+    }
+
+    private String getStringDecodeString(LinkedList<String> v){
+        StringBuffer ret = new StringBuffer();
+        for(String s:v){
+            ret.append(s);
+        }
+        return ret.toString();
+    }
 }
