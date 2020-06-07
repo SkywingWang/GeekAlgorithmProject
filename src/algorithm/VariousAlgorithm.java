@@ -798,30 +798,30 @@ public class VariousAlgorithm {
         double[] ans = new double[2];
         Arrays.fill(ans, Double.MAX_VALUE);
         // 判断两直线是否平行
-        if ((y4-y3)*(x2-x1) == (y2-y1)*(x4-x3)) {
+        if ((y4 - y3) * (x2 - x1) == (y2 - y1) * (x4 - x3)) {
             // 判断两直线是否重叠
-            if ((y2-y1)*(x3-x1) == (y3-y1)*(x2-x1)) {
+            if ((y2 - y1) * (x3 - x1) == (y3 - y1) * (x2 - x1)) {
                 // 判断 (x3, y3) 是否在「线段」(x1, y1)~(x2, y2) 上
                 if (isInside(x1, y1, x2, y2, x3, y3)) {
                     updateRes(ans, x3, y3);
                 }
                 // 判断 (x4, y4) 是否在「线段」(x1, y1)~(x2, y2) 上
                 if (isInside(x1, y1, x2, y2, x4, y4)) {
-                    updateRes(ans, (double)x4, (double)y4);
+                    updateRes(ans, (double) x4, (double) y4);
                 }
                 // 判断 (x1, y1) 是否在「线段」(x3, y3)~(x4, y4) 上
                 if (isInside(x3, y3, x4, y4, x1, y1)) {
-                    updateRes(ans, (double)x1, (double)y1);
+                    updateRes(ans, (double) x1, (double) y1);
                 }
                 // 判断 (x2, y2) 是否在「线段」(x3, y3)~(x4, y4) 上
                 if (isInside(x3, y3, x4, y4, x2, y2)) {
-                    updateRes(ans, (double)x2, (double)y2);
+                    updateRes(ans, (double) x2, (double) y2);
                 }
             }
         } else {
             // 联立方程得到 t1 和 t2 的值
-            double t1 = (double)(x3 * (y4 - y3) + y1 * (x4 - x3) - y3 * (x4 - x3) - x1 * (y4 - y3)) / ((x2 - x1) * (y4 - y3) - (x4 - x3) * (y2 - y1));
-            double t2 = (double)(x1 * (y2 - y1) + y3 * (x2 - x1) - y1 * (x2 - x1) - x3 * (y2 - y1)) / ((x4 - x3) * (y2 - y1) - (x2 - x1) * (y4 - y3));
+            double t1 = (double) (x3 * (y4 - y3) + y1 * (x4 - x3) - y3 * (x4 - x3) - x1 * (y4 - y3)) / ((x2 - x1) * (y4 - y3) - (x4 - x3) * (y2 - y1));
+            double t2 = (double) (x1 * (y2 - y1) + y3 * (x2 - x1) - y1 * (x2 - x1) - x3 * (y2 - y1)) / ((x4 - x3) * (y2 - y1) - (x2 - x1) * (y4 - y3));
             // 判断 t1 和 t2 是否均在 [0, 1] 之间
             if (t1 >= 0.0 && t1 <= 1.0 && t2 >= 0.0 && t2 <= 1.0) {
                 ans[0] = x1 + t1 * (x2 - x1);
@@ -854,17 +854,18 @@ public class VariousAlgorithm {
     /**
      * 面试题 08.11. 硬币
      * 硬币。给定数量不限的硬币，币值为25分、10分、5分和1分，编写代码计算n分有几种表示法。(结果可能会很大，你需要将结果模上1000000007)
+     *
      * @param n
      * @return
      */
     public int waysToChange(int n) {
-        if(n <= 0)
+        if (n <= 0)
             return 0;
-        if(n < 5)
+        if (n < 5)
             return 1;
         int mod = 1000000007;
         int result = 0;
-        for(int i = 0; i <= n / 25; i++){
+        for (int i = 0; i <= n / 25; i++) {
             int rest = n - i * 25;
             int a = rest / 10;
             int b = (rest % 10) / 5;
@@ -875,7 +876,7 @@ public class VariousAlgorithm {
 
     /**
      * 面试题51. 数组中的逆序对
-     *
+     * <p>
      * 在数组中的两个数字，如果前面一个数字大于后面的数字，则这两个数字组成一个逆序对。输入一个数组，求出这个数组中的逆序对的总数。
      *
      * @param nums
@@ -883,46 +884,46 @@ public class VariousAlgorithm {
      */
     public int reversePairs(int[] nums) {
         int length = nums.length;
-        if(length < 2)
+        if (length < 2)
             return 0;
         int[] copy = new int[length];
-        for(int i = 0; i < length; i++)
+        for (int i = 0; i < length; i++)
             copy[i] = nums[i];
         int[] temp = new int[length];
-        return reversePairs(copy,0,length - 1,temp);
+        return reversePairs(copy, 0, length - 1, temp);
     }
 
-    private int reversePairs(int[] nums,int left,int right,int[] temp){
-        if(left == right)
+    private int reversePairs(int[] nums, int left, int right, int[] temp) {
+        if (left == right)
             return 0;
-        int mid = left + (right - left)/2;
-        int leftPairs = reversePairs(nums,left,mid,temp);
-        int rightPairs = reversePairs(nums,mid + 1, right,temp);
-        if(nums[mid] <= nums[mid + 1]){
+        int mid = left + (right - left) / 2;
+        int leftPairs = reversePairs(nums, left, mid, temp);
+        int rightPairs = reversePairs(nums, mid + 1, right, temp);
+        if (nums[mid] <= nums[mid + 1]) {
             return leftPairs + rightPairs;
         }
-        int crossPairs = mergeAndCount(nums,left,mid,right,temp);
+        int crossPairs = mergeAndCount(nums, left, mid, right, temp);
         return leftPairs + rightPairs + crossPairs;
     }
 
-    private int mergeAndCount(int[] nums,int left ,int mid,int right ,int[] temp){
-        for(int i = left; i <= right; i++){
+    private int mergeAndCount(int[] nums, int left, int mid, int right, int[] temp) {
+        for (int i = left; i <= right; i++) {
             temp[i] = nums[i];
         }
         int i = left;
         int j = mid + 1;
         int count = 0;
-        for(int k = left; k <= right;k++){
-            if(i== mid + 1){
+        for (int k = left; k <= right; k++) {
+            if (i == mid + 1) {
                 nums[k] = temp[j];
                 j++;
-            }else if(j == right + 1){
+            } else if (j == right + 1) {
                 nums[k] = temp[i];
                 i++;
-            }else if(temp[i] <= temp[j]){
+            } else if (temp[i] <= temp[j]) {
                 nums[k] = temp[i];
                 i++;
-            }else {
+            } else {
                 nums[k] = temp[j];
                 j++;
                 count += (mid - i + 1);
@@ -931,12 +932,12 @@ public class VariousAlgorithm {
         return count;
     }
 
-    public String randomStr(int n){
+    public String randomStr(int n) {
         Random r = new Random();
         StringBuilder strBuilder = new StringBuilder();
-        for(int i = 0;i < n; i++){
+        for (int i = 0; i < n; i++) {
             int number = r.nextInt(26);
-            strBuilder.append((char)(number + (int)('A')));
+            strBuilder.append((char) (number + (int) ('A')));
         }
         return strBuilder.toString();
     }
@@ -944,14 +945,14 @@ public class VariousAlgorithm {
     /**
      * 983. 最低票价
      * 在一个火车旅行很受欢迎的国度，你提前一年计划了一些火车旅行。在接下来的一年里，你要旅行的日子将以一个名为 days 的数组给出。每一项是一个从 1 到 365 的整数。
-     *
+     * <p>
      * 火车票有三种不同的销售方式：
-     *
+     * <p>
      * 一张为期一天的通行证售价为 costs[0] 美元；
      * 一张为期七天的通行证售价为 costs[1] 美元；
      * 一张为期三十天的通行证售价为 costs[2] 美元。
      * 通行证允许数天无限制的旅行。 例如，如果我们在第 2 天获得一张为期 7 天的通行证，那么我们可以连着旅行 7 天：第 2 天、第 3 天、第 4 天、第 5 天、第 6 天、第 7 天和第 8 天。
-     *
+     * <p>
      * 返回你想要完成在给定的列表 days 中列出的每一天的旅行所需要的最低消费。
      *
      * @param days
@@ -962,24 +963,25 @@ public class VariousAlgorithm {
     int[] costs;
     Integer[] memo;
     Set<Integer> dayset;
+
     public int mincostTickets(int[] days, int[] costs) {
         this.costs = costs;
         memo = new Integer[366];
         dayset = new HashSet<>();
-        for(int d : days){
+        for (int d : days) {
             dayset.add(d);
         }
         return mincostTicketsDP(1);
     }
 
-    private int mincostTicketsDP(int i){
-        if(i > 365)
+    private int mincostTicketsDP(int i) {
+        if (i > 365)
             return 0;
-        if(memo[i] != null)
+        if (memo[i] != null)
             return memo[i];
-        if(dayset.contains(i)){
-            memo[i] = Math.min(Math.min(mincostTicketsDP(i + 1) + costs[0],mincostTicketsDP(i + 7) + costs[1]),mincostTicketsDP(i + 30) + costs[2]);
-        }else{
+        if (dayset.contains(i)) {
+            memo[i] = Math.min(Math.min(mincostTicketsDP(i + 1) + costs[0], mincostTicketsDP(i + 7) + costs[1]), mincostTicketsDP(i + 30) + costs[2]);
+        } else {
             memo[i] = mincostTicketsDP(i + 1);
         }
         return memo[i];
@@ -987,33 +989,80 @@ public class VariousAlgorithm {
 
     /**
      * 实现 pow(x, n) ，即计算 x 的 n 次幂函数。
+     *
      * @param x
      * @param n
      * @return
      */
     public double myPow(double x, int n) {
         long N = n;
-        return N >= 0 ? quickMulRecursive(x,N):1.0/quickMulRecursive(x,-N);
+        return N >= 0 ? quickMulRecursive(x, N) : 1.0 / quickMulRecursive(x, -N);
 //        return N >= 0 ? quickMulIterate(x,N) : 1.0 / quickMulIterate(x, -N);
     }
 
-    public double quickMulRecursive(double x,long N){
-        if(N == 0)
+    public double quickMulRecursive(double x, long N) {
+        if (N == 0)
             return 1.0;
-        double y = quickMulRecursive(x,N / 2);
-        return N % 2 == 0 ? y* y : y * y * x;
+        double y = quickMulRecursive(x, N / 2);
+        return N % 2 == 0 ? y * y : y * y * x;
     }
 
-    public double quickMulIterate(double x,long N){
+    public double quickMulIterate(double x, long N) {
         double result = 1.0;
         double x_contribute = x;
-        while (N>0){
-            if(N % 2 == 1){
+        while (N > 0) {
+            if (N % 2 == 1) {
                 result *= x_contribute;
             }
             x_contribute *= x_contribute;
             N /= 2;
         }
         return result;
+    }
+
+    /**
+     * 面试题64. 求1+2+…+n
+     *
+     * 求 1+2+...+n ，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。
+     *
+     * @param n
+     * @return
+     */
+    public int sumNums(int n) {
+        if (n == 0)
+            return 0;
+        if (n == 1)
+            return 1;
+        return sumNums(n - 1) + n;
+
+    }
+
+    /**
+     * 837. 新21点
+     *
+     * 爱丽丝参与一个大致基于纸牌游戏 “21点” 规则的游戏，描述如下：
+     *
+     * 爱丽丝以 0 分开始，并在她的得分少于 K 分时抽取数字。 抽取时，她从 [1, W] 的范围中随机获得一个整数作为分数进行累计，其中 W 是整数。 每次抽取都是独立的，其结果具有相同的概率。
+     *
+     * 当爱丽丝获得不少于 K 分时，她就停止抽取数字。 爱丽丝的分数不超过 N 的概率是多少？
+     *
+     * @param N
+     * @param K
+     * @param W
+     * @return
+     */
+    public double new21Game(int N, int K, int W) {
+        if(K == 0){
+            return 1.0;
+        }
+        double[] dp = new double[K + W + 1];
+        for(int i = K; i <= N && i < K + W; i++){
+            dp[i] = 1.0;
+        }
+        dp[K - 1] = 1.0 * Math.min(N - K + 1, W) / W;
+        for(int i = K - 2 ; i >= 0; i--){
+            dp[i] = dp[i + 1] - (dp[i + W + 1] - dp[i + 1]) / W;
+        }
+        return dp[0];
     }
 }

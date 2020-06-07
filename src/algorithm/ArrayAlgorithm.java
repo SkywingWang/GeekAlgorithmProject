@@ -1691,4 +1691,133 @@ public class ArrayAlgorithm {
         }
         return true;
     }
+
+    /**
+     * 1450. 在既定时间做作业的学生人数
+     *
+     * 给你两个整数数组 startTime（开始时间）和 endTime（结束时间），并指定一个整数 queryTime 作为查询时间。
+     *
+     * 已知，第 i 名学生在 startTime[i] 时开始写作业并于 endTime[i] 时完成作业。
+     *
+     * 请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。
+     *
+     *
+     * @param startTime
+     * @param endTime
+     * @param queryTime
+     * @return
+     */
+    public int busyStudent(int[] startTime, int[] endTime, int queryTime) {
+        if(startTime == null || startTime.length == 0 || endTime == null || endTime.length == 0)
+            return 0;
+        int length = Math.min(startTime.length,endTime.length);
+        int count = 0;
+        for(int i = 0; i < length;i++){
+            if(queryTime >= startTime[i] && queryTime <= endTime[i])
+                count++;
+        }
+        return count;
+    }
+
+    /**
+     * 238. 除自身以外数组的乘积
+     * 给你一个长度为 n 的整数数组 nums，其中 n > 1，返回输出数组 output ，其中 output[i] 等于 nums 中除 nums[i] 之外其余各元素的乘积。
+     *
+     * @param nums
+     * @return
+     */
+    public int[] productExceptSelf(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return new int[0];
+        int mulAll = 1;
+        int haveZero = 0;
+        int[] result = new int[nums.length];
+        for(int i = 0; i < nums.length; i ++){
+            if(nums[i] == 0)
+                haveZero++;
+            else
+                mulAll = mulAll * nums[i];
+        }
+        if(haveZero >= 2){
+            return result;
+        }else if(haveZero == 1){
+            for(int i = 0; i < nums.length ; i++){
+                if(nums[i] == 0){
+                    result[i] = mulAll;
+                    return result;
+                }
+
+            }
+        }
+        for(int i = 0; i < nums.length;i++){
+            result[i] = mulAll / nums[i];
+        }
+        return result;
+    }
+
+
+    /**
+     * 面试题29. 顺时针打印矩阵
+     *
+     * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
+     *
+     * @param matrix
+     * @return
+     */
+    public int[] spiralOrder(int[][] matrix) {
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return new int[0];
+        int rows = matrix.length, columns = matrix[0].length;
+        int[] order = new int[rows * columns];
+        int index = 0;
+        int left = 0, right = columns - 1, top = 0, bottom = rows - 1;
+        while (left <= right && top <= bottom){
+            for(int column = left;column <= right;column ++)
+                order[index++] = matrix[top][column];
+            for(int row = top + 1; row <= bottom;row ++)
+                order[index++] = matrix[row][right];
+            if(left < right && top < bottom){
+                for(int column = right - 1; column > left; column--)
+                    order[index++] = matrix[bottom][column];
+                for(int row = bottom; row > top; row--)
+                    order[index++] = matrix[row][left];
+            }
+            left ++;
+            right--;
+            top++;
+            bottom--;
+        }
+        return order;
+    }
+
+    /**
+     * 128. 最长连续序列
+     *
+     * 给定一个未排序的整数数组，找出最长连续序列的长度。
+     *
+     * 要求算法的时间复杂度为 O(n)。
+     *
+     * @param nums
+     * @return
+     */
+    public int longestConsecutive(int[] nums) {
+        Set<Integer> num_set = new HashSet<>();
+        for(int num : nums){
+            num_set.add(num);
+        }
+        int longestSteak = 0;
+        for(int num:num_set){
+            if(!num_set.contains(num - 1)){
+                int currentNum = num;
+                int currentStreak = 1;
+                while (num_set.contains(currentNum + 1)){
+                    currentNum += 1;
+                    currentStreak += 1;
+                }
+                longestSteak = Math.max(longestSteak,currentStreak);
+            }
+        }
+        return longestSteak;
+    }
+
 }
