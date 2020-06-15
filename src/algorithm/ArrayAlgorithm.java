@@ -1850,4 +1850,117 @@ public class ArrayAlgorithm {
 
     }
 
+    /**
+     * 15. 三数之和
+     * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
+     *
+     * 注意：答案中不可以包含重复的三元组。
+     *
+     * @param nums
+     * @return
+     */
+    public List<List<Integer>> threeSum(int[] nums) {
+        Arrays.sort(nums);
+        List<List<Integer>> result = new ArrayList<List<Integer>>();
+        for (int i = 0; i < nums.length - 2; i++){
+            if(i==0 || (i > 0 && nums[i] != nums[i-1])){
+                int left = i + 1, right = nums.length - 1, sum = 0 - nums[i];
+                while (left < right){
+                    if(nums[left] + nums[right] == sum){
+                        result.add(Arrays.asList(nums[i],nums[left],nums[right]));
+                        while (left < right && nums[left] == nums[left + 1]) left++;
+                        while (left < right && nums[right] == nums[right - 1]) right --;
+                        left ++;
+                        right --;
+                    }else if(nums[left] + nums[right] < sum){
+                        while (left < right && nums[left] == nums[left + 1]) left++;
+                        left++;
+                    }else if(nums[left] + nums[right] > sum){
+                        while (left < right && nums[right] == nums[right - 1]) right --;
+                        right --;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public int findBestValue(int[] arr, int target) {
+        Arrays.sort(arr);
+        int n = arr.length;
+        int[] prefix = new int[n + 1];
+        for(int i = 1; i <= n; ++i){
+            prefix[i] = prefix[i - 1] + arr[i - 1];
+        }
+        int l = 0, r = arr[n - 1],ans = -1;
+        while (l <= r){
+            int mid = (l + r) / 2;
+            int index = Arrays.binarySearch(arr,mid);
+            if(index < 0){
+                index = - index - 1;
+            }
+            int cur = prefix[index] + (n - index) * mid;
+            if(cur <= target){
+                ans = mid;
+                l = mid + 1;
+            }else {
+                r = mid - 1;
+            }
+        }
+        int chooseSmall = check(arr,ans);
+        int chooseBig = check(arr,ans  + 1);
+        return Math.abs(chooseSmall - target) <= Math.abs(chooseBig - target) ? ans : ans + 1;
+    }
+
+    public int check(int[] arr,int x){
+        int ret = 0;
+        for(int num : arr){
+            ret += Math.min(num,x);
+        }
+        return ret;
+    }
+
+    /**
+     * 14. 最长公共前缀
+     *
+     * 编写一个函数来查找字符串数组中的最长公共前缀。
+     *
+     * 如果不存在公共前缀，返回空字符串 ""。
+     *
+     * @param strs
+     * @return
+     */
+    public String longestCommonPrefix(String[] strs) {
+        if(strs == null || strs.length == 0 || strs[0] == null || strs[0].length() == 0)
+            return "";
+        int minLength = strs[0].length();
+        for(String str : strs){
+            minLength = Math.min(minLength,str.length());
+        }
+        int low = 0, high = minLength;
+        while (low< high){
+            int mid = (high - low + 1) / 2 + low;
+            if(isCommonPrefix(strs,mid)){
+                low = mid;
+            }else {
+                high = mid - 1;
+            }
+        }
+        return strs[0].substring(0,low);
+
+    }
+
+    private boolean isCommonPrefix(String[] strs,int length){
+        String str0 = strs[0].substring(0,length);
+        int count = strs.length;
+        for(int i = 1; i < count; i++){
+            String str = strs[i];
+            for(int j = 0; j < length; j++){
+                if(str0.charAt(j) != str.charAt(j)){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 }

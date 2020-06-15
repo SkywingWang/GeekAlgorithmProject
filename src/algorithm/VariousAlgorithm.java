@@ -1086,4 +1086,5 @@ public class VariousAlgorithm {
         }
         return x == revertedNumber || x == revertedNumber / 10;
     }
+
 }
