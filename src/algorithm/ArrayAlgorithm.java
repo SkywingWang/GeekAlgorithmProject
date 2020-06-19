@@ -1963,4 +1963,37 @@ public class ArrayAlgorithm {
         }
         return true;
     }
+
+    public int maxScoreSightseeingPair(int[] A){
+        int ans = 0, mx = A[0] + 0;
+        for(int j = 1; j < A.length;j++){
+            ans = Math.max(ans,mx + A[j] - j);
+            mx = Math.max(mx,A[j] + j);
+        }
+        return ans;
+    }
+
+    /**
+     * 1480. 一维数组的动态和
+     *
+     * 给你一个数组 nums 。数组「动态和」的计算公式为：runningSum[i] = sum(nums[0]…nums[i]) 。
+     *
+     * 请返回 nums 的动态和。
+     *
+     * @param nums
+     * @return
+     */
+    public int[] runningSum(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return new int[0];
+        int[] runningSum = new int[nums.length];
+        runningSum[0] = nums[0];
+        int i = 1;
+        while (i < nums.length){
+            runningSum[i] = runningSum[i - 1] + nums[i];
+            i++;
+        }
+        return runningSum;
+    }
+
 }
