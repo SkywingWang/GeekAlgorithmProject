@@ -477,4 +477,29 @@ public class BinaryTreeAlgorithm {
         }
         return path.peek();
     }
+
+    /**
+     * 124. 二叉树中的最大路径和
+     *
+     * 给定一个非空二叉树，返回其最大路径和。
+     *
+     * 本题中，路径被定义为一条从树中任意节点出发，达到任意节点的序列。该路径至少包含一个节点，且不一定经过根节点。
+     *
+     * @param root
+     * @return
+     */
+    private int maxSum = Integer.MIN_VALUE;
+    public int maxPathSum(TreeNode root) {
+        maxGain(root);
+        return maxSum;
+    }
+    public int maxGain(TreeNode node){
+        if(node == null)
+            return 0;
+        int leftGain = Math.max(maxGain(node.left),0);
+        int rightGain = Math.max(maxGain(node.right),0);
+        int priceNewPath = node.val + leftGain + rightGain;
+        maxSum = Math.max(maxSum,priceNewPath);
+        return node.val + Math.max(leftGain,rightGain);
+    }
 }
