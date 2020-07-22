@@ -1,6 +1,7 @@
 package algorithm;
 
 import data.MountainArray;
+import data.TreeNode;
 
 import java.util.*;
 
@@ -2018,5 +2019,290 @@ public class ArrayAlgorithm {
             result[2 * i + 1] = nums[n + i];
         }
         return result;
+    }
+
+    /**
+     * 209. 长度最小的子数组
+     *
+     * 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的连续子数组，返回 0。
+     *
+     * @param s
+     * @param nums
+     * @return
+     */
+    public int minSubArrayLen(int s, int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int minLength = Integer.MAX_VALUE,sum = 0;
+        int left=0,right=0;
+        while (right < nums.length){
+            sum += nums[right];
+            while (sum >= s){
+                minLength = Math.min(minLength,right - left + 1);
+                sum -= nums[left];
+                left++;
+            }
+            right++;
+        }
+        return minLength == Integer.MAX_VALUE ? 0 : minLength;
+    }
+
+    /**
+     * 215. 数组中的第K个最大元素
+     *
+     * 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int findKthLargest(int[] nums, int k) {
+        int heapSize = nums.length;
+        buildMaxHeap(nums,heapSize);
+        for(int i = nums.length - 1; i >= nums.length - k + 1; i--){
+            swap(nums, 0 ,i);
+            heapSize--;
+            maxHeapify(nums,0,heapSize);
+        }
+        return nums[0];
+    }
+
+    private void buildMaxHeap(int[] a,int heapSize){
+        for(int i = heapSize / 2; i >= 0; i--){
+            maxHeapify(a,i,heapSize);
+        }
+    }
+
+    private void maxHeapify(int[] a,int i, int heapSize){
+        int l = i * 2 + 1, r = i * 2 + 2, largest = i;
+        if(l < heapSize && a[l] > a[largest]){
+            largest = l;
+        }
+        if(r < heapSize && a[r] > a[largest]){
+            largest = r;
+        }
+        if(largest != i){
+            swap(a,i,largest);
+            maxHeapify(a,largest,heapSize);
+        }
+    }
+
+    /***
+     * 378. 有序矩阵中第K小的元素
+     *
+     * 给定一个 n x n 矩阵，其中每行和每列元素均按升序排序，找到矩阵中第 k 小的元素。
+     * 请注意，它是排序后的第 k 小元素，而不是第 k 个不同的元素。
+     *
+     * @param matrix
+     * @param k
+     * @return
+     */
+    public int kthSmallest(int[][] matrix, int k) {
+        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+            return 0;
+        int n = matrix.length;
+        int left = matrix[0][0];
+        int right = matrix[n - 1][n - 1];
+        while (left < right){
+            int mid = left + ((right - left) >> 1);
+            if(checkKthSmallest(matrix,mid,k,n)){
+                right = mid;
+            }else
+                left = mid + 1;
+        }
+        return left;
+
+    }
+    private boolean checkKthSmallest(int[][] matrix,int mid,int k,int n){
+        int i = n - 1;
+        int j = 0;
+        int num = 0;
+        while (i >= 0 && j < n){
+            if(matrix[i][j] <= mid){
+                num += i + 1;
+                j++;
+            }else{
+                i--;
+            }
+        }
+        return num >= k;
+    }
+
+    /**
+     * 108. 将有序数组转换为二叉搜索树
+     *
+     * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
+     *
+     * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+     *
+     * @param nums
+     * @return
+     */
+    public TreeNode sortedArrayToBST(int[] nums) {
+        return sortedArrayToBSTHelper(nums,0,nums.length - 1);
+    }
+
+    private TreeNode sortedArrayToBSTHelper(int[] nums,int left, int right){
+        if(left > right)
+            return null;
+        int mid = (left + right) / 2;
+        TreeNode root = new TreeNode(nums[mid]);
+        root.left = sortedArrayToBSTHelper(nums,left,mid -1 );
+        root.right = sortedArrayToBSTHelper(nums,mid + 1,right);
+        return root;
+    }
+
+    /**
+     * 63. 不同路径 II
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
+     *
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
+     *
+     * 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
+     *
+     *
+     * @param obstacleGrid
+     * @return
+     */
+    public int uniquePathsWithObstacles(int[][] obstacleGrid) {
+        if(obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0)
+            return 0;
+        int width = obstacleGrid.length;
+        int hight = obstacleGrid[0].length;
+        int[][] result = new int[width][hight];
+        for(int i = 0; i < width; i++){
+            for(int j = 0; j < hight;j++){
+                if(obstacleGrid[i][j]== 1){
+                    result[i][j] = 0;
+                }else{
+                    if(i == 0 && j == 0)
+                        result[i][j] = 1;
+                    if(i >  0)
+                        result[i][j] = result[i - 1][j] + result[i][j];
+                    if(j > 0)
+                        result[i][j] = result[i][j - 1] + result[i][j];
+                }
+            }
+        }
+        return result[width -1][hight-1];
+    }
+
+    /**
+     * 309. 最佳买卖股票时机含冷冻期
+     *
+     * 给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
+     *
+     * 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
+     *
+     * 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     * 卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit(int[] prices) {
+        if(prices == null || prices.length == 0)
+            return 0;
+        int n = prices.length;
+        int f0 = -prices[0];
+        int f1 = 0;
+        int f2 = 0;
+        for(int i = 1; i < n; i++){
+            int newf0 = Math.max(f0,f2 - prices[i]);
+            int newf1 = f0 + prices[i];
+            int newf2 = Math.max(f1,f2);
+            f0 = newf0;
+            f1 = newf1;
+            f2 = newf2;
+        }
+        return Math.max(f1,f2);
+    }
+
+
+    /**
+     * 两个数组的交集2
+     * 给定两个数组，编写一个函数来计算它们的交集。
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] intersect(int[] nums1, int[] nums2) {
+        if(nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0)
+            return new int[0];
+        HashMap<Integer,Integer> nums1HM = new HashMap<>();
+        for(int num : nums1){
+            int count = nums1HM.getOrDefault(num,0) + 1;
+            nums1HM.put(num,count);
+        }
+        int[] intersection = new int[Math.min(nums1.length,nums2.length)];
+        int index = 0;
+        for(int num : nums2){
+            int count = nums1HM.getOrDefault(num,0);
+            if(count > 0){
+                intersection[index++] = num;
+                count --;
+                if(count > 0)
+                    nums1HM.put(num,count);
+                else
+                    nums1HM.remove(num);
+            }
+
+        }
+        return Arrays.copyOfRange(intersection,0,index);
+    }
+
+    /**
+     * 1512. 好数对的数目
+     *
+     * 给你一个整数数组 nums 。
+     *
+     * 如果一组数字 (i,j) 满足 nums[i] == nums[j] 且 i < j ，就可以认为这是一组 好数对 。
+     *
+     * 返回好数对的数目。
+     *
+     *  
+     * @param nums
+     * @return
+     */
+    public int numIdenticalPairs(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 0;
+        int count = 0;
+        HashMap<Integer,Integer> mHashMap = new HashMap<>();
+        for(int i : nums){
+            mHashMap.put(i,mHashMap.getOrDefault(i,-1) + 1);
+        }
+        for(int i : mHashMap.keySet()){
+            int v = mHashMap.get(i);
+            count += (1 + v) * v / 2;
+        }
+        return count;
+    }
+
+    /**
+     * 剑指 Offer 11. 旋转数组的最小数字
+     *
+     * @param numbers
+     * @return
+     */
+    public int minArray(int[] numbers) {
+        if(numbers == null || numbers.length == 0){
+            return 0;
+        }
+        if(numbers.length == 1)
+            return numbers[0];
+        int low = 0,hight = numbers.length - 1;
+        while (low < hight){
+            int pivot = low + (hight - low) / 2;
+            if(numbers[pivot] < numbers[hight]){
+                hight = pivot;
+            }else if(numbers[pivot] > numbers[hight]){
+                low = pivot + 1;
+            }else {
+                hight -= 1;
+            }
+        }
+        return numbers[low];
+
     }
 }

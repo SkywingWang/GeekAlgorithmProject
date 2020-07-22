@@ -502,4 +502,97 @@ public class BinaryTreeAlgorithm {
         maxSum = Math.max(maxSum,priceNewPath);
         return node.val + Math.max(leftGain,rightGain);
     }
+
+    /**
+     * 41. 缺失的第一个正数
+     *
+     * 给你一个未排序的整数数组，请你找出其中没有出现的最小的正整数。
+     *
+     * @param nums
+     * @return
+     */
+    public int firstMissingPositive(int[] nums) {
+        if(nums == null || nums.length == 0)
+            return 1;
+        int n = nums.length;
+        for(int i = 0; i < n; i++){
+            if(nums[i] < 0){
+                nums[i] = n + 1;
+            }
+        }
+        for(int i = 0; i < n; i++){
+            int num = Math.abs(nums[i]);
+            if (num <= n) {
+                nums[num - 1] = -Math.abs(nums[num - 1]);
+            }
+        }
+        for(int i = 0;i < n; i++){
+            if(nums[i] > 0){
+                return i + 1;
+            }
+        }
+        return n+1;
+    }
+
+    /**
+     * 96. 不同的二叉搜索树
+     *
+     * 给定一个整数 n，求以 1 ... n 为节点组成的二叉搜索树有多少种？
+     *
+     * @param n
+     * @return
+     */
+    public int numTrees(int n) {
+        if(n <= 0)
+            return 0;
+        int[] G = new int[n + 1];
+        G[0] = 1;
+        G[1] = 1;
+        for(int i = 2; i <= n; i++){
+            for(int j = 1; j <= i; j++){
+                G[i] += G[j - 1] * G[i - j];
+            }
+        }
+        return G[n];
+    }
+
+    /**
+     * 785. 判断二分图
+     *
+     * @param graph
+     * @return
+     */
+    private static final int UNCOLORED = 0;
+    private static final int RED = 1;
+    private static final int GREEN = 2;
+    private int[] color;
+    private boolean valid;
+
+    public boolean isBipartite(int[][] graph) {
+        int n = graph.length;
+        valid = true;
+        color = new int[n];
+        Arrays.fill(color,UNCOLORED);
+        for(int i = 0; i < n && valid; i++){
+            if(color[i]==UNCOLORED){
+                isBipartiteDFS(i,RED,graph);
+            }
+        }
+        return valid;
+    }
+
+    private void isBipartiteDFS(int node,int c,int[][] graph){
+        color[node] = c;
+        int cNei = c == RED ? GREEN : RED;
+        for(int neighbor : graph[node]){
+            if(color[neighbor] == UNCOLORED){
+                isBipartiteDFS(neighbor,cNei,graph);
+                if(!valid)
+                    return;
+            }else if(color[neighbor] != cNei){
+                valid = false;
+                return;
+            }
+        }
+    }
 }

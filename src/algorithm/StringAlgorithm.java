@@ -1,5 +1,8 @@
 package algorithm;
 
+import data.TreeNode;
+import data.Trie;
+
 import java.util.*;
 
 /**
@@ -819,4 +822,350 @@ public class StringAlgorithm {
         return s.charAt(i - 1) == p.charAt(j - 1);
     }
 
+    /**
+     *
+     * 面试题 16.18. 模式匹配
+     *
+     * 你有两个字符串，即pattern和value。 pattern字符串由字母"a"和"b"组成，用于描述字符串中的模式。
+     * 例如，字符串"catcatgocatgo"匹配模式"aabab"（其中"cat"是"a"，"go"是"b"），
+     * 该字符串也匹配像"a"、"ab"和"b"这样的模式。但需注意"a"和"b"不能同时表示相同的字符串。
+     * 编写一个方法判断value字符串是否匹配pattern字符串。
+     *
+     * @param pattern
+     * @param value
+     * @return
+     */
+    public boolean patternMatching(String pattern, String value) {
+        int count_a = 0, count_b = 0;
+        for(char ch: pattern.toCharArray()){
+            if(ch == 'a'){
+                ++count_a;
+            }else{
+                ++count_b;
+            }
+        }
+        if(count_a < count_b){
+            int temp = count_a;
+            count_a = count_b;
+            count_b = temp;
+            char[] array = pattern.toCharArray();
+            for(int i = 0; i < array.length; i++){
+                array[i] = array[i] == 'a' ? 'b' : 'a';
+            }
+            pattern = new String(array);
+        }
+        if(value.length() == 0){
+            return count_b == 0;
+        }
+        if(pattern.length() == 0){
+            return false;
+        }
+        for(int len_a = 0; count_a * len_a <= value.length(); ++len_a){
+            int rest = value.length() -  count_a * len_a;
+            if((count_b == 0 && rest == 0)|| (count_b != 0 && rest % count_b == 0)){
+                int len_b = (count_b == 0 ? 0:rest/count_b);
+                int pos = 0;
+                boolean correct = true;
+                String value_a = "",value_b = "";
+                for(char ch : pattern.toCharArray()){
+                    if(ch == 'a'){
+                        String sub = value.substring(pos,pos + len_a);
+                        if(value_a.length() == 0){
+                            value_a = sub;
+                        }else if(!value_a.equals(sub)){
+                            correct = false;
+                            break;
+                        }
+                        pos += len_a;
+                    }else {
+                        String sub = value.substring(pos,pos + len_b);
+                        if(value_b.length() == 0){
+                            value_b = sub;
+                        }else if(!value_b.equals(sub)){
+                            correct = false;
+                            break;
+                        }
+                        pos += len_b;
+                    }
+                }
+                if(correct && !value_a.equals(value_b)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 67. 二进制求和
+     *
+     * 给你两个二进制字符串，返回它们的和（用二进制表示）。
+     *
+     * 输入为 非空 字符串且只包含数字 1 和 0。
+     *
+     * @param a
+     * @param b
+     * @return
+     */
+    public String addBinary_V2(String a, String b) {
+        if(a == null || "".trim().equals(a))
+            return b;
+        if(b == null || "".trim().equals(b))
+            return a;
+        int n = Math.max(a.length(),b.length()),carry = 0;
+        StringBuffer resultSB = new StringBuffer();
+        for(int i = 0; i < n; i++){
+            carry += i < a.length() ? (a.charAt(a.length() - 1 -i) - '0') : 0;
+            carry += i < b.length() ? (b.charAt(b.length() - 1 - i) - '0') : 0;
+            resultSB.append((char)(carry % 2 + '0'));
+            carry /= 2;
+        }
+        if(carry > 0)
+            resultSB.append('1');
+        resultSB.reverse();
+        return resultSB.toString();
+    }
+
+    /**
+     * 139. 单词拆分
+     *
+     * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
+     *
+     * 说明：
+     *
+     * 拆分时可以重复使用字典中的单词。
+     * 你可以假设字典中没有重复的单词。
+     *
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public boolean wordBreak(String s, List<String> wordDict) {
+        if(s==null || "".equals(s))
+            return true;
+        if(wordDict == null || wordDict.size() == 0)
+            return false;
+        Set<String> wordDictSet = new HashSet(wordDict);
+        boolean[] dp = new boolean[s.length() + 1];
+        dp[0] = true;
+        for (int i = 1; i <= s.length(); i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && wordDictSet.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
+            }
+        }
+        return dp[s.length()];
+    }
+
+    /**
+     * 44. 通配符匹配
+     *
+     *  给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+     *
+     * '?' 可以匹配任何单个字符。
+     * '*' 可以匹配任意字符串（包括空字符串）。
+     * 两个字符串完全匹配才算匹配成功。
+     *
+     * @param s
+     * @param p
+     * @return
+     */
+    public boolean isMatchC(String s, String p) {
+        int m = s.length();
+        int n = p.length();
+        boolean[][] dp = new boolean[m+1][n+1];
+        dp[0][0] = true;
+        for(int i = 1; i <= n; i++){
+            if(p.charAt(i - 1) == '*'){
+                dp[0][i] = true;
+
+            }else
+                break;
+        }
+        for(int i = 1; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                if(p.charAt(j - 1)=='*'){
+                    dp[i][j] = dp[i][j - 1] || dp[i-1][j];
+                }else if(p.charAt(j - 1) == '?' || s.charAt(i - 1) == p.charAt(j - 1)){
+                    dp[i][j] = dp[i - 1][j - 1];
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+    /**
+     * 面试题 17.13. 恢复空格
+     * 哦，不！你不小心把一个长篇文章中的空格、标点都删掉了，并且大写也弄成了小写。
+     * 像句子"I reset the computer. It still didn’t boot!"已经变成了"iresetthecomputeritstilldidntboot"。
+     * 在处理标点符号和大小写之前，你得先把它断成词语。当然了，你有一本厚厚的词典dictionary，不过，有些词没在词典里。
+     * 假设文章用sentence表示，设计一个算法，把文章断开，要求未识别的字符最少，返回未识别的字符数。
+     *
+     * @param dictionary
+     * @param sentence
+     * @return
+     */
+    public int respace(String[] dictionary, String sentence) {
+        int n = sentence.length();
+        Trie root = new Trie();
+        for(String word : dictionary){
+            root.insert(word);
+        }
+        int[] dp = new int[n + 1];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[0] = 0;
+        for(int i = 1; i <= n; i++){
+            dp[i] = dp[i-1] + 1;
+            Trie curPos = root;
+            for(int j = i; j >= 1;j--){
+                int t = sentence.charAt(j - 1) - 'a';
+                if(curPos.next[t] == null)
+                    break;
+                else if(curPos.next[t].isEnd){
+                    dp[i] = Math.min(dp[i],dp[j-1]);
+                }
+                if(dp[i]==0)
+                    break;
+                curPos = curPos.next[t];
+            }
+        }
+        return dp[n];
+    }
+
+    /**
+     *
+     * 97. 交错字符串
+     *
+     * 给定三个字符串 s1, s2, s3, 验证 s3 是否是由 s1 和 s2 交错组成的。
+     *
+     * @param s1
+     * @param s2
+     * @param s3
+     * @return
+     */
+    public boolean isInterleave(String s1, String s2, String s3) {
+        if(s1 == null || s2 == null || s3 == null || s1.length() == 0 || s2.length() == 0 || s3.length() == 0 || s3.length() != s1.length() + s2.length())
+            return false;
+        int s1Index = 0,s2Index = 0, s3Index = 0;
+        int s1Length = s1.length(),s2Length = s2.length(),s3Length = s3.length();
+
+        boolean[][] f = new boolean[s1Length + 1][s2Length + 1];
+        f[0][0] = true;
+        for(int i = 0; i <= s1Length; i++){
+            for(int j = 0; j <= s2Length; j++){
+                int p = i + j - 1;
+                if(i > 0)
+                    f[i][j] = f[i][j] || (f[i-1][j] && s1.charAt(i - 1) == s3.charAt(p));
+                if(j > 0)
+                    f[i][j] = f[i][j] || (f[i][j-1] && s2.charAt(j-1) == s3.charAt(p));
+            }
+        }
+        return f[s1Length][s2Length];
+    }
+
+    /**
+     *
+     * 312. 戳气球
+     *
+     * 有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
+     *
+     * 现在要求你戳破所有的气球。如果你戳破气球 i ，就可以获得 nums[left] * nums[i] * nums[right] 个硬币。 这里的 left 和 right 代表和 i 相邻的两个气球的序号。注意当你戳破了气球 i 后，气球 left 和气球 right 就变成了相邻的气球。
+     *
+     * 求所能获得硬币的最大数量。
+     *
+     *
+     * @param nums
+     * @return
+     */
+    public int[][] rec;
+    public int[] val;
+    public int maxCoins(int[] nums) {
+        int n = nums.length;
+        val = new int[n + 2];
+        for(int i = 1; i <= n ; i++){
+            val[i] = nums[i-1];
+        }
+        val[0] = val[n + 1] = 1;
+        rec = new int[n+2][n+2];
+        for(int i = 0; i <= n + 1; i++){
+            Arrays.fill(rec[i],-1);
+        }
+        return solveMaxConins(0,n + 1);
+    }
+
+    private int solveMaxConins(int left,int right){
+        if(left >= right - 1)
+            return 0;
+        if(rec[left][right] != -1)
+            return rec[left][right];
+        for(int i = left + 1; i < right; i++){
+            int sum = val[left] * val[i] * val[right];
+            sum += solveMaxConins(left,i) + solveMaxConins(i,right);
+            rec[left][right] = Math.max(rec[left][right],sum);
+        }
+        return rec[left][right];
+    }
+
+    /**
+     * 1486. 数组异或操作
+     *
+     * 给你两个整数，n 和 start 。
+     *
+     * 数组 nums 定义为：nums[i] = start + 2*i（下标从 0 开始）且 n == nums.length 。
+     *
+     * 请返回 nums 中所有元素按位异或（XOR）后得到的结果。
+     *
+     *
+     * @param n
+     * @param start
+     * @return
+     */
+    public int xorOperation(int n, int start) {
+        int result = start;
+        for(int i = 1; i < n ; i ++){
+            start += 2;
+            result ^= start;
+        }
+        return result;
+    }
+
+    /**
+     * 95. 不同的二叉搜索树 II
+     *
+     * 给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
+     *
+     * @param n
+     * @return
+     */
+    public List<TreeNode> generateTrees(int n) {
+        if( n == 0)
+            return new LinkedList<TreeNode>();
+        return generateTrees(1,n);
+    }
+
+    private List<TreeNode> generateTrees(int start,int end){
+        List<TreeNode> allTrees = new LinkedList<TreeNode>();
+        if(start > end){
+            allTrees.add(null);
+            return allTrees;
+        }
+
+        for(int i = start; i <= end; i++){
+            List<TreeNode> leftTrees = generateTrees(start,i - 1);
+            List<TreeNode> rightTrees = generateTrees(i + 1,end);
+            for(TreeNode left:leftTrees){
+                for(TreeNode right : rightTrees){
+                    TreeNode currTree = new TreeNode(i);
+                    currTree.left = left;
+                    currTree.right = right;
+                    allTrees.add(currTree);
+                }
+            }
+
+        }
+        return allTrees;
+    }
 }
