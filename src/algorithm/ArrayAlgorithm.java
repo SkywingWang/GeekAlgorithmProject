@@ -2305,4 +2305,270 @@ public class ArrayAlgorithm {
         return numbers[low];
 
     }
+
+    /**
+     * 64. 最小路径和
+     *
+     * 给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
+     *
+     * 说明：每次只能向下或者向右移动一步。
+     *
+     * @param grid
+     * @return
+     */
+    public int minPathSum(int[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0)
+            return 0;
+        int m = grid.length, n = grid[0].length;
+        int[][] result = new int[m][n];
+        for(int mIndex = 0;mIndex < m; mIndex++){
+            for(int nIndex = 0; nIndex < n; nIndex++){
+                if(mIndex == 0 && nIndex == 0)
+                    result[0][0] = grid[0][0];
+                else if(mIndex == 0)
+                    result[mIndex][nIndex] = result[mIndex][nIndex - 1] + grid[mIndex][nIndex];
+                else if(nIndex == 0)
+                    result[mIndex][nIndex] = result[mIndex - 1][nIndex] + grid[mIndex][nIndex];
+                else{
+                    result[mIndex][nIndex] = Math.min(result[mIndex - 1][nIndex],result[mIndex][nIndex - 1]) + grid[mIndex][nIndex];
+                }
+            }
+        }
+        return result[m - 1][n - 1];
+    }
+
+    /**
+     * 410. 分割数组的最大值
+     *
+     * 给定一个非负整数数组和一个整数 m，你需要将这个数组分成 m 个非空的连续子数组。设计一个算法使得这 m 个子数组各自和的最大值最小。
+     *
+     * 注意:
+     * 数组长度 n 满足以下条件:
+     *
+     * 1 ≤ n ≤ 1000
+     * 1 ≤ m ≤ min(50, n)
+     * 示例:
+     *
+     * @param nums
+     * @param m
+     * @return
+     */
+    public int splitArray(int[] nums, int m) {
+        int n = nums.length;
+        int[][] f = new int[n+1][m+1];
+        for(int i = 0; i <= n; i++){
+            Arrays.fill(f[i],Integer.MAX_VALUE);
+        }
+        int[] sub = new int[n + 1];
+        for(int i = 0; i < n; i++){
+            sub[i + 1] = sub[i] + nums[i];
+        }
+        f[0][0] = 0;
+        for(int i = 1; i <= n; i++){
+            for(int j = 1; j <= Math.min(i,m);j++){
+                for(int k = 0; k < i; k++){
+                    f[i][j] = Math.min(f[i][j],Math.max(f[k][j-1],sub[i] - sub[k]));
+                }
+            }
+        }
+        return f[n][m];
+
+    }
+
+    /**
+     * 329. 矩阵中的最长递增路径
+     *
+     * 给定一个整数矩阵，找出最长递增路径的长度。
+     *
+     * 对于每个单元格，你可以往上，下，左，右四个方向移动。 你不能在对角线方向上移动或移动到边界外（即不允许环绕）。
+     *
+     * @param matrix
+     * @return
+     */
+    public int[][] dirs={{-1,0},{1,0},{0,-1},{0,1}};
+    public int rows, columns;
+    public int longestIncreasingPath(int[][] matrix) {
+        if(matrix == null || matrix.length == 0 || matrix[0].length ==0)
+            return 0;
+        rows = matrix.length;
+        columns = matrix[0].length;
+        int[][] memo = new int[rows][columns];
+        int ans = 0;
+        for(int i = 0; i < rows; i++){
+            for(int j = 0; j < columns; j++){
+                ans = Math.max(ans,lIPDFS(matrix,i,j,memo));
+            }
+        }
+        return ans;
+    }
+
+    private int lIPDFS(int[][] matrix,int row,int column,int[][] memo){
+        if(memo[row][column] != 0)
+            return memo[row][column];
+        memo[row][column]++;
+        for(int []dir : dirs){
+            int newRow = row + dir[0], newColumn = column + dir[1];
+            if(newRow >= 0 && newRow < rows && newColumn >= 0 && newColumn < columns && matrix[newRow][newColumn] > matrix[row][column]){
+                memo[row][column] = Math.max(memo[row][column],lIPDFS(matrix,newRow,newColumn,memo) + 1);
+            }
+        }
+        return memo[row][column];
+    }
+
+    /**
+     * LCP 13. 寻宝
+     * 我们得到了一副藏宝图，藏宝图显示，在一个迷宫中存在着未被世人发现的宝藏。
+     *
+     * 迷宫是一个二维矩阵，用一个字符串数组表示。它标识了唯一的入口（用 'S' 表示），和唯一的宝藏地点（用 'T' 表示）。但是，宝藏被一些隐蔽的机关保护了起来。在地图上有若干个机关点（用 'M' 表示），只有所有机关均被触发，才可以拿到宝藏。
+     *
+     * 要保持机关的触发，需要把一个重石放在上面。迷宫中有若干个石堆（用 'O' 表示），每个石堆都有无限个足够触发机关的重石。但是由于石头太重，我们一次只能搬一个石头到指定地点。
+     *
+     * 迷宫中同样有一些墙壁（用 '#' 表示），我们不能走入墙壁。剩余的都是可随意通行的点（用 '.' 表示）。石堆、机关、起点和终点（无论是否能拿到宝藏）也是可以通行的。
+     *
+     * 我们每步可以选择向上/向下/向左/向右移动一格，并且不能移出迷宫。搬起石头和放下石头不算步数。那么，从起点开始，我们最少需要多少步才能最后拿到宝藏呢？如果无法拿到宝藏，返回 -1 。
+     *
+     * @param maze
+     * @return
+     */
+    int[] dx = {1,-1,0,0};
+    int[] dy = {0,0,1,-1};
+    int n,m;
+    public int minimalSteps(String[] maze) {
+        n = maze.length;
+        m = maze[0].length();
+
+        List<int[]> buttons = new ArrayList<int[]>();
+        List<int[]> stones = new ArrayList<>();
+
+        int sx = -1, sy = -1, tx = -1, ty = -1;
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(maze[i].charAt(j) == 'M'){
+                    buttons.add(new int[]{i,j});
+                }
+                if(maze[i].charAt(j) == 'O'){
+                    stones.add(new int[]{i,j});
+                }
+                if(maze[i].charAt(j) == 'S'){
+                    sx = i;
+                    sy = j;
+                }
+                if(maze[i].charAt(j) == 'T'){
+                    tx = i;
+                    ty = j;
+                }
+            }
+        }
+        int nb = buttons.size();
+        int ns = stones.size();
+        int[][] startDist = bfsMS(sx,sy,maze);
+
+        if(nb == 0)
+            return startDist[tx][ty];
+        int[][] dist = new int[nb][nb + 2];
+        for(int i = 0; i < nb; i++){
+            Arrays.fill(dist[i], -1);
+        }
+        int[][][] dd = new int[nb][][];
+        for(int i = 0; i < nb; i++){
+            int[][] d = bfsMS(buttons.get(i)[0],buttons.get(i)[1],maze);
+            dd[i] = d;
+            dist[i][nb + 1] = d[tx][ty];
+        }
+        for (int i = 0; i < nb; i++) {
+            int tmp = -1;
+            for (int k = 0; k < ns; k++) {
+                int midX = stones.get(k)[0], midY = stones.get(k)[1];
+                if (dd[i][midX][midY] != -1 && startDist[midX][midY] != -1) {
+                    if (tmp == -1 || tmp > dd[i][midX][midY] + startDist[midX][midY]) {
+                        tmp = dd[i][midX][midY] + startDist[midX][midY];
+                    }
+                }
+            }
+            dist[i][nb] = tmp;
+            for (int j = i + 1; j < nb; j++) {
+                int mn = -1;
+                for (int k = 0; k < ns; k++) {
+                    int midX = stones.get(k)[0], midY = stones.get(k)[1];
+                    if (dd[i][midX][midY] != -1 && dd[j][midX][midY] != -1) {
+                        if (mn == -1 || mn > dd[i][midX][midY] + dd[j][midX][midY]) {
+                            mn = dd[i][midX][midY] + dd[j][midX][midY];
+                        }
+                    }
+                }
+                dist[i][j] = mn;
+                dist[j][i] = mn;
+            }
+        }
+
+        // 无法达成的情形
+        for (int i = 0; i < nb; i++) {
+            if (dist[i][nb] == -1 || dist[i][nb + 1] == -1) {
+                return -1;
+            }
+        }
+
+        // dp 数组， -1 代表没有遍历到
+        int[][] dp = new int[1 << nb][nb];
+        for (int i = 0; i < 1 << nb; i++) {
+            Arrays.fill(dp[i], -1);
+        }
+        for (int i = 0; i < nb; i++) {
+            dp[1 << i][i] = dist[i][nb];
+        }
+
+        // 由于更新的状态都比未更新的大，所以直接从小到大遍历即可
+        for (int mask = 1; mask < (1 << nb); mask++) {
+            for (int i = 0; i < nb; i++) {
+                // 当前 dp 是合法的
+                if ((mask & (1 << i)) != 0) {
+                    for (int j = 0; j < nb; j++) {
+                        // j 不在 mask 里
+                        if ((mask & (1 << j)) == 0) {
+                            int next = mask | (1 << j);
+                            if (dp[next][j] == -1 || dp[next][j] > dp[mask][i] + dist[i][j]) {
+                                dp[next][j] = dp[mask][i] + dist[i][j];
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        int ret = -1;
+        int finalMask = (1 << nb) - 1;
+        for (int i = 0; i < nb; i++) {
+            if (ret == -1 || ret > dp[finalMask][i] + dist[i][nb + 1]) {
+                ret = dp[finalMask][i] + dist[i][nb + 1];
+            }
+        }
+
+        return ret;
+    }
+
+    private int[][] bfsMS(int x,int y,String[] maze){
+        int[][] ret = new int[n][m];
+        for(int i = 0; i < n; i++){
+            Arrays.fill(ret[i],-1);
+        }
+        ret[x][y] = 0;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{x,y});
+        while (!queue.isEmpty()){
+            int[] p = queue.poll();
+            int curx = p[0],cury = p[1];
+            for(int k = 0; k < 4 ; k++){
+                int nx = curx + dx[k], ny = cury + dy[k];
+                if(inBoundMS(nx,ny) && maze[nx].charAt(ny) != '#' && ret[nx][ny] == -1){
+                    ret[nx][ny] = ret[curx][cury] + 1;
+                    queue.offer(new int[]{nx,ny});
+                }
+            }
+        }
+        return ret;
+    }
+
+    private boolean inBoundMS(int x,int y){
+        return x >= 0 && x < n && y >= 0 && y < m;
+    }
 }

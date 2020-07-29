@@ -14,5 +14,7 @@ public class Main {
         System.out.println(stringAlgorithm.minWindow("a","a"));
         ArrayAlgorithm arrayAlgorithm = new ArrayAlgorithm();
         arrayAlgorithm.productExceptSelf(test);
+
+        System.out.println("result : " + stringAlgorithm.isSubsequence("abc","ahbgdc"));
     }
 }
