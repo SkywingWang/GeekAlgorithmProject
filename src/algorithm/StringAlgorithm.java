@@ -1195,4 +1195,9 @@ public class StringAlgorithm {
         }
         return sIndex == s.length();
     }
+
+    public void testStr(String fileStr){
+        String[] str = fileStr.split("\\.");
+        System.out.println(str[fileStr.split("\\.").length - 1]);
+    }
 }

@@ -16,5 +16,6 @@ public class Main {
         arrayAlgorithm.productExceptSelf(test);
 
         System.out.println("result : " + stringAlgorithm.isSubsequence("abc","ahbgdc"));
+        stringAlgorithm.testStr("https://nngcockpit.oss-ap-southeast-1.aliyuncs.com/cockpit/rp/2a0382f3-9fe1-4bbf-82f8-70cd24301a6f.jpg");
     }
 }
