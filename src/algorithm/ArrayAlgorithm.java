@@ -2595,4 +2595,129 @@ public class ArrayAlgorithm {
         }
         return getAnswer(nums,mid + 1,right);
     }
+
+    /**
+     * 130. 被围绕的区域
+     *
+     * 给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
+     *
+     * 找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
+     *
+     * @param board
+     */
+    private int[] solveDx = {1,-1,0,0};
+    private int[] solveDy = {0,0,1,-1};
+    public void solve(char[][] board) {
+        int n = board.length;
+        if(n == 0)
+            return;
+        int m = board[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        for(int i = 0; i < n; i++){
+            if(board[i][0] == 'O')
+                queue.offer(new int[]{i,0});
+            if(board[i][m -1] == 'O')
+                queue.offer(new int[]{i,m - 1});
+
+        }
+        for(int i = 1; i < m - 1; i++){
+            if(board[0][i] == 'O')
+                queue.offer(new int[]{0,i});
+            if(board[n - 1][i] == 'O')
+                queue.offer(new int[]{n - 1,i});
+        }
+        while (! queue.isEmpty()){
+            int[] cell = queue.poll();
+            int x = cell[0],y = cell[1];
+            board[x][y] = 'A';
+            for(int i = 0; i < 4 ; i++){
+                int mx = x + solveDx[i], my = y + solveDy[i];
+                if(mx < 0 || my < 0 || mx >= n || my >= m || board[mx][my] != 'O')
+                    continue;
+                queue.offer(new int[]{mx,my});
+            }
+        }
+        for(int i = 0; i < n; i++){
+            for(int j = 0; j < m; j++){
+                if(board[i][j] == 'A')
+                    board[i][j] = 'O';
+                else if(board[i][j] == 'O'){
+                    board[i][j] = 'X';
+                }
+            }
+        }
+    }
+
+    /**
+     * 733. 图像渲染
+     *
+     * 有一幅以二维整数数组表示的图画，每一个整数表示该图画的像素值大小，数值在 0 到 65535 之间。
+     *
+     * 给你一个坐标 (sr, sc) 表示图像渲染开始的像素值（行 ，列）和一个新的颜色值 newColor，让你重新上色这幅图像。
+     *
+     * 为了完成上色工作，从初始坐标开始，记录初始坐标的上下左右四个方向上像素值与初始坐标相同的相连像素点，接着再记录这四个方向上符合条件的像素点与他们对应四个方向上像素值与初始坐标相同的相连像素点，……，重复该过程。将所有有记录的像素点的颜色值改为新的颜色值。
+     *
+     * 最后返回经过上色渲染后的图像
+     *
+     * @param image
+     * @param sr
+     * @param sc
+     * @param newColor
+     * @return
+     */
+    int[] dxFloodFill = {1,0,0,-1};
+    int[] dyFloodFill = {0,1,-1,0};
+    public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
+        int currColor = image[sr][sc];
+        if(currColor == newColor)
+            return image;
+        int n = image.length, m = image[0].length;
+        Queue<int[]> queue = new LinkedList<>();
+        queue.offer(new int[]{sr,sc});
+        image[sr][sc] = newColor;
+        while (!queue.isEmpty()){
+            int[] cell = queue.poll();
+            int x = cell[0], y = cell[1];
+            for(int i = 0; i < 4; i++){
+                int mx = x + dxFloodFill[i],my = y + dyFloodFill[i];
+                if(mx >= 0 && mx < n && my >= 0 && my < m && image[mx][my] == currColor){
+                    queue.offer(new int[]{mx,my});
+                    image[mx][my] = newColor;
+                }
+            }
+        }
+        return image;
+    }
+
+    /**
+     * 491. 递增子序列
+     *
+     * 给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
+     *
+     * @param nums
+     * @return
+     */
+    List<Integer> temp = new ArrayList<>();
+    List<List<Integer>> ans = new ArrayList<>();
+    public List<List<Integer>> findSubsequences(int[] nums) {
+        dfsFindSubsequences(0,Integer.MIN_VALUE,nums);
+        return ans;
+    }
+
+    private void dfsFindSubsequences(int cur,int last,int[] nums){
+        if(cur == nums.length){
+            if(temp.size() >= 2){
+                ans.add(new ArrayList<>(temp));
+            }
+            return;
+        }
+        if(nums[cur] >= last){
+            temp.add(nums[cur]);
+            dfsFindSubsequences(cur + 1,nums[cur],nums);
+            temp.remove(temp.size() - 1);
+        }
+        if(nums[cur] != last){
+            dfsFindSubsequences(cur + 1,last,nums);
+        }
+    }
 }

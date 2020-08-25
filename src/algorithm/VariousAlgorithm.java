@@ -1149,4 +1149,235 @@ public class VariousAlgorithm {
         return dp[n];
     }
 
+    /**
+     * 207. 课程表
+     *
+     * 你这个学期必须选修 numCourse 门课程，记为 0 到 numCourse-1 。
+     *
+     * 在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们：[0,1]
+     *
+     * 给定课程总量以及它们的先决条件，请你判断是否可能完成所有课程的学习？
+     *
+     *  
+     *
+     * @param numCourses
+     * @param prerequisites
+     * @return
+     */
+    List<List<Integer>> edges;
+    int[] visited;
+    boolean valid = true;
+    public boolean canFinish(int numCourses, int[][] prerequisites) {
+        edges = new ArrayList<List<Integer>>();
+        for(int i = 0; i < numCourses; i++)
+            edges.add(new ArrayList<Integer>());
+        visited = new int[numCourses];
+        for(int[] info : prerequisites)
+            edges.get(info[1]).add(info[0]);
+        for(int i = 0; i < numCourses && valid; i++){
+            if(visited[i] == 0)
+                dfsCanFinish(i);
+        }
+        return valid;
+    }
+
+    private void dfsCanFinish(int u){
+        visited[u] = 1;
+        for(int v:edges.get(u)){
+            if(visited[v] == 0){
+                dfsCanFinish(v);
+                if(!valid)
+                    return;
+            }else if(visited[v] == 1){
+                valid = false;
+                return;
+            }
+        }
+        visited[u] = 2;
+    }
+
+    /**
+     * 剑指 Offer 10- II. 青蛙跳台阶问题
+     *
+     * 一只青蛙一次可以跳上1级台阶，也可以跳上2级台阶。求该青蛙跳上一个 n 级的台阶总共有多少种跳法。
+     *
+     * 答案需要取模 1e9+7（1000000007），如计算初始结果为：1000000008，请返回 1。
+     *
+     *
+     * @param n
+     * @return
+     */
+    public int numWays(int n) {
+        int a = 1, b = 1, sum;
+        for(int i = 0; i < n;i++){
+            sum = (a + b) % 1000000007;
+            a = b;
+            b = sum;
+        }
+        return a;
+    }
+
+    /**
+     * 546. 移除盒子
+     *
+     * 给出一些不同颜色的盒子，盒子的颜色由数字表示，即不同的数字表示不同的颜色。
+     * 你将经过若干轮操作去去掉盒子，直到所有的盒子都去掉为止。每一轮你可以移除具有相同颜色的连续 k 个盒子（k >= 1），这样一轮之后你将得到 k*k 个积分。
+     * 当你将所有盒子都去掉之后，求你能获得的最大积分和。
+     *
+     * @param boxes
+     * @return
+     */
+    public int removeBoxes(int[] boxes) {
+        int[][][] dp = new int[100][100][100];
+        return calculatePointsBoxs(boxes,dp,0,boxes.length - 1,0);
+    }
+    private int calculatePointsBoxs(int[] boxes,int [][][] dp,int l,int r,int k){
+        if(l > r) return 0;
+        if(dp[l][r][k] != 0) return dp[l][r][k];
+        while (r > l && boxes[r] == boxes[r - 1]){
+            r--;
+            k++;
+        }
+        dp[l][r][k] = calculatePointsBoxs(boxes, dp, l, r - 1, 0) + (k + 1) * (k + 1);
+        for (int i = l; i < r; i++) {
+            if (boxes[i] == boxes[r]) {
+                dp[l][r][k] = Math.max(dp[l][r][k], calculatePointsBoxs(boxes, dp, l, i, k + 1) + calculatePointsBoxs(boxes, dp, i + 1, r - 1, 0));
+            }
+        }
+        return dp[l][r][k];
+    }
+
+
+    /**
+     * 529. 扫雷游戏
+     * 让我们一起来玩扫雷游戏！
+     *
+     * 给定一个代表游戏板的二维字符矩阵。 'M' 代表一个未挖出的地雷，'E' 代表一个未挖出的空方块，'B' 代表没有相邻（上，下，左，右，和所有4个对角线）地雷的已挖出的空白方块，数字（'1' 到 '8'）表示有多少地雷与这块已挖出的方块相邻，'X' 则表示一个已挖出的地雷。
+     *
+     * 现在给出在所有未挖出的方块中（'M'或者'E'）的下一个点击位置（行和列索引），根据以下规则，返回相应位置被点击后对应的面板：
+     *
+     * 如果一个地雷（'M'）被挖出，游戏就结束了- 把它改为 'X'。
+     * 如果一个没有相邻地雷的空方块（'E'）被挖出，修改它为（'B'），并且所有和其相邻的未挖出方块都应该被递归地揭露。
+     * 如果一个至少与一个地雷相邻的空方块（'E'）被挖出，修改它为数字（'1'到'8'），表示相邻地雷的数量。
+     * 如果在此次点击中，若无更多方块可被揭露，则返回面板。
+     *
+     *
+     * @param board
+     * @param click
+     * @return
+     */
+    int[] updateBoardDirX = {0,1,0,-1,1,1,-1,-1};
+    int[] updateBoardDirY = {1,0,-1,0,1,-1,1,-1};
+    public char[][] updateBoard(char[][] board,int[] click){
+        int x = click[0], y = click[1];
+        if(board[x][y] == 'M')
+            board[x][y] = 'X';
+        else
+            boardDFS(board,x,y);
+        return board;
+    }
+
+    public void boardDFS(char[][] board,int x,int y){
+        int cnt = 0;
+        for(int i = 0; i < 8; i++){
+            int tx = x + updateBoardDirX[i];
+            int ty = y + updateBoardDirY[i];
+            if(tx < 0 || tx >= board.length || ty < 0 || ty >= board[0].length)
+                continue;
+            if(board[tx][ty] == 'M')
+                cnt++;
+        }
+        if(cnt > 0)
+            board[x][y] = (char)(cnt + '0');
+        else{
+            board[x][y] = 'B';
+            for(int i = 0; i < 8; i++){
+                int tx = x + updateBoardDirX[i];
+                int ty = y + updateBoardDirY[i];
+                if (tx < 0 || tx >= board.length || ty < 0 || ty >= board[0].length || board[tx][ty] != 'E') {
+                    continue;
+                }
+                boardDFS(board,tx,ty);
+            }
+        }
+
+    }
+
+    /**
+     * 679. 24 点游戏
+     * 你有 4 张写有 1 到 9 数字的牌。你需要判断是否能通过 *，/，+，-，(，) 的运算得到 24。
+     * @param nums
+     * @return
+     */
+    static final int TARGET = 24;
+    static final double EPSILON = 1e-6;
+    static final int ADD = 0, MULTIPLY = 1, SUBTRACT = 2, DIVIDE = 3;
+    public boolean judgePoint24(int[] nums) {
+        List<Double> list = new ArrayList<>();
+        for(int num : nums)
+            list.add((double) num);
+        return solveJudgePoint24(list);
+    }
+    public boolean solveJudgePoint24(List<Double> list){
+        if(list.size() == 0)
+            return false;
+        if(list.size() == 1)
+            return Math.abs(list.get(0) - TARGET ) < EPSILON;
+        int size = list.size();
+        for(int i = 0; i < size ; i++){
+            for (int j = 0; j < size; j++) {
+                if (i != j) {
+                    List<Double> list2 = new ArrayList<Double>();
+                    for (int k = 0; k < size; k++) {
+                        if (k != i && k != j) {
+                            list2.add(list.get(k));
+                        }
+                    }
+                    for (int k = 0; k < 4; k++) {
+                        if (k < 2 && i > j) {
+                            continue;
+                        }
+                        if (k == ADD) {
+                            list2.add(list.get(i) + list.get(j));
+                        } else if (k == MULTIPLY) {
+                            list2.add(list.get(i) * list.get(j));
+                        } else if (k == SUBTRACT) {
+                            list2.add(list.get(i) - list.get(j));
+                        } else if (k == DIVIDE) {
+                            if (Math.abs(list.get(j)) < EPSILON) {
+                                continue;
+                            } else {
+                                list2.add(list.get(i) / list.get(j));
+                            }
+                        }
+                        if (solveJudgePoint24(list2)) {
+                            return true;
+                        }
+                        list2.remove(list2.size() - 1);
+                    }
+                }
+            }
+
+        }
+        return false;
+    }
+
+    /**
+     * 201. 数字范围按位与
+     *
+     * 给定范围 [m, n]，其中 0 <= m <= n <= 2147483647，返回此范围内所有数字的按位与（包含 m, n 两端点）。
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public int rangeBitwiseAnd(int m, int n) {
+        int shift = 0;
+        while (m < n){
+            m >>= 1;
+            n >>= 1;
+            ++shift;
+        }
+        return m << shift;
+    }
 }

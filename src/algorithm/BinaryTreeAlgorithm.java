@@ -1,6 +1,7 @@
 package algorithm;
 
 
+import data.ListNode;
 import data.TreeNode;
 import javafx.util.Pair;
 
@@ -596,4 +597,132 @@ public class BinaryTreeAlgorithm {
         }
     }
 
+    public void flatten(TreeNode root) {
+        List<TreeNode> list = new ArrayList<TreeNode>();
+        preorderTraversal(root, list);
+        int size = list.size();
+        for (int i = 1; i < size; i++) {
+            TreeNode prev = list.get(i - 1), curr = list.get(i);
+            prev.left = null;
+            prev.right = curr;
+        }
+    }
+
+    public void preorderTraversal(TreeNode root, List<TreeNode> list) {
+        if (root != null) {
+            list.add(root);
+            preorderTraversal(root.left, list);
+            preorderTraversal(root.right, list);
+        }
+    }
+
+    /**
+     * 337. 打家劫舍 III
+     *
+     * 在上次打劫完一条街道之后和一圈房屋后，小偷又发现了一个新的可行窃的地区。这个地区只有一个入口，我们称之为“根”。 除了“根”之外，每栋房子有且只有一个“父“房子与之相连。一番侦察之后，聪明的小偷意识到“这个地方的所有房屋的排列类似于一棵二叉树”。 如果两个直接相连的房子在同一天晚上被打劫，房屋将自动报警。
+     *
+     * 计算在不触动警报的情况下，小偷一晚能够盗取的最高金额。
+     *
+     * @param root
+     * @return
+     */
+    Map<TreeNode,Integer> f = new HashMap<>();
+    Map<TreeNode,Integer> g = new HashMap<>();
+
+    public int rob(TreeNode root) {
+        dfsRob(root);
+        return Math.max(f.getOrDefault(root,0),g.getOrDefault(root,0));
+    }
+    public void dfsRob(TreeNode node){
+        if(node == null)
+            return;
+        dfsRob(node.left);
+        dfsRob(node.right);
+        f.put(node,node.val + g.getOrDefault(node.left,0) + g.getOrDefault(node.right,0));
+        g.put(node,Math.max(f.getOrDefault(node.left,0),g.getOrDefault(node.left,0)) + Math.max(f.getOrDefault(node.right,0),g.getOrDefault(node.right,0)));
+    }
+
+    /**
+     * 99. 恢复二叉搜索树
+     *
+     * 二叉搜索树中的两个节点被错误地交换。
+     * 请在不改变其结构的情况下，恢复这棵树。
+     *
+     * @param root
+     */
+    public void recoverTree(TreeNode root) {
+        List<Integer> nums = new ArrayList<>();
+        inorderRecoverTree(root,nums);
+        int[] swapped = findTwoSwapperdRecoverTree(nums);
+        recoverRecoverTree(root,2,swapped[0],swapped[1]);
+    }
+
+    private void inorderRecoverTree(TreeNode root,List<Integer> nums){
+        if(root == null)
+            return;
+        inorderRecoverTree(root.left,nums);
+        nums.add(root.val);
+        inorderRecoverTree(root.right,nums);
+    }
+
+    private int[] findTwoSwapperdRecoverTree(List<Integer> nums){
+        int n = nums.size();
+        int x = -1, y = -1;
+        for(int i = 0; i < n - 1; i++){
+            if(nums.get(i + 1) < nums.get(i)){
+                y = nums.get(i + 1);
+                if( x == -1){
+                    x = nums.get(i);
+                }else
+                    break;
+            }
+        }
+        return new int[]{x,y};
+    }
+    private void recoverRecoverTree(TreeNode root,int count,int x,int y){
+        if(root != null){
+            if(root.val == x || root.val == y){
+                root.val = root.val == x ? y : x;
+                if(--count == 0)
+                    return;
+            }
+            recoverRecoverTree(root.right,count,x,y);
+            recoverRecoverTree(root.left,count,x,y);
+        }
+    }
+
+    /**
+     * 109. 有序链表转换二叉搜索树
+     * 给定一个单链表，其中的元素按升序排序，将其转换为高度平衡的二叉搜索树。
+     *
+     * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
+     *
+     *
+     * @param head
+     * @return
+     */
+    public TreeNode sortedListToBST(ListNode head) {
+        return buildTreeSortedListToBST(head,null);
+    }
+
+    private TreeNode buildTreeSortedListToBST(ListNode left,ListNode right){
+        if(left == right)
+            return null;
+        ListNode mid = getMedianSortedListToBST(left,right);
+        TreeNode root = new TreeNode(mid.val);
+        root.left = buildTreeSortedListToBST(left,mid);
+        root.right = buildTreeSortedListToBST(mid.next,right);
+        return root;
+    }
+
+    private ListNode getMedianSortedListToBST(ListNode left,ListNode right){
+        ListNode fast = left;
+        ListNode slow = left;
+        while (fast != right && fast.next != right){
+            fast = fast.next;
+            fast = fast.next;
+            slow = slow.next;
+        }
+        return slow;
+    }
 }

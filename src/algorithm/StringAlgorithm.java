@@ -1,5 +1,6 @@
 package algorithm;
 
+import data.PalindromeNode;
 import data.TreeNode;
 import data.Trie;
 
@@ -1199,5 +1200,291 @@ public class StringAlgorithm {
     public void testStr(String fileStr){
         String[] str = fileStr.split("\\.");
         System.out.println(str[fileStr.split("\\.").length - 1]);
+    }
+
+    /**
+     * 415. 字符串相加
+     * 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和。
+     *
+     * 注意：
+     *
+     * num1 和num2 的长度都小于 5100.
+     * num1 和num2 都只包含数字 0-9.
+     * num1 和num2 都不包含任何前导零。
+     * 你不能使用任何內建 BigInteger 库， 也不能直接将输入的字符串转换为整数形式。
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public String addStrings(String num1, String num2) {
+        if(num1 == null && num2 == null)
+            return null;
+        if(num1 == null)
+            return num2;
+        if(num2 == null)
+            return num1;
+        StringBuffer result = new StringBuffer();
+        int i = num1.length() - 1;
+        int j = num2.length() - 1;
+        int add = 0;
+        while (i >= 0 || j >= 0 || add != 0){
+            int x = i >= 0?num1.charAt(i) - '0' : 0;
+            int y = j >= 0?num2.charAt(j) - '0' : 0;
+            int r = x + y + add;
+            result.append(r % 10);
+            add = r / 10;
+            i--;
+            j--;
+
+        }
+        result.reverse();
+        return result.toString();
+    }
+
+    /**
+     * 336. 回文对
+     *
+     * 给定一组 互不相同 的单词， 找出所有不同 的索引对(i, j)，使得列表中的两个单词， words[i] + words[j] ，可拼接成回文串。
+     *
+     * @param words
+     * @return
+     */
+    List<PalindromeNode> palindromeNodeTree = new ArrayList<>();
+    public List<List<Integer>> palindromePairs(String[] words) {
+        if(words == null || words.length == 0)
+            return null;
+        palindromeNodeTree.add(new PalindromeNode());
+        int n = words.length;
+        for(int i = 0; i < n;i++)
+            insertPalindromePairs(words[i],i);
+        List<List<Integer>> ret = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            int m = words[i].length();
+            for(int j = 0; j <= m; j++){
+                if(isPalindromePairs(words[i],j,m-1)){
+                    int leftId = findWordPalindromePairs(words[i],0,j - 1);
+                    if(leftId != -1 && leftId != i){
+                        ret.add(Arrays.asList(i,leftId));
+                    }
+                }
+                if(j != 0 && isPalindromePairs(words[i],0,j-1)){
+                    int rightId = findWordPalindromePairs(words[i],j,m-1);
+                    if(rightId != -1 && rightId != i){
+                        ret.add(Arrays.asList(rightId,i));
+                    }
+                }
+            }
+        }
+        return ret;
+    }
+
+    private void insertPalindromePairs(String s,int id){
+        int len = s.length(), add = 0;
+        for(int i = 0; i < len; i++){
+            int x = s.charAt(i) - 'a';
+            if(palindromeNodeTree.get(add).ch[x] == 0){
+                palindromeNodeTree.add(new PalindromeNode());
+                palindromeNodeTree.get(add).ch[x] = palindromeNodeTree.size() - 1;
+            }
+            add = palindromeNodeTree.get(add).ch[x];
+        }
+        palindromeNodeTree.get(add).flag = id;
+    }
+
+    private boolean isPalindromePairs(String s,int left,int right){
+        int len = right - left + 1;
+        for(int i = 0; i < len / 2; i++){
+            if(s.charAt(left + i) != s.charAt(right - i)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public int findWordPalindromePairs(String s,int left, int right){
+        int add = 0;
+        for(int i = right; i >= left; i--){
+            int x = s.charAt(i) - 'a';
+            if(palindromeNodeTree.get(add).ch[x] == 0)
+                return -1;
+            add = palindromeNodeTree.get(add).ch[x];
+        }
+        return palindromeNodeTree.get(add).flag;
+    }
+
+    /**
+     * 93. 复原IP地址
+     *
+     * 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
+     *
+     * 有效的 IP 地址正好由四个整数（每个整数位于 0 到 255 之间组成），整数之间用 '.' 分隔。
+     *
+     * @param s
+     * @return
+     */
+    static final int SEG_COUNT = 4;
+    List<String> ansRestoreIpAddresses = new ArrayList<>();
+    int[] segments = new int[SEG_COUNT];
+    public List<String> restoreIpAddresses(String s) {
+        segments = new int[SEG_COUNT];
+        dfsRestoreIpAddress(s,0,0);
+        return ansRestoreIpAddresses;
+    }
+
+    private void dfsRestoreIpAddress(String s,int segId,int segStart){
+        if(segId == SEG_COUNT){
+            if(segStart == s.length()){
+                StringBuffer ipAddr = new StringBuffer();
+                for(int i = 0; i < SEG_COUNT; i++){
+                    ipAddr.append(segments[i]);
+                    if(i != SEG_COUNT - 1)
+                        ipAddr.append('.');
+                }
+                ansRestoreIpAddresses.add(ipAddr.toString());
+            }
+            return;
+        }
+        if(segStart == s.length())
+            return;
+
+        if(s.charAt(segStart) == '0'){
+            segments[segId] = 0;
+            dfsRestoreIpAddress(s,segId + 1,segStart + 1);
+        }
+        int addr = 0;
+        for(int segEnd = segStart; segEnd < s.length(); segEnd++){
+            addr = addr * 10 + (s.charAt(segEnd) - '0');
+            if(addr > 0 && addr <= 0xFF){
+                segments[segId] = addr;
+                dfsRestoreIpAddress(s,segId + 1, segEnd + 1);
+            }else
+                break;
+        }
+    }
+
+    /**
+     * 696. 计数二进制子串
+     *
+     * 给定一个字符串 s，计算具有相同数量0和1的非空(连续)子字符串的数量，并且这些子字符串中的所有0和所有1都是组合在一起的。
+     *
+     * 重复出现的子串要计算它们出现的次数。
+     *
+     *
+     * @param s
+     * @return
+     */
+    public int countBinarySubstrings(String s) {
+        if(s == null || "".equals(s))
+            return 0;
+        int ptr = 0, n = s.length(), last = 0,ans = 0;
+        while (ptr < n){
+            char c = s.charAt(ptr);
+            int count = 0;
+            while (ptr < n && s.charAt(ptr) == c){
+                ptr++;
+                count++;
+            }
+            ans += Math.min(count,last);
+            last = count;
+        }
+        return ans;
+    }
+
+    /**
+     * 43. 字符串相乘
+     *
+     * 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
+     *
+     * @param num1
+     * @param num2
+     * @return
+     */
+    public String multiply(String num1, String num2) {
+        if(num1.equals("0") || num2.equals("0")){
+            return "0";
+        }
+        int m = num1.length(), n = num2.length();
+        int[] ansArr = new int[m + n];
+        for(int i = m - 1; i >= 0; i--){
+            int x = num1.charAt(i) - '0';
+            for(int j = n - 1; j >= 0; j--){
+                int y = num2.charAt(j) - '0';
+                ansArr[i + j + 1] += x * y;
+            }
+        }
+        for(int i = m + n - 1; i > 0; i--){
+            ansArr[i - 1] += ansArr[i] / 10;
+            ansArr[i] %= 10;
+        }
+        int index = ansArr[0] == 0 ? 1 : 0;
+        StringBuffer ans = new StringBuffer();
+        while (index < m + n){
+            ans.append(ansArr[index]);
+            index++;
+        }
+        return ans.toString();
+    }
+
+    /**
+     * 647. 回文子串
+     *
+     * 给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
+     *
+     * 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
+     *
+     *
+     * @param s
+     * @return
+     */
+    public int countSubstrings(String s) {
+        int n = s.length(), ans = 0;
+        for(int i = 0; i < 2 * n - 1; i++){
+            int l = i / 2, r= i / 2 + i % 2;
+            while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)){
+                l--;
+                r++;
+                ans++;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     *
+     * @param s
+     * @return
+     */
+    public boolean repeatedSubstringPattern(String s) {
+        return kmpRepeatedSubstringPattern(s + s,s);
+    }
+
+    public boolean kmpRepeatedSubstringPattern(String query,String pattern){
+        int n = query.length();
+        int m = pattern.length();
+        int[] fail = new int[m];
+        Arrays.fill(fail, -1);
+        for(int i = 1; i < m; i++){
+            int j = fail[i - 1];
+            while (j != -1 && pattern.charAt(j + 1) != pattern.charAt(i)){
+                j = fail[j];
+            }
+            if(pattern.charAt(j+1)==pattern.charAt(i)){
+                fail[i] = j+ 1;
+            }
+        }
+        int match = -1;
+        for(int i = 1; i < n - 1; i++){
+            while (match != -1 && pattern.charAt(match + 1) != query.charAt(i)){
+                match = fail[match];
+            }
+            if(pattern.charAt(match + 1) == query.charAt(i)){
+                match++;
+                if(match == m - 1){
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 }
