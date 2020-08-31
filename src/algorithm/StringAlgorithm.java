@@ -1531,4 +1531,66 @@ public class StringAlgorithm {
             }
         }
     }
+
+    /**
+     * 657. 机器人能否返回原点
+     *
+     * 在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。
+     *
+     * 移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。
+     *
+     * 注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。
+     *
+     *
+     * @param moves
+     * @return
+     */
+    public boolean judgeCircle(String moves) {
+        if(moves == null || moves.length() == 0)
+            return true;
+        int lr = 0, ud = 0;
+        for(int i = 0 ; i < moves.length();i ++){
+            char c = moves.charAt(i);
+            if(c == 'L'){
+                lr++;
+            }else if(c == 'R'){
+                lr--;
+            }else if(c == 'U'){
+                ud++;
+            }else if(c == 'D'){
+                ud--;
+            }
+        }
+        if(lr == 0 && ud == 0){
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 557. 反转字符串中的单词 III
+     * 给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+     * @param s
+     * @return
+     */
+    public String reverseWords_3(String s) {
+        StringBuffer ret = new StringBuffer();
+        int length = s.length();
+        int i = 0;
+        while (i < length) {
+            int start = i;
+            while (i < length && s.charAt(i) != ' ') {
+                i++;
+            }
+            for (int p = start; p < i; p++) {
+                ret.append(s.charAt(start + i - 1 - p));
+            }
+            while (i < length && s.charAt(i) == ' ') {
+                i++;
+                ret.append(' ');
+            }
+        }
+        return ret.toString();
+
+    }
 }
