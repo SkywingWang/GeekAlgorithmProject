@@ -1415,4 +1415,247 @@ public class VariousAlgorithm {
         }
         return num == n;
     }
+
+    /**
+     * 486. 预测赢家
+     *
+     * 给定一个表示分数的非负整数数组。 玩家 1 从数组任意一端拿取一个分数，随后玩家 2 继续从剩余数组任意一端拿取分数，然后玩家 1 拿，…… 。每次一个玩家只能拿取一个分数，分数被拿取之后不再可取。直到没有剩余分数可取时游戏结束。最终获得分数总和最多的玩家获胜。
+     * 给定一个表示分数的数组，预测玩家1是否会成为赢家。你可以假设每个玩家的玩法都会使他的分数最大化。
+     * @param nums
+     * @return
+     */
+    public boolean PredictTheWinner(int[] nums) {
+        if(nums == null)
+            return false;
+        int length = nums.length;
+        int[][] dp = new int[length][length];
+        for(int i = 0; i < length; i ++){
+            dp[i][i] = nums[i];
+        }
+        for(int i = length - 2; i >= 0; i--){
+            for(int j = i + 1; j < length; j++){
+                dp[i][j] = Math.max(nums[i] - dp[i + 1][j],nums[j] - dp[i][j-1]);
+            }
+        }
+        return dp[0][length - 1] >= 0;
+    }
+
+    /**
+     * 51. N 皇后
+     * n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+     * 上图为 8 皇后问题的一种解法。
+     * 给定一个整数 n，返回所有不同的 n 皇后问题的解决方案。
+     * 每一种解法包含一个明确的 n 皇后问题的棋子放置方案，该方案中 'Q' 和 '.' 分别代表了皇后和空位。
+     * @param n
+     * @return
+     */
+    public List<List<String>> solveNQueens(int n) {
+        List<List<String>> solutions = new ArrayList<>();
+        int[] queens = new int[n];
+        Arrays.fill(queens,-1);
+        Set<Integer> columns = new HashSet<Integer>();
+        Set<Integer> diagonals1 = new HashSet<Integer>();
+        Set<Integer> diagonals2 = new HashSet<Integer>();
+        backtrackNQueens(solutions, queens, n, 0, columns, diagonals1, diagonals2);
+        return solutions;
+    }
+
+    private void backtrackNQueens(List<List<String>> solutions,int[] queens,int n, int row,Set<Integer> columns,Set<Integer> diagonals1, Set<Integer> diagonals2) {
+        if(row == n){
+            List<String> board = generateBoardNQueens(queens,n);
+            solutions.add(board);
+        }else{
+            for(int i =0; i < n; i++){
+                if(columns.contains(i)){
+                    continue;
+                }
+                int diagonal1 = row - i;
+                if(diagonals1.contains(diagonal1)){
+                    continue;
+                }
+                int diagonal2 = row + i;
+                if(diagonals2.contains(diagonal2)){
+                    continue;
+                }
+                queens[row] = i;
+                columns.add(i);
+                diagonals1.add(diagonal1);
+                diagonals2.add(diagonal2);
+                backtrackNQueens(solutions,queens,n,row + 1,columns,diagonals1,diagonals2);
+                queens[row] = -1;
+                columns.remove(i);
+                diagonals1.remove(diagonal1);
+                diagonals2.remove(diagonal2);
+
+            }
+        }
+    }
+
+    private List<String> generateBoardNQueens(int[] queens,int n){
+        List<String> board = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            char[] row = new char[n];
+            Arrays.fill(row,'.');
+            row[queens[i]] = 'Q';
+            board.add(new String(row));
+
+        }
+        return board;
+    }
+
+    /**
+     * 60. 第k个排列
+     * 给出集合 [1,2,3,…,n]，其所有元素共有 n! 种排列。
+     *
+     * 按大小顺序列出所有排列情况，并一一标记，当 n = 3 时, 所有排列如下：
+     *
+     * "123"
+     * "132"
+     * "213"
+     * "231"
+     * "312"
+     * "321"
+     * 给定 n 和 k，返回第 k 个排列。
+     *
+     * 说明：
+     *
+     * 给定 n 的范围是 [1, 9]。
+     * 给定 k 的范围是[1,  n!]。
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public String getPermutation(int n, int k) {
+        int[] factorial = new int[n];
+        factorial[0] = 1;
+        for(int i = 1; i < n; i++){
+            factorial[i] = factorial[i - 1] * i;
+        }
+        k--;
+        StringBuffer ans = new StringBuffer();
+        int[] valid = new int[n + 1];
+        Arrays.fill(valid,1);
+        for(int i = 1; i <= n;i++) {
+            int order = k / factorial[n - i] + 1;
+            for(int j = 1; j <= n; j++){
+                order -= valid[j];
+                if(order == 0){
+                    ans.append(j);
+                    valid[j] = 0;
+                    break;
+                }
+            }
+            k %= factorial[n - i];
+        }
+        return ans.toString();
+    }
+
+    /**
+     * 347. 前 K 个高频元素
+     *
+     * 给定一个非空的整数数组，返回其中出现频率前 k 高的元素。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] topKFrequent(int[] nums, int k) {
+        Map<Integer,Integer> occurrences = new HashMap<>();
+        for(int num : nums){
+            occurrences.put(num,occurrences.getOrDefault(num,0) + 1);
+        }
+        PriorityQueue<int[]> queue = new PriorityQueue<>(new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[1] - o2[1];
+            }
+        });
+        for(Map.Entry<Integer, Integer> entry : occurrences.entrySet()){
+            int num = entry.getKey(), count = entry.getValue();
+            if(queue.size() == k){
+                if(queue.peek()[1] < count){
+                    queue.poll();
+                    queue.offer(new int[]{num,count});
+                }
+            }else {
+                queue.offer(new int[]{num,count});
+            }
+        }
+        int[] ret = new int[k];
+        for(int i = 0; i < k; i++){
+            ret[i] = queue.poll()[0];
+        }
+        return ret;
+    }
+
+    /**
+     * 77. 组合
+     *
+     * 给定两个整数 n 和 k，返回 1 ... n 中所有可能的 k 个数的组合。
+     *
+     * @param n
+     * @param k
+     * @return
+     */
+    public List<List<Integer>> combine(int n, int k) {
+        List<Integer> temp = new ArrayList<>();
+        List<List<Integer>> ans = new ArrayList<>();
+        for(int i = 1; i <= k; i++){
+            temp.add(i);
+        }
+        temp.add(n + 1);
+        int j = 0;
+        while(j < k){
+            ans.add(new ArrayList<>(temp.subList(0,k)));
+            j = 0;
+            while (j < k && temp.get(j) + 1 == temp.get(j + 1)){
+                temp.set(j,j + 1);
+                j++;
+            }
+            temp.set(j,temp.get(j) + 1);
+        }
+        return ans;
+    }
+
+    /**
+     * 216. 组合总和 III
+     *
+     * 找出所有相加之和为 n 的 k 个数的组合。组合中只允许含有 1 - 9 的正整数，并且每种组合中不存在重复的数字。
+     *
+     * 说明：
+     *
+     * 所有数字都是正整数。
+     * 解集不能包含重复的组合。 
+     *
+     * @param k
+     * @param n
+     * @return
+     */
+    List<Integer> tempCombinationSum3 = new ArrayList<>();
+    List<List<Integer>> ansCombinationSum3 = new ArrayList<>();
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        for (int mask = 0; mask < (1 << 9); ++mask) {
+            if (check(mask, k, n)) {
+                ansCombinationSum3.add(new ArrayList<Integer>(tempCombinationSum3));
+            }
+        }
+        return ansCombinationSum3;
+    }
+    public boolean check(int mask,int k,int n){
+        tempCombinationSum3.clear();
+        for(int i = 0; i < 9; i ++){
+            if (((1 << i) & mask) != 0) {
+                tempCombinationSum3.add(i + 1);
+            }
+        }
+        if(tempCombinationSum3.size() != k){
+            return false;
+        }
+        int sum = 0;
+        for(int num : tempCombinationSum3){
+            sum += num;
+        }
+        return sum == n;
+    }
 }

@@ -2720,4 +2720,87 @@ public class ArrayAlgorithm {
             dfsFindSubsequences(cur + 1,last,nums);
         }
     }
+
+    /**
+     * 39. 组合总和
+     *
+     * 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+     * candidates 中的数字可以无限制重复被选取。
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    public List<List<Integer>> combinationSum(int[] candidates, int target) {
+        List<List<Integer>> ans = new ArrayList<>();
+        List<Integer> combine = new ArrayList<>();
+        dfsCombinationSum(candidates,target,ans,combine,0);
+        return ans;
+    }
+
+    private void dfsCombinationSum(int[] candidates,int target,List<List<Integer>>ans,List<Integer> combine, int idx){
+        if(idx == candidates.length){
+            return;
+        }
+        if(target == 0){
+            ans.add(new ArrayList<>(combine));
+            return;
+        }
+        dfsCombinationSum(candidates,target,ans,combine,idx + 1);
+        if(target - candidates[idx] >= 0){
+            combine.add(candidates[idx]);
+            dfsCombinationSum(candidates,target - candidates[idx],ans,combine,idx);
+            combine.remove(combine.size() - 1);
+        }
+    }
+
+    /**
+     * 40. 组合总和 II
+     * 给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
+     *
+     * candidates 中的每个数字在每个组合中只能使用一次。
+     *
+     * 说明：
+     *
+     * 所有数字（包括目标数）都是正整数。
+     * 解集不能包含重复的组合。 
+     *
+     * @param candidates
+     * @param target
+     * @return
+     */
+    List<int[]> freq = new ArrayList<>();
+    List<List<Integer>> ansCombinationSum2 = new ArrayList<>();
+    List<Integer> sequence = new ArrayList<>();
+    public List<List<Integer>> combinationSum2(int[] candidates, int target) {
+        Arrays.sort(candidates);
+        for(int num : candidates){
+            int size = freq.size();
+            if(freq.isEmpty() || num != freq.get(size - 1)[0]){
+                freq.add(new int[]{num,1});
+            }else{
+                freq.get(size - 1)[1]++;
+            }
+        }
+        dfsCombinationSum2(0,target);
+        return ansCombinationSum2;
+    }
+    private void dfsCombinationSum2(int pos,int rest){
+        if(rest == 0){
+            ansCombinationSum2.add(new ArrayList<>(sequence));
+            return;
+        }
+        if(pos == freq.size() || rest < freq.get(pos)[0]){
+            return;
+        }
+        dfsCombinationSum2(pos + 1, rest);
+        int most = Math.min(rest / freq.get(pos)[0], freq.get(pos)[1]);
+        for(int i = 1; i <= most; i++){
+            sequence.add(freq.get(pos)[0]);
+            dfsCombinationSum2(pos + 1, rest -i * freq.get(pos)[0]);
+        }
+        for(int i = 1; i <= most; i++){
+            sequence.remove(sequence.size() - 1);
+        }
+    }
 }

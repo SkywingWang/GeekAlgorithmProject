@@ -16,4 +16,23 @@ public class RegularExpressionTest {
     public static String replaceStr(String content){
         return content.replaceAll("//", "-").replaceAll("/.", "-");
     }
+
+    public static String replaceStrToDate(String content){
+        content = content.replaceAll("/", "-");
+        content = content.replaceAll("\\.", "-");
+        String[] tmp = content.split("-");
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < tmp.length; i++){
+            if(i != 0){
+                sb.append("-");
+            }
+            if(tmp[i].length() == 1){
+                sb.append("0");
+            }
+            sb.append(tmp[i]);
+
+        }
+        return sb.toString();
+    }
+
 }
