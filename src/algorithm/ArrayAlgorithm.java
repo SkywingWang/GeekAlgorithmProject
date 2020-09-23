@@ -2803,4 +2803,81 @@ public class ArrayAlgorithm {
             sequence.remove(sequence.size() - 1);
         }
     }
+
+    /**
+     * 79. 单词搜索
+     * 给定一个二维网格和一个单词，找出该单词是否存在于网格中。
+     * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     * @param board
+     * @param word
+     * @return
+     */
+    public boolean exist(char[][] board, String word) {
+        if(board == null || board.length == 0 )
+            return false;
+        int h = board.length,w = board[0].length;
+        boolean[][] visited = new boolean[h][w];
+        for(int i = 0; i < h; i++){
+            for(int j = 0; j < w; j++){
+                boolean flag = checkExist(board,visited,i,j,word,0);
+                if(flag){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean checkExist(char[][] board,boolean[][] visited, int i,int j,String s,int k){
+        if(board[i][j] != s.charAt(k)){
+            return false;
+        }else if(k == s.length() - 1){
+            return true;
+        }
+        visited[i][j] = true;
+        int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
+        boolean result = false;
+        for(int[] dir: directions){
+            int newi = i + dir[0], newj = j + dir[1];
+            if(newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length){
+                if(!visited[newi][newj]){
+                    boolean flag = checkExist(board,visited,newi,newj,s,k+1);
+                    if(flag){
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        visited[i][j]=false;
+        return result;
+
+    }
+
+    /**
+     * 78. 子集
+     * 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
+     *
+     * 说明：解集不能包含重复的子集。
+     *
+     * @param nums
+     * @return
+     */
+    List<Integer> tSubsets = new ArrayList<>();
+    List<List<Integer>> ansSubsets = new ArrayList<>();
+    public List<List<Integer>> subsets(int[] nums) {
+        int n = nums.length;
+        for(int mask = 0; mask < (1 << n); mask++){
+            tSubsets.clear();
+            for(int i = 0; i < n; i++){
+
+                if((mask & (1 << i)) != 0){
+                    tSubsets.add(nums[i]);
+                }
+            }
+            ansSubsets.add(new ArrayList<>(tSubsets));
+        }
+        return ansSubsets;
+    }
+
 }

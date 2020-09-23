@@ -1,6 +1,7 @@
 package algorithm;
 
 import data.State;
+import data.TreeNode;
 
 import java.util.*;
 
@@ -1657,5 +1658,84 @@ public class VariousAlgorithm {
             sum += num;
         }
         return sum == n;
+    }
+
+    /**
+     * 637. 二叉树的层平均值
+     * 给定一个非空二叉树, 返回一个由每层节点平均值组成的数组。
+     * @param root
+     * @return
+     */
+    public List<Double> averageOfLevels(TreeNode root) {
+        List<Double> averages = new ArrayList<>();
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            double sum = 0;
+            int size = queue.size();
+            for(int i = 0; i < size; i++){
+                TreeNode node = queue.poll();
+                sum += node.val;
+                TreeNode left = node.left, right = node.right;
+                if(left != null){
+                    queue.offer(left);
+                }
+                if(right != null){
+                    queue.offer(right);
+                }
+            }
+            averages.add(sum /size);
+        }
+        return averages;
+    }
+
+    /**
+     * 37. 解数独
+     *
+     * 编写一个程序，通过已填充的空格来解决数独问题。
+     *
+     * 一个数独的解法需遵循如下规则：
+     *
+     * 数字 1-9 在每一行只能出现一次。
+     * 数字 1-9 在每一列只能出现一次。
+     * 数字 1-9 在每一个以粗实线分隔的 3x3 宫内只能出现一次。
+     * 空白格用 '.' 表示。
+     *
+     * @param board
+     */
+    private boolean[][] lineSudoku = new boolean[9][9];
+    private boolean[][] columnSudoku = new boolean[9][9];
+    private boolean[][][] blockSudoku = new boolean[3][3][9];
+    private boolean validSudoku = false;
+    private List<int[]> spacesSudoku = new ArrayList<>();
+    public void solveSudoku(char[][] board) {
+        for(int i = 0; i < 9; i++){
+            for(int j = 0; j < 9; j++){
+                if(board[i][j] == '.'){
+                    spacesSudoku.add(new int[]{i,j});
+                }else{
+                    int digit = board[i][j] - '0' - 1;
+                    lineSudoku[i][digit] = columnSudoku[j][digit] = blockSudoku[i / 3][j / 3][digit] = true;
+                }
+            }
+        }
+        dfsSudoku(board,0);
+    }
+
+    private void dfsSudoku(char[][]board,int pos){
+        if(pos == spacesSudoku.size()){
+            validSudoku = true;
+            return;
+        }
+        int[] space = spacesSudoku.get(pos);
+        int i = space[0], j = space[1];
+        for(int digit = 0; digit < 9 && !validSudoku;digit++){
+            if(!lineSudoku[i][digit] && !columnSudoku[j][digit] && !blockSudoku[i / 3][j / 3][digit]){
+                lineSudoku[i][digit] = columnSudoku[j][digit] = blockSudoku[i / 3][j / 3][digit] = true;
+                board[i][j] = (char) ( digit + '0' + 1);
+                dfsSudoku(board,pos + 1);
+                lineSudoku[i][digit] = columnSudoku[j][digit] = blockSudoku[i / 3][j / 3][digit] = false;
+            }
+        }
     }
 }

@@ -3,6 +3,7 @@ package algorithm;
 
 import data.ListNode;
 import data.TreeNode;
+import data.UnionFind;
 import javafx.util.Pair;
 
 import java.util.*;
@@ -724,5 +725,203 @@ public class BinaryTreeAlgorithm {
             slow = slow.next;
         }
         return slow;
+    }
+
+    /**
+     * 94. 二叉树的中序遍历
+     * 给定一个二叉树，返回它的中序 遍历。
+     * @param root
+     * @return
+     */
+    public List<Integer> inorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        inorderMiddle(root,res);
+        return res;
+    }
+
+    private void inorderMiddle(TreeNode root,List<Integer> res){
+        if(root == null){
+            return;
+        }
+        inorderMiddle(root.left, res);
+        res.add(root.val);
+        inorderMiddle(root.right,res);
+    }
+
+    /**
+     * 226. 翻转二叉树
+     * 翻转一棵二叉树。
+     * @param root
+     * @return
+     */
+    public TreeNode invertTree(TreeNode root) {
+        if(root ==null)
+            return null;
+        TreeNode left = invertTree(root.left);
+        TreeNode right = invertTree(root.right);
+        root.left = right;
+        root.right = left;
+        return root;
+    }
+
+    /**
+     * 685. 冗余连接 II
+     *
+     * 在本问题中，有根树指满足以下条件的有向图。该树只有一个根节点，所有其他节点都是该根节点的后继。每一个节点只有一个父节点，除了根节点没有父节点。
+     * 输入一个有向图，该图由一个有着N个节点 (节点值不重复1, 2, ..., N) 的树及一条附加的边构成。附加的边的两个顶点包含在1到N中间，这条附加的边不属于树中已存在的边。
+     * 结果图是一个以边组成的二维数组。 每一个边 的元素是一对 [u, v]，用以表示有向图中连接顶点 u 和顶点 v 的边，其中 u 是 v 的一个父节点。
+     * 返回一条能删除的边，使得剩下的图是有N个节点的有根树。若有多个答案，返回最后出现在给定二维数组的答案。
+     * @param edges
+     * @return
+     */
+    public int[] findRedundantDirectedConnection(int[][] edges) {
+        int nodesCount = edges.length;
+        UnionFind uf = new UnionFind(nodesCount + 1);
+        int[] parent = new int[nodesCount + 1];
+        for(int i = 1; i <= nodesCount; i++){
+            parent[i] = i;
+        }
+        int conflict = -1;
+        int cycle = -1;
+        for(int i = 0; i < nodesCount; i++){
+            int[] edge = edges[i];
+            int node1 = edge[0], node2 = edge[1];
+            if (parent[node2] != node2) {
+                conflict = i;
+            } else {
+                parent[node2] = node1;
+                if (uf.find(node1) == uf.find(node2)) {
+                    cycle = i;
+                } else {
+                    uf.union(node1, node2);
+                }
+            }
+        }
+        if (conflict < 0) {
+            int[] redundant = {edges[cycle][0], edges[cycle][1]};
+            return redundant;
+        } else {
+            int[] conflictEdge = edges[conflict];
+            if (cycle >= 0) {
+                int[] redundant = {parent[conflictEdge[1]], conflictEdge[1]};
+                return redundant;
+            } else {
+                int[] redundant = {conflictEdge[0], conflictEdge[1]};
+                return redundant;
+            }
+        }
+    }
+
+    /**
+     * 404. 左叶子之和
+     * 计算给定二叉树的所有左叶子之和。
+     * @param root
+     * @return
+     */
+    public int sumOfLeftLeaves(TreeNode root) {
+        if(root == null){
+            return 0;
+        }
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        int ans = 0;
+        while (!queue.isEmpty()){
+            TreeNode node = queue.poll();
+            if(node.left != null){
+                if(isLeafNodeSum(node.left)){
+                    ans += node.left.val;
+                }else{
+                    queue.offer(node.left);
+                }
+            }
+            if(node.right != null){
+                if(!isLeafNodeSum(node.right)){
+                    queue.offer(node.right);
+                }
+            }
+        }
+        return ans;
+    }
+
+    private boolean isLeafNodeSum(TreeNode node){
+        return node.left == null && node.right == null;
+    }
+
+    /**
+     * 538. 把二叉搜索树转换为累加树
+     *
+     * 给定一个二叉搜索树（Binary Search Tree），
+     * 把它转换成为累加树（Greater Tree)，
+     * 使得每个节点的值是原来的节点值加上所有大于它的节点值之和。
+     *
+     * @param root
+     * @return
+     */
+    int sumConvertBST = 0;
+    public TreeNode convertBST(TreeNode root) {
+        if(root != null){
+            convertBST(root.right);
+            sumConvertBST += root.val;
+            root.val = sumConvertBST;
+            convertBST(root.left);
+        }
+        return root;
+    }
+
+    /**
+     * 968. 监控二叉树
+     *
+     * 给定一个二叉树，我们在树的节点上安装摄像头。
+     *
+     * 节点上的每个摄影头都可以监视其父对象、自身及其直接子对象。
+     *
+     * 计算监控树的所有节点所需的最小摄像头数量。
+     *
+     * @param root
+     * @return
+     */
+    public int minCameraCover(TreeNode root) {
+        int[] array = dfsMinCameraCover(root);
+        return array[1];
+    }
+
+    private int[] dfsMinCameraCover(TreeNode root){
+        if(root == null){
+            return new int[]{Integer.MAX_VALUE / 2,0,0};
+        }
+        int[] leftArray = dfsMinCameraCover(root.left);
+        int[] rightArray = dfsMinCameraCover(root.right);
+        int[] array = new int[3];
+        array[0] = leftArray[2] + rightArray[2] + 1;
+        array[1] = Math.min(array[0],Math.min(leftArray[0] + rightArray[1] ,rightArray[0] + leftArray[1]));
+        array[2] = Math.min(array[0],leftArray[1] + rightArray[1]);
+        return array;
+
+    }
+
+    /**
+     * 617. 合并二叉树
+     *
+     * 给定两个二叉树，想象当你将它们中的一个覆盖到另一个上时，两个二叉树的一些节点便会重叠。
+     *
+     * 你需要将他们合并为一个新的二叉树。合并的规则是如果两个节点重叠，那么将他们的值相加作为节点合并后的新值，
+     *
+     * 否则不为 NULL 的节点将直接作为新二叉树的节点。
+     *
+     * @param t1
+     * @param t2
+     * @return
+     */
+    public TreeNode mergeTrees(TreeNode t1, TreeNode t2) {
+        if(t1 == null){
+            return t2;
+        }
+        if(t2 == null){
+            return t1;
+        }
+        TreeNode merged = new TreeNode(t1.val + t2.val);
+        merged.left = mergeTrees(t1.left,t2.left);
+        merged.right = mergeTrees(t1.right,t2.right);
+        return merged;
     }
 }
