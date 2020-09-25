@@ -924,4 +924,105 @@ public class BinaryTreeAlgorithm {
         merged.right = mergeTrees(t1.right,t2.right);
         return merged;
     }
+
+
+    /**
+     * 501. 二叉搜索树中的众数
+     * 给定一个有相同值的二叉搜索树（BST），找出 BST 中的所有众数（出现频率最高的元素）。
+     *
+     * 假定 BST 有如下定义：
+     *
+     * 结点左子树中所含结点的值小于等于当前结点的值
+     * 结点右子树中所含结点的值大于等于当前结点的值
+     * 左子树和右子树都是二叉搜索树
+     * 例如：
+     * 给定 BST [1,null,2,2],
+     *
+     * @param root
+     * @return
+     */
+    int baseFindMode,countFindMode,maxCountFindMode;
+    List<Integer> answerFindMode = new ArrayList<>();
+    public int[] findMode(TreeNode root) {
+        TreeNode cur = root,pre = null;
+        while(cur != null){
+            if(cur.left == null){
+                updateFindMode(cur.val);
+                cur = cur.right;
+                continue;
+            }
+            pre = cur.left;
+            while (pre.right != null && pre.right != cur){
+                pre = pre.right;
+            }
+            if(pre.right == null){
+                pre.right = cur;
+                cur = cur.left;
+            }else{
+                pre.right = null;
+                updateFindMode(cur.val);
+                cur = cur.right;
+            }
+        }
+        int[] mode = new int[answerFindMode.size()];
+        for(int i = 0; i < answerFindMode.size(); i++){
+            mode[i] = answerFindMode.get(i);
+        }
+        return mode;
+    }
+
+    private void updateFindMode(int x){
+        if(x == baseFindMode){
+            countFindMode ++;
+        }else{
+            countFindMode = 1;
+            baseFindMode = x;
+        }
+        if(countFindMode == maxCountFindMode){
+            answerFindMode.add(baseFindMode);
+        }
+        if(countFindMode > maxCountFindMode){
+            maxCountFindMode = countFindMode;
+            answerFindMode.clear();
+            answerFindMode.add(baseFindMode);
+        }
+    }
+
+    /**
+     * 106. 从中序与后序遍历序列构造二叉树
+     *
+     * 根据一棵树的中序遍历与后序遍历构造二叉树。
+     *
+     * 注意:
+     * 你可以假设树中没有重复的元素。
+     *
+     * @param inorder
+     * @param postorder
+     * @return
+     */
+    public TreeNode buildTree_v2(int[] inorder, int[] postorder) {
+        if(postorder == null || postorder.length == 0){
+            return null;
+        }
+        TreeNode root = new TreeNode(postorder[postorder.length - 1]);
+        Deque<TreeNode> stack = new LinkedList<>();
+        stack.push(root);
+        int inorderIndex = inorder.length - 1;
+        for(int i = postorder.length - 2; i >= 0; i--){
+            int postoderVal = postorder[i];
+            TreeNode node = stack.peek();
+            if(node.val != inorder[inorderIndex]){
+                node.right = new TreeNode(postoderVal);
+                stack.push(node.right);
+            }else{
+                while (!stack.isEmpty() && stack.peek().val == inorder[inorderIndex]) {
+                    node = stack.pop();
+                    inorderIndex--;
+                }
+                node.left = new TreeNode(postoderVal);
+                stack.push(node.left);
+            }
+        }
+        return root;
+    }
 }
