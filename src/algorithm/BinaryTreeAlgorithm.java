@@ -2,6 +2,7 @@ package algorithm;
 
 
 import data.ListNode;
+import data.Node;
 import data.TreeNode;
 import data.UnionFind;
 import javafx.util.Pair;
@@ -1021,6 +1022,153 @@ public class BinaryTreeAlgorithm {
                 }
                 node.left = new TreeNode(postoderVal);
                 stack.push(node.left);
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 235. 二叉搜索树的最近公共祖先
+     * 给定一个二叉搜索树, 找到该树中两个指定节点的最近公共祖先。
+     *
+     * 百度百科中最近公共祖先的定义为：“对于有根树 T 的两个结点 p、q，最近公共祖先表示为一个结点 x，满足 x 是 p、q 的祖先且 x 的深度尽可能大（一个节点也可以是它自己的祖先）。”
+     *
+     * 例如，给定如下二叉搜索树:  root = [6,2,8,0,4,7,9,null,null,3,5]
+     *
+     * @param root
+     * @param p
+     * @param q
+     * @return
+     */
+    public TreeNode lowestCommonAncestor_V2(TreeNode root, TreeNode p, TreeNode q) {
+        List<TreeNode> path_p = getPathLowestCommonAncestor(root,p);
+        List<TreeNode> path_q = getPathLowestCommonAncestor(root,q);
+        TreeNode ancestor = null;
+        for(int i = 0; i < path_p.size() && i < path_q.size(); i++){
+            if(path_p.get(i) == path_q.get(i)){
+                ancestor = path_p.get(i);
+            }else {
+                break;
+            }
+        }
+        return ancestor;
+    }
+
+    private List<TreeNode> getPathLowestCommonAncestor(TreeNode root,TreeNode target){
+        List<TreeNode> path = new ArrayList<>();
+        TreeNode node = root;
+        while (node != target){
+            path.add(node);
+            if(target.val < node.val){
+                node = node.left;
+            }else {
+                node = node.right;
+            }
+        }
+        path.add(node);
+        return path;
+    }
+
+    /**
+     * 117. 填充每个节点的下一个右侧节点指针 II
+     *
+     * 填充它的每个 next 指针，让这个指针指向其下一个右侧节点。如果找不到下一个右侧节点，则将 next 指针设置为 NULL。
+     *
+     * 初始状态下，所有 next 指针都被设置为 NULL。
+     *
+     * @param root
+     * @return
+     */
+    public Node connect(Node root) {
+        if(root == null){
+            return null;
+        }
+        Queue<Node> queue = new LinkedList<Node>();
+        queue.offer(root);
+        while (!queue.isEmpty()){
+            int n = queue.size();
+            Node last = null;
+            for(int i = 1; i <= n; i++){
+                Node f = queue.poll();
+                if(f.left != null){
+                    queue.offer(f.left);
+                }
+                if(f.right != null){
+                    queue.offer(f.right);
+                }
+                if(i != 1){
+                    last.next = f;
+                }
+                last = f;
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 145. 二叉树的后序遍历
+     *
+     * 给定一个二叉树，返回它的 后序 遍历。
+     * @param root
+     * @return
+     */
+    public List<Integer> postorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root == null){
+            return res;
+        }
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode prev = null;
+        while (root != null || !stack.isEmpty()){
+            while (root != null){
+                stack.push(root);
+                root = root.left;
+            }
+            root = stack.pop();
+            if(root.right == null || root.right == prev){
+                res.add(root.val);
+                prev = root;
+                root = null;
+            }else{
+                stack.push(root);
+                root = root.right;
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 701. 二叉搜索树中的插入操作
+     *
+     * 给定二叉搜索树（BST）的根节点和要插入树中的值，将值插入二叉搜索树。 返回插入后二叉搜索树的根节点。 输入数据保证，新值和原始二叉搜索树中的任意节点值都不同。
+     *
+     * 注意，可能存在多种有效的插入方式，只要树在插入后仍保持为二叉搜索树即可。 你可以返回任意有效的结果。
+     *
+     *
+     * @param root
+     * @param val
+     * @return
+     */
+    public TreeNode insertIntoBST(TreeNode root, int val) {
+        if(root == null){
+            return new TreeNode(val);
+        }
+        TreeNode pos = root;
+        while (pos !=null){
+            if(val < pos.val){
+                if(pos.left == null){
+                    pos.left = new TreeNode(val);
+                    break;
+                }else{
+                    pos = pos.left;
+                }
+            }else{
+                if(pos.right == null){
+                    pos.right = new TreeNode(val);
+                    break;
+                }else{
+                    pos = pos.right;
+                }
             }
         }
         return root;
