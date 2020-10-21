@@ -2880,4 +2880,90 @@ public class ArrayAlgorithm {
         return ansSubsets;
     }
 
+    /**
+     * 416. 分割等和子集
+     * 给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
+     *
+     * 注意:
+     *
+     * 每个数组中的元素不会超过 100
+     * 数组的大小不会超过 200
+     *
+     * @param nums
+     * @return
+     */
+    public boolean canPartition(int[] nums) {
+        int n = nums.length;
+        if(n < 2){
+            return false;
+        }
+        int sum = 0, maxNum = 0;
+        for(int num: nums){
+            sum += num;
+            maxNum = Math.max(maxNum,num);
+        }
+        if(sum % 2 != 0){
+            return false;
+        }
+        int target = sum / 2;
+        if(maxNum > target){
+            return false;
+        }
+        boolean[][] dp = new boolean[n][target + 1];
+        for(int i = 0; i < n; i++){
+            dp[i][0] = true;
+        }
+        dp[0][nums[0]] = true;
+        for(int i = 1; i < n; i++){
+            dp[i][0] = true;
+        }
+        dp[0][nums[0]] = true;
+        for(int i  = 1; i < n; i++){
+            int num = nums[i];
+            for(int j = 1; j <= target; j++){
+                if(j >= num){
+                    dp[i][j] = dp[i - 1][j] | dp[i - 1][j - num];
+                }else {
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
+        }
+        return dp[n - 1][target];
+    }
+
+    /**
+     * 977. 有序数组的平方
+     * @param A
+     * @return
+     */
+    public int[] sortedSquares(int[] A) {
+        if(A == null){
+            return null;
+        }
+        int[] result = new int[A.length];
+        for(int i = 0; i < A.length; i++){
+            result[i] = A[i] * A[i];
+        }
+        Arrays.sort(result);
+        return result;
+    }
+
+    public int[] sortedSquares_v2(int[] A){
+        int n = A.length;
+        int[] ans = new int[n];
+        for(int i = 0, j = n - 1, pos = n -1; i <= j;){
+            if (A[i] * A[i] > A[j] * A[j]) {
+                ans[pos] = A[i] * A[i];
+                i++;
+            }else{
+                ans[pos] = A[j] * A[j];
+                j--;
+            }
+            pos--;
+
+        }
+        return ans;
+    }
+
+
 }

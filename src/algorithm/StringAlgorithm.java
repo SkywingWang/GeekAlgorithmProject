@@ -1711,4 +1711,138 @@ public class StringAlgorithm {
         CHAR_SPACE,
         CHAR_ILLEGAL,
     }
+
+    /**
+     * 344. 反转字符串
+     * 编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。
+     *
+     * 不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。
+     *
+     * 你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。
+     *
+     * @param s
+     */
+    public void reverseString(char[] s) {
+        if(s == null){
+            return;}
+        int n = s.length;
+        for(int left = 0,right = n - 1; left < right; left++,right--){
+            char tmp = s[left];
+            s[left] = s[right];
+            s[right] = tmp;
+        }
+    }
+
+    /**
+     * 1002. 查找常用字符
+     * 给定仅有小写字母组成的字符串数组 A，返回列表中的每个字符串中都显示的全部字符（包括重复字符）组成的列表。例如，如果一个字符在每个字符串中出现 3 次，但不是 4 次，则需要在最终答案中包含该字符 3 次。
+     *
+     * 你可以按任意顺序返回答案。
+     *
+     * @param A
+     * @return
+     */
+    public List<String> commonChars(String[] A) {
+        if(A == null){
+            return null;
+        }
+        int[] minfreq = new int[26];
+        Arrays.fill(minfreq,Integer.MAX_VALUE);
+        for(String word:A){
+            int[] freq = new int[26];
+            int length = word.length();
+            for(int i = 0; i < length; i++){
+                char ch = word.charAt(i);
+                ++freq[ch - 'a'];
+            }
+            for(int i = 0;i < 26;i++){
+                minfreq[i] = Math.min(minfreq[i],freq[i]);
+            }
+        }
+        List<String> ans = new ArrayList<>();
+        for(int i = 0; i < 26; i++){
+            for(int j = 0; j < minfreq[i];j++){
+                ans.add(String.valueOf((char)(i + 'a')));
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 844. 比较含退格的字符串
+     *
+     * 给定 S 和 T 两个字符串，当它们分别被输入到空白的文本编辑器后，判断二者是否相等，并返回结果。 # 代表退格字符。
+     *
+     * 注意：如果对空文本输入退格字符，文本继续为空。
+     *
+     * @param S
+     * @param T
+     * @return
+     */
+    public boolean backspaceCompare(String S, String T) {
+        int i = S.length() - 1,j = T.length() - 1;
+        int skipS = 0, skipT = 0;
+        while (i >= 0 || j >= 0){
+            while (i >= 0){
+                if(S.charAt(i) == '#'){
+                    skipS++;
+                    i--;
+                }else if(skipS > 0){
+                    skipS--;
+                    i--;
+                }else{
+                    break;
+                }
+            }
+            while (j >= 0){
+                if(T.charAt(j) == '#'){
+                    skipT++;
+                    j--;
+                }else if(skipT > 0){
+                    skipT--;
+                    j--;
+                }else{
+                    break;
+                }
+            }
+            if(i >= 0 && j >= 0){
+                if(S.charAt(i) != T.charAt(j)){
+                    return false;
+                }
+            }else{
+                if(i >= 0 || j >=0){
+                    return false;
+                }
+            }
+            i--;
+            j--;
+        }
+        return true;
+    }
+
+    /**
+     * 925. 长按键入
+     *
+     * 你的朋友正在使用键盘输入他的名字 name。偶尔，在键入字符 c 时，按键可能会被长按，而字符可能被输入 1 次或多次。
+     *
+     * 你将会检查键盘输入的字符 typed。如果它对应的可能是你的朋友的名字（其中一些字符可能被长按），那么就返回 True。
+     *
+     * @param name
+     * @param typed
+     * @return
+     */
+    public boolean isLongPressedName(String name, String typed) {
+        int i = 0, j = 0;
+        while (j < typed.length()){
+            if(i < name.length() && name.charAt(i) == typed.charAt(j)){
+                i++;
+                j++;
+            }else if(j > 0 && typed.charAt(j) == typed.charAt(j - 1)){
+                j++;
+            }else{
+                return false;
+            }
+        }
+        return i == name.length();
+    }
 }

@@ -1,6 +1,7 @@
 package algorithm;
 
 import data.ListNode;
+import data.Node;
 
 import java.util.*;
 
@@ -72,10 +73,11 @@ public class ListAlgorithm {
             }
             index = index.next;
         }
-        if (l1 != null)
+        if (l1 != null) {
             index.next = l1;
-        else
+        } else {
             index.next = l2;
+        }
         return result;
     }
 
@@ -89,8 +91,9 @@ public class ListAlgorithm {
      */
     public List<List<Integer>> generate(int numRows) {
         List<List<Integer>> result = new ArrayList<>();
-        if (numRows <= 0)
+        if (numRows <= 0) {
             return result;
+        }
         for (int i = 0; i < numRows; i++) {
             Integer[] tmp = new Integer[i + 1];
             if (i == 0) {
@@ -121,8 +124,9 @@ public class ListAlgorithm {
     public List<Integer> getRow(int rowIndex) {
         List<Integer> result = new ArrayList<>();
         int pre = 1;
-        if (rowIndex == 0)
+        if (rowIndex == 0) {
             result.add(1);
+        }
         if (rowIndex == 1) {
             result.add(1);
             result.add(1);
@@ -149,13 +153,15 @@ public class ListAlgorithm {
      * @return
      */
     public boolean hasCycle(ListNode head) {
-        if (head == null || head.next == null)
+        if (head == null || head.next == null) {
             return false;
+        }
         ListNode slow = head;
         ListNode fast = head.next;
         while (slow != fast) {
-            if (fast.next == null || fast.next.next == null)
+            if (fast.next == null || fast.next.next == null) {
                 return false;
+            }
             slow = slow.next;
             fast = fast.next.next;
         }
@@ -168,8 +174,9 @@ public class ListAlgorithm {
      * 编写一个程序，找到两个单链表相交的起始节点。
      */
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null)
+        if (headA == null || headB == null) {
             return null;
+        }
         ListNode indexNode = headA;
         Set<ListNode> aNodeSet = new HashSet<>();
         while (indexNode != null) {
@@ -178,8 +185,9 @@ public class ListAlgorithm {
         }
         indexNode = headB;
         while (indexNode != null) {
-            if (aNodeSet.contains(indexNode))
+            if (aNodeSet.contains(indexNode)) {
                 return indexNode;
+            }
             indexNode = indexNode.next;
         }
         return null;
@@ -193,13 +201,15 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode getIntersectionNode2(ListNode headA, ListNode headB) {
-        if (headA == null || headB == null)
+        if (headA == null || headB == null) {
             return null;
+        }
         ListNode indexNodeA = headA, indexNodeB = headB;
         boolean indexNodeAInA = true, indexNodeBInB = true;
         while (indexNodeA != null && indexNodeB != null) {
-            if (indexNodeB == indexNodeA)
+            if (indexNodeB == indexNodeA) {
                 return indexNodeA;
+            }
             if (indexNodeA.next == null) {
                 if (indexNodeAInA) {
                     indexNodeA = headB;
@@ -234,8 +244,9 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode removeElements(ListNode head, int val) {
-        if (head == null)
+        if (head == null) {
             return null;
+        }
         ListNode indexNode = head;
         while (indexNode != null) {
             if (indexNode.next.val == val) {
@@ -244,8 +255,9 @@ public class ListAlgorithm {
                 indexNode = indexNode.next;
             }
         }
-        if (head.val == val)
+        if (head.val == val) {
             head = head.next;
+        }
         return head;
     }
 
@@ -260,15 +272,18 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode middleNode(ListNode head) {
-        if (head == null || head.next == null)
+        if (head == null || head.next == null) {
             return head;
+        }
         ListNode index = head;
         ListNode doubleStepIndex = head;
         while (true) {
-            if (doubleStepIndex.next == null)
+            if (doubleStepIndex.next == null) {
                 return index;
-            if (doubleStepIndex.next.next == null)
+            }
+            if (doubleStepIndex.next.next == null) {
                 return index.next;
+            }
             index = index.next;
             doubleStepIndex = doubleStepIndex.next.next;
         }
@@ -318,8 +333,9 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode mergeKLists(ListNode[] lists) {
-        if (lists == null || lists.length == 0)
+        if (lists == null || lists.length == 0) {
             return null;
+        }
         PriorityQueue<ListNode> queue = new PriorityQueue<>(new Comparator<ListNode>() {
             @Override
             public int compare(ListNode o1, ListNode o2) {
@@ -330,8 +346,9 @@ public class ListAlgorithm {
         ListNode current = dummy;
         for (int i = 0; i < lists.length; i++) {
             ListNode head = lists[i];
-            if (head != null)
+            if (head != null) {
                 queue.add(head);
+            }
         }
         while (queue.size() > 0) {
             ListNode node = queue.poll();
@@ -355,8 +372,9 @@ public class ListAlgorithm {
      * @param node
      */
     public void deleteNode(ListNode node) {
-        if (node == null)
+        if (node == null) {
             return;
+        }
         if (node.next == null) {
             node = null;
             return;
@@ -374,25 +392,29 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode getKthFromEnd(ListNode head, int k) {
-        if (head == null)
+        if (head == null) {
             return null;
+        }
         Queue<ListNode> queue = new LinkedList<>();
         ListNode index = head;
         while (index != null) {
-            if (queue.size() == k)
+            if (queue.size() == k) {
                 queue.poll();
+            }
             queue.offer(index);
             index = index.next;
         }
-        if (queue.size() == k)
+        if (queue.size() == k) {
             return queue.poll();
-        else
+        } else {
             return null;
+        }
     }
 
     public ListNode getKthFromEnd_V2(ListNode head, int k) {
-        if (head == null)
+        if (head == null) {
             return null;
+        }
         ListNode index = head;
         ListNode result = head;
         int i = 0;
@@ -425,8 +447,12 @@ public class ListAlgorithm {
         ListNode pre = hair;
         ListNode end = hair;
         while (end.next != null) {
-            for (int i = 0; i < k && end != null; i++) end = end.next;
-            if (end == null) break;
+            for (int i = 0; i < k && end != null; i++) {
+                end = end.next;
+            }
+            if (end == null) {
+                break;
+            }
             ListNode start = pre.next;
             ListNode next = end.next;
             end.next = null;
@@ -459,8 +485,9 @@ public class ListAlgorithm {
      * @return
      */
     public ListNode removeDuplicateNodes(ListNode head) {
-        if (head == null)
+        if (head == null) {
             return null;
+        }
         HashSet<Integer> dict = new HashSet<>();
         ListNode indexNode = head;
         dict.add(head.val);
@@ -488,8 +515,9 @@ public class ListAlgorithm {
      * @return
      */
     public int minimumTotal(List<List<Integer>> triangle) {
-        if (triangle == null || triangle.size() == 0)
+        if (triangle == null || triangle.size() == 0) {
             return 0;
+        }
         int n = triangle.size();
         int[][] f = new int[n][n];
         f[0][0] = triangle.get(0).get(0);
@@ -523,6 +551,7 @@ public class ListAlgorithm {
         int size = nums.size();
         int[] next = new int[size];
         PriorityQueue<Integer> priorityQueue = new PriorityQueue<Integer>(new Comparator<Integer>() {
+            @Override
             public int compare(Integer index1, Integer index2) {
                 return nums.get(index1).get(next[index1]) - nums.get(index2).get(next[index2]);
             }
@@ -640,4 +669,152 @@ public class ListAlgorithm {
         }
         return result;
     }
+
+    /**
+     * 142. 环形链表 II
+     * <p>
+     * 给定一个链表，返回链表开始入环的第一个节点。 如果链表无环，则返回 null。
+     * <p>
+     * 为了表示给定链表中的环，我们使用整数 pos 来表示链表尾连接到链表中的位置（索引从 0 开始）。 如果 pos 是 -1，则在该链表中没有环。
+     * <p>
+     * 说明：不允许修改给定的链表。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode detectCycle(ListNode head) {
+        ListNode pos = head;
+        Set<ListNode> visited = new HashSet<ListNode>();
+        while (pos != null) {
+            if (visited.contains(pos)) {
+                return pos;
+            } else {
+                visited.add(pos);
+            }
+            pos = pos.next;
+        }
+        return null;
+    }
+
+    /**
+     * 24. 两两交换链表中的节点
+     * <p>
+     * 给定一个链表，两两交换其中相邻的节点，并返回交换后的链表。
+     * <p>
+     * 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode swapPairs(ListNode head) {
+        if (head == null || head.next == null) {
+            return head;
+        }
+        ListNode newHead = head.next;
+        head.next = swapPairs(newHead.next);
+        newHead.next = head;
+        return newHead;
+    }
+
+    public ListNode swapPairs_V2(ListNode head) {
+        ListNode dummyHead = new ListNode(0);
+        dummyHead.next = head;
+        ListNode temp = dummyHead;
+        while (temp.next != null && temp.next.next != null) {
+            ListNode node1 = temp.next;
+            ListNode node2 = temp.next.next;
+            temp.next = node2;
+            node1.next = node2.next;
+            node2.next = node1;
+            temp = node1;
+        }
+        return dummyHead.next;
+    }
+
+    public Node connect(Node root) {
+        if (root == null) {
+            return root;
+        }
+
+        Queue<Node> queue = new LinkedList<>();
+        queue.add(root);
+
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                Node node = queue.poll();
+                if (i < size - 1) {
+                    node.next = queue.peek();
+                }
+                if (node.left != null) {
+                    queue.add(node.left);
+                }
+                if (node.right != null) {
+                    queue.add(node.right);
+                }
+            }
+        }
+        return root;
+    }
+
+    /**
+     * 19. 删除链表的倒数第N个节点
+     * <p>
+     * 给定一个链表，删除链表的倒数第 n 个节点，并且返回链表的头结点。
+     *
+     * @param head
+     * @param n
+     * @return
+     */
+    public ListNode removeNthFromEnd(ListNode head, int n) {
+        ListNode result = head;
+        ListNode indexNode = head;
+        while (indexNode.next != null) {
+            if (n <= 0)
+                result = result.next;
+            if (n >= 0)
+                n--;
+            indexNode = indexNode.next;
+        }
+
+        if (n == 1) {
+            return head.next;
+        }
+        result.next = result.next.next;
+        return head;
+    }
+
+    /**
+     * 143. 重排链表
+     *
+     * 给定一个单链表 L：L0→L1→…→Ln-1→Ln ，
+     * 将其重新排列后变为： L0→Ln→L1→Ln-1→L2→Ln-2→…
+     *
+     * 你不能只是单纯的改变节点内部的值，而是需要实际的进行节点交换。
+     *
+     * @param head
+     */
+    public void reorderList(ListNode head) {
+        if(head == null){
+            return;
+        }
+        List<ListNode> listNodes = new ArrayList<>();
+        ListNode indexNode = head;
+        while (indexNode != null){
+            listNodes.add(indexNode);
+            indexNode = indexNode.next;
+        }
+        int i = 0, j = listNodes.size() - 1;
+        while (i < j){
+            listNodes.get(i).next = listNodes.get(j);
+            i++;
+            if(i == j){
+                break;
+            }
+            listNodes.get(j).next = listNodes.get(i);
+            j--;
+        }
+        listNodes.get(i).next = null;
+    }
+
 }

@@ -20,9 +20,11 @@ public class Main {
         stringAlgorithm.testStr("https://nngcockpit.oss-ap-southeast-1.aliyuncs.com/cockpit/rp/2a0382f3-9fe1-4bbf-82f8-70cd24301a6f.jpg");
 
 //        System.out.println("姓名 result : " + RegularExpressionTest.checkName("刘w"));
-        System.out.println(RegularExpressionTest.replaceStrToDate("2011.7-12"));
+        System.out.println("日期校验 result ：" + RegularExpressionTest.checkDateFormat("2011-02-28"));
 
         int a = 13 & 17;
         System.out.println(a);
+
+
     }
 }

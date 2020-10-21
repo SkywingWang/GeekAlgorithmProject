@@ -1195,4 +1195,106 @@ public class BinaryTreeAlgorithm {
         }
         return f[n - 1][2];
     }
+
+
+    /**
+     * 834. 树中距离之和
+     *
+     * 给定一个无向、连通的树。树中有 N 个标记为 0...N-1 的节点以及 N-1 条边 。
+     *
+     * 第 i 条边连接节点 edges[i][0] 和 edges[i][1] 。
+     *
+     * 返回一个表示节点 i 与其他所有节点距离之和的列表 ans。
+     *
+     * @param N
+     * @param edges
+     * @return
+     */
+    int[] ansSumOfDistancesInTree;
+    int[] szSumOfDistancesInTree;
+    int[] dpSumOfDistancesInTree;
+    List<List<Integer>> graphSumOfDistancesInTree;
+    public int[] sumOfDistancesInTree(int N, int[][] edges) {
+        ansSumOfDistancesInTree = new int[N];
+        szSumOfDistancesInTree = new int[N];
+        dpSumOfDistancesInTree = new int[N];
+        graphSumOfDistancesInTree = new ArrayList<List<Integer>>();
+        for (int i = 0; i < N; ++i) {
+            graphSumOfDistancesInTree.add(new ArrayList<Integer>());
+        }
+        for (int[] edge: edges) {
+            int u = edge[0], v = edge[1];
+            graphSumOfDistancesInTree.get(u).add(v);
+            graphSumOfDistancesInTree.get(v).add(u);
+        }
+        dfsSumOfDistancesInTree(0, -1);
+        dfsSumOfDistancesInTree_2(0, -1);
+        return ansSumOfDistancesInTree;
+    }
+
+    private void dfsSumOfDistancesInTree(int u,int f){
+        szSumOfDistancesInTree[u] = 1;
+        dpSumOfDistancesInTree[u] = 0;
+        for(int v : graphSumOfDistancesInTree.get(u)){
+            if(v == f){
+                continue;
+            }
+            dfsSumOfDistancesInTree(v,u);
+            dpSumOfDistancesInTree[u] += dpSumOfDistancesInTree[v] + szSumOfDistancesInTree[v];
+            szSumOfDistancesInTree[u] += szSumOfDistancesInTree[v];
+        }
+    }
+
+    private void dfsSumOfDistancesInTree_2(int u,int f){
+        ansSumOfDistancesInTree[u] = dpSumOfDistancesInTree[u];
+        for(int v:graphSumOfDistancesInTree.get(u)){
+            if(v == f){
+                continue;
+            }
+            int pu = dpSumOfDistancesInTree[u],pv = dpSumOfDistancesInTree[v];
+            int su = szSumOfDistancesInTree[u],sv = szSumOfDistancesInTree[v];
+            dpSumOfDistancesInTree[u] -= dpSumOfDistancesInTree[v] + szSumOfDistancesInTree[v];
+            szSumOfDistancesInTree[u] -= szSumOfDistancesInTree[v];
+            dpSumOfDistancesInTree[v] += dpSumOfDistancesInTree[u] + szSumOfDistancesInTree[u];
+            szSumOfDistancesInTree[v] += szSumOfDistancesInTree[u];
+
+            dfsSumOfDistancesInTree_2(v, u);
+
+            dpSumOfDistancesInTree[u] = pu;
+            dpSumOfDistancesInTree[v] = pv;
+            szSumOfDistancesInTree[u] = su;
+            szSumOfDistancesInTree[v] = sv;
+
+        }
+    }
+
+    /**
+     * 530. 二叉搜索树的最小绝对差
+     *
+     * 给你一棵所有节点为非负值的二叉搜索树，请你计算树中任意两节点的差的绝对值的最小值。
+     *
+     * @param root
+     * @return
+     */
+    int preGetMinimumDifference;
+    int ansGetMinimumDifference;
+    public int getMinimumDifference(TreeNode root) {
+        ansGetMinimumDifference = Integer.MAX_VALUE;
+        preGetMinimumDifference = -1;
+        dfsGetMinimumDifference(root);
+        return ansGetMinimumDifference;
+    }
+    private void dfsGetMinimumDifference(TreeNode root){
+        if(root == null){
+            return;
+        }
+        dfsGetMinimumDifference(root.left);
+        if(preGetMinimumDifference == -1){
+            preGetMinimumDifference = root.val;
+        }else{
+            ansGetMinimumDifference = Math.min(ansGetMinimumDifference,root.val - preGetMinimumDifference);
+            preGetMinimumDifference = root.val;
+        }
+        dfsGetMinimumDifference(root.right);
+    }
 }

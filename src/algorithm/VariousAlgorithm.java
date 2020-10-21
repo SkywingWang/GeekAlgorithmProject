@@ -1738,4 +1738,29 @@ public class VariousAlgorithm {
             }
         }
     }
+
+    /**
+     * 52. N皇后 II
+     * n 皇后问题研究的是如何将 n 个皇后放置在 n×n 的棋盘上，并且使皇后彼此之间不能相互攻击。
+     * @param n
+     * @return
+     */
+    public int totalNQueens(int n) {
+        return solveTotalNQueens(n,0,0,0,0);
+    }
+    private int solveTotalNQueens(int n, int row, int columns, int diagonals1, int diagonals2) {
+        if (row == n) {
+            return 1;
+        } else {
+            int count = 0;
+            int availablePositions = ((1 << n) - 1) & (~(columns | diagonals1 | diagonals2));
+            while (availablePositions != 0) {
+                int position = availablePositions & (-availablePositions);
+                availablePositions = availablePositions & (availablePositions - 1);
+                count += solveTotalNQueens(n, row + 1, columns | position, (diagonals1 | position) << 1, (diagonals2 | position) >> 1);
+            }
+            return count;
+        }
+    }
+
 }
