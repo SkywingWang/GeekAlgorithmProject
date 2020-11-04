@@ -1763,4 +1763,110 @@ public class VariousAlgorithm {
         }
     }
 
+    /**
+     * 1024. 视频拼接
+     *
+     * 你将会获得一系列视频片段，这些片段来自于一项持续时长为 T 秒的体育赛事。这些片段可能有所重叠，也可能长度不一。
+     *
+     * 视频片段 clips[i] 都用区间进行表示：开始于 clips[i][0] 并于 clips[i][1] 结束。我们甚至可以对这些片段自由地再剪辑，例如片段 [0, 7] 可以剪切成 [0, 1] + [1, 3] + [3, 7] 三部分。
+     *
+     * 我们需要将这些片段进行再剪辑，并将剪辑后的内容拼接成覆盖整个运动过程的片段（[0, T]）。返回所需片段的最小数目，如果无法完成该任务，则返回 -1 。
+     *
+     * @param clips
+     * @param T
+     * @return
+     */
+    public int videoStitching(int[][] clips, int T) {
+        int[] dp = new int[T + 1];
+        Arrays.fill(dp,Integer.MAX_VALUE - 1);
+        dp[0] = 0;
+        for(int i = 1; i <= T; i++){
+            for(int[] clip:clips){
+                if(clip[0] < i && i <= clip[1]){
+                    dp[i] = Math.min(dp[i],dp[clip[0]] + 1);
+                }
+            }
+        }
+        return dp[T] == Integer.MAX_VALUE - 1 ? -1 : dp[T];
+    }
+
+    /**
+     *
+     * 463. 岛屿的周长
+     *
+     * 给定一个包含 0 和 1 的二维网格地图，其中 1 表示陆地 0 表示水域。
+     *
+     * 网格中的格子水平和垂直方向相连（对角线方向不相连）。整个网格被水完全包围，但其中恰好有一个岛屿（或者说，一个或多个表示陆地的格子相连组成的岛屿）。
+     *
+     * 岛屿中没有“湖”（“湖” 指水域在岛屿内部且不和岛屿周围的水相连）。格子是边长为 1 的正方形。网格为长方形，且宽度和高度均不超过 100 。计算这个岛屿的周长。
+     *
+     * @param grid
+     * @return
+     */
+    public int islandPerimeter(int[][] grid) {
+        if(grid == null || grid.length == 0 || grid[0].length == 0){
+            return 0;
+        }
+        int perimeter = 0;
+        for(int i = 0; i < grid.length; i++){
+            for(int j = 0; j < grid[0].length; j++){
+                if(grid[i][j] == 1){
+                    perimeter += 4;
+                    if(i > 0 && grid[i-1][j] == 1){
+                        perimeter-=2;
+                    }
+                    if(j > 0 && grid[i][j - 1] == 1){
+                        perimeter-=2;
+                    }
+                }
+            }
+        }
+        return perimeter;
+    }
+
+    /**
+     * 140. 单词拆分 II
+     *
+     * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，在字符串中增加空格来构建一个句子，使得句子中所有的单词都在词典中。返回所有这些可能的句子。
+     *
+     * 说明：
+     *
+     * 分隔时可以重复使用字典中的单词。
+     * 你可以假设字典中没有重复的单词。
+     *
+     * @param s
+     * @param wordDict
+     * @return
+     */
+    public List<String> wordBreak(String s, List<String> wordDict) {
+        Map<Integer,List<List<String>>> map = new HashMap<>();
+        List<List<String>> wordBreaks = backtrack(s,s.length(),new HashSet<String>(wordDict),0,map);
+        List<String> breakList = new LinkedList<>();
+        for(List<String> wordBreak:wordBreaks){
+            breakList.add(String.join(" ",wordBreak));
+        }
+        return breakList;
+    }
+
+    private List<List<String>> backtrack(String s, int length, Set<String> wordSet, int index, Map<Integer, List<List<String>>> map) {
+        if(!map.containsKey(index)){
+            List<List<String>> wordBreaks = new LinkedList<List<String>>();
+            if(index == length){
+                wordBreaks.add(new LinkedList<>());
+            }
+            for(int i = index + 1; i <= length;i++){
+                String word = s.substring(index,i);
+                if(wordSet.contains(word)){
+                    List<List<String>> nextWordBreaks = backtrack(s,length,wordSet,i,map);
+                    for(List<String> nextWordBreak : nextWordBreaks){
+                        LinkedList<String> wordBreak = new LinkedList<>(nextWordBreak);
+                        wordBreak.offerFirst(word);
+                        wordBreaks.add(wordBreak);
+                    }
+                }
+            }
+            map.put(index,wordBreaks);
+        }
+        return map.get(index);
+    }
 }

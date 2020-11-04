@@ -2965,5 +2965,169 @@ public class ArrayAlgorithm {
         return ans;
     }
 
+    /**
+     * 845. 数组中的最长山脉
+     * 我们把数组 A 中符合下列属性的任意连续子数组 B 称为 “山脉”：
+     *
+     * B.length >= 3
+     * 存在 0 < i < B.length - 1 使得 B[0] < B[1] < ... B[i-1] < B[i] > B[i+1] > ... > B[B.length - 1]
+     * （注意：B 可以是 A 的任意子数组，包括整个数组 A。）
+     *
+     * 给出一个整数数组 A，返回最长 “山脉” 的长度。
+     *
+     * 如果不含有 “山脉” 则返回 0。
+     *
+     * @param A
+     * @return
+     */
+    public int longestMountain(int[] A) {
+        int result = 0;
+        int n = A.length;
+        if(A != null && n > 2){
+            int left = 0;
+            while (left + 2 < n){
+                int right = left + 1;
+                if(A[left] < A[left + 1]){
+                    while (right + 1 < n && A[right] < A[right + 1]){
+                        right++;
+                    }
+                    if(right < n - 1 && A[right] > A[right + 1]){
+                        while (right + 1 < n && A[right] > A[right + 1]){
+                            right++;
+                        }
+                        result  = Math.max(result,right - left + 1);
+                    }else {
+                        right++;
+                    }
+                }
+                left = right;
+            }
+        }
+        return result;
+    }
 
+    /**
+     * 1207. 独一无二的出现次数
+     *
+     * 给你一个整数数组 arr，请你帮忙统计数组中每个数的出现次数。
+     *
+     * 如果每个数的出现次数都是独一无二的，就返回 true；否则返回 false。
+     *
+     * @param arr
+     * @return
+     */
+    public boolean uniqueOccurrences(int[] arr) {
+        Map<Integer,Integer> occur = new HashMap<>();
+        for(int x : arr){
+            occur.put(x,occur.getOrDefault(x,0) + 1);
+        }
+        Set<Integer> times = new HashSet<>();
+        for(Map.Entry<Integer,Integer> x : occur.entrySet()){
+            times.add(x.getValue());
+        }
+        return times.size() == occur.size();
+    }
+
+    /**
+     * 349. 两个数组的交集
+     *
+     * 给定两个数组，编写一个函数来计算它们的交集。
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int[] intersection(int[] nums1, int[] nums2) {
+        if(nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0){
+            return new int[0];
+        }
+        Set<Integer> numCount = new HashSet<>();
+        for(int n : nums1){
+            numCount.add(n);
+        }
+        List<Integer> list = new ArrayList<>();
+        for(int n : nums2){
+            if(numCount.contains(n)){
+                list.add(n);
+                numCount.remove(n);
+            }
+        }
+        int[] result = new int[list.size()];
+        for(int i = 0; i < list.size();i++){
+            result[i] = list.get(i);
+        }
+        return result;
+    }
+
+    /**
+     * 941. 有效的山脉数组
+     *
+     * 给定一个整数数组 A，如果它是有效的山脉数组就返回 true，否则返回 false。
+     *
+     * 让我们回顾一下，如果 A 满足下述条件，那么它是一个山脉数组：
+     *
+     * A.length >= 3
+     * 在 0 < i < A.length - 1 条件下，存在 i 使得：
+     * A[0] < A[1] < ... A[i-1] < A[i]
+     * A[i] > A[i+1] > ... > A[A.length - 1]
+     *
+     * @param A
+     * @return
+     */
+    public boolean validMountainArray(int[] A) {
+        int N = A.length;
+        int i = 0;
+        while (i + 1 < N && A[i] < A[i + 1]){
+            i++;
+        }
+        if(i==0||i==N-1){
+            return false;
+        }
+        while (i + 1 < N && A[i] > A[i + 1]){
+            i++;
+        }
+        return i == N - 1;
+    }
+
+    /**
+     * 57. 插入区间
+     * 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
+     *
+     * 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
+     *
+     * @param intervals
+     * @param newInterval
+     * @return
+     */
+    public int[][] insert(int[][] intervals, int[] newInterval) {
+        if(intervals == null && newInterval == null){
+            return null;
+        }
+        int left = newInterval[0];
+        int right = newInterval[1];
+        boolean placed = false;
+        List<int[]> ansList = new ArrayList<>();
+        for(int[] interval:intervals){
+            if(interval[0] > right){
+                if(!placed){
+                    ansList.add(new int[]{left,right});
+                    placed = true;
+                }
+                ansList.add(interval);
+            }else if(interval[1] < left){
+                ansList.add(interval);
+            }else {
+                left = Math.min(left,interval[0]);
+                right = Math.max(right,interval[1]);
+            }
+        }
+        if(!placed){
+            ansList.add(new int[]{left,right});
+        }
+        int[][] ans = new int[ansList.size()][2];
+        for(int i = 0; i < ansList.size(); i++){
+            ans[i] = ansList.get(i);
+        }
+        return ans;
+    }
 }

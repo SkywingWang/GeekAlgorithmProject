@@ -1297,4 +1297,73 @@ public class BinaryTreeAlgorithm {
         }
         dfsGetMinimumDifference(root.right);
     }
+
+    /**
+     *
+     * @param root
+     * @return
+     */
+    public List<Integer> preorderTraversal(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        if(root == null){
+            return res;
+        }
+
+        Deque<TreeNode> stack = new LinkedList<>();
+        TreeNode node = root;
+        while (!stack.isEmpty() || node != null){
+            while (node != null){
+                res.add(node.val);
+                stack.push(node);
+                node = node.left;
+            }
+            node = stack.pop();
+            node = node.right;
+        }
+        return res;
+    }
+
+    /**
+     * 129. 求根到叶子节点数字之和
+     *
+     * 给定一个二叉树，它的每个结点都存放一个 0-9 的数字，每条从根到叶子节点的路径都代表一个数字。
+     *
+     * 例如，从根到叶子节点路径 1->2->3 代表数字 123。
+     *
+     * 计算从根到叶子节点生成的所有数字之和。
+     *
+     * 说明: 叶子节点是指没有子节点的节点。
+     *
+     * @param root
+     * @return
+     */
+    public int sumNumbers(TreeNode root) {
+        int result = 0;
+        if(root == null){
+            return 0;
+        }
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        Queue<Integer> numQueue = new LinkedList<Integer>();
+        nodeQueue.offer(root);
+        numQueue.offer(root.val);
+        while (!nodeQueue.isEmpty()){
+            TreeNode node = nodeQueue.poll();
+            int num = numQueue.poll();
+            TreeNode left = node.left,right = node.right;
+            if(left == null && right == null){
+                result += num;
+            }else {
+                if(left !=null){
+                    nodeQueue.offer(left);
+                    numQueue.offer(num * 10 + left.val);
+                }
+                if(right != null){
+                    nodeQueue.offer(right);
+                    numQueue.offer(num * 10 + right.val);
+                }
+            }
+        }
+        return result;
+    }
+
 }
