@@ -1869,4 +1869,28 @@ public class VariousAlgorithm {
         }
         return map.get(index);
     }
+
+    /**
+     * 973. 最接近原点的 K 个点
+     *
+     * 我们有一个由平面上的点组成的列表 points。需要从中找出 K 个距离原点 (0, 0) 最近的点。
+     *
+     * （这里，平面上两点之间的距离是欧几里德距离。）
+     *
+     * 你可以按任何顺序返回答案。除了点坐标的顺序之外，答案确保是唯一的。
+     *
+     *
+     * @param points
+     * @param K
+     * @return
+     */
+    public int[][] kClosest(int[][] points, int K) {
+        Arrays.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return (o1[0] * o1[0] + o1[1] * o1[1] - o2[0] * o2[0] - o2[1] * o2[1]);
+            }
+        });
+        return Arrays.copyOfRange(points,0,K);
+    }
 }

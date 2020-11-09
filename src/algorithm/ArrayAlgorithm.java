@@ -942,16 +942,16 @@ public class ArrayAlgorithm {
      * @return
      */
     public int numIslands(char[][] grid) {
-        if(grid == null || grid.length == 0)
+        if (grid == null || grid.length == 0)
             return 0;
         int nr = grid.length;
         int nc = grid[0].length;
         int num_islands = 0;
-        for(int r = 0; r < nr; r++){
-            for(int c = 0; c < nc; c++){
-                if(grid[r][c] == '1'){
-                    ++ num_islands;
-                    numIslandsDFS(grid,r,c);
+        for (int r = 0; r < nr; r++) {
+            for (int c = 0; c < nc; c++) {
+                if (grid[r][c] == '1') {
+                    ++num_islands;
+                    numIslandsDFS(grid, r, c);
                 }
             }
         }
@@ -978,100 +978,101 @@ public class ArrayAlgorithm {
      * 给你一个整数数组 nums 和一个整数 k。
      * 如果某个 连续 子数组中恰好有 k 个奇数数字，我们就认为这个子数组是「优美子数组」。
      * 请返回这个数组中「优美子数组」的数目。
+     *
      * @param nums
      * @param k
      * @return
      */
     public int numberOfSubarrays(int[] nums, int k) {
-        if(nums == null || nums.length == 0 || nums.length < k) return 0;
-        int left = 0,right = 0;
+        if (nums == null || nums.length == 0 || nums.length < k) return 0;
+        int left = 0, right = 0;
         int count = 0;
         int res = 0;
         int preEven = 0;
-        while (right < nums.length){
-            if(count < k){
-                if(nums[right] % 2 != 0) count ++;
-                right ++;
+        while (right < nums.length) {
+            if (count < k) {
+                if (nums[right] % 2 != 0) count++;
+                right++;
             }
-            if(count == k){
+            if (count == k) {
                 preEven = 0;
-                while (count == k){
+                while (count == k) {
                     res++;
-                    if(nums[left] % 2 != 0) count--;
+                    if (nums[left] % 2 != 0) count--;
                     left++;
                     preEven++;
                 }
-            }else res += preEven;
+            } else res += preEven;
         }
         return res;
     }
 
     /**
      * 46. 全排列
-     *
+     * <p>
      * 给定一个 没有重复 数字的序列，返回其所有可能的全排列。
      *
      * @param nums
      * @return
      */
     public List<List<Integer>> permute(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return null;
         List<List<Integer>> res = new LinkedList<>();
         ArrayList<Integer> output = new ArrayList<Integer>();
-        for(int num:nums)
+        for (int num : nums)
             output.add(num);
         int n = nums.length;
-        backtrack(n,output,res,0);
+        backtrack(n, output, res, 0);
         return res;
     }
 
-    private void backtrack(int n, ArrayList<Integer> output,List<List<Integer>> res,int first){
-        if(first == n)
+    private void backtrack(int n, ArrayList<Integer> output, List<List<Integer>> res, int first) {
+        if (first == n)
             res.add(new ArrayList<Integer>(output));
-        for(int i = first; i < n; i++){
-            Collections.swap(output,first,i);
-            backtrack(n,output,res,first + 1);
-            Collections.swap(output,first,i);
+        for (int i = first; i < n; i++) {
+            Collections.swap(output, first, i);
+            backtrack(n, output, res, first + 1);
+            Collections.swap(output, first, i);
         }
     }
 
     /**
      * 33. 搜索旋转排序数组
-     *
-     *
+     * <p>
+     * <p>
      * 假设按照升序排序的数组在预先未知的某个点上进行了旋转。
-
+     * <p>
      * ( 例如，数组 [0,1,2,4,5,6,7] 可能变为 [4,5,6,7,0,1,2] )。
-
-     搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
-
-     你可以假设数组中不存在重复的元素。
-
-     你的算法时间复杂度必须是 O(log n) 级别。
+     * <p>
+     * 搜索一个给定的目标值，如果数组中存在这个目标值，则返回它的索引，否则返回 -1 。
+     * <p>
+     * 你可以假设数组中不存在重复的元素。
+     * <p>
+     * 你的算法时间复杂度必须是 O(log n) 级别。
      *
      * @param nums
      * @param target
      * @return
      */
     public int search(int[] nums, int target) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return -1;
         int length = nums.length;
-        if(length == 1)
+        if (length == 1)
             return nums[0] == target ? 0 : -1;
         int left = 0, right = length - 1;
-        while (left <= right){
+        while (left <= right) {
             int mid = (left + right) / 2;
-            if(nums[mid] == target) return mid;
-            if(nums[0] <= nums[mid]){
-                if(nums[0] <= target && target < nums[mid]){
+            if (nums[mid] == target) return mid;
+            if (nums[0] <= nums[mid]) {
+                if (nums[0] <= target && target < nums[mid]) {
                     right = mid - 1;
-                }else{
+                } else {
                     left = mid + 1;
                 }
-            }else{
-                if(nums[mid] < target && target <= nums[length - 1])
+            } else {
+                if (nums[mid] < target && target <= nums[length - 1])
                     left = mid + 1;
                 else
                     right = mid - 1;
@@ -1083,7 +1084,7 @@ public class ArrayAlgorithm {
 
     /**
      * 面试题56 - I. 数组中数字出现的次数
-     *
+     * <p>
      * 一个整型数组 nums 里除两个数字之外，其他数字都出现了两次。请写程序找出这两个只出现一次的数字。要求时间复杂度是O(n)，空间复杂度是O(1)。
      *
      * @param nums
@@ -1091,20 +1092,19 @@ public class ArrayAlgorithm {
      */
     public int[] singleNumbers(int[] nums) {
         int sum = 0;
-        for(int i = 0; i < nums.length; i++){
+        for (int i = 0; i < nums.length; i++) {
             sum ^= nums[i];
         }
         int first = 1;
         while ((sum & first) == 0)
             first = first << 1;
         int[] result = new int[2];
-        for(int i=0;i<nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             //将数组分类。
-            if((nums[i]&first)==0){
-                result[0]^=nums[i];
-            }
-            else{
-                result[1]^=nums[i];
+            if ((nums[i] & first) == 0) {
+                result[0] ^= nums[i];
+            } else {
+                result[1] ^= nums[i];
             }
         }
         return result;
@@ -1113,33 +1113,33 @@ public class ArrayAlgorithm {
     /**
      * 1095. 山脉数组中查找目标值
      * （这是一个 交互式问题 ）
-     *
+     * <p>
      * 给你一个 山脉数组 mountainArr，请你返回能够使得 mountainArr.get(index) 等于 target 最小 的下标 index 值。
-     *
+     * <p>
      * 如果不存在这样的下标 index，就请返回 -1。
-     *
+     * <p>
      *  
-     *
+     * <p>
      * 何为山脉数组？如果数组 A 是一个山脉数组的话，那它满足如下条件：
-     *
+     * <p>
      * 首先，A.length >= 3
-     *
+     * <p>
      * 其次，在 0 < i < A.length - 1 条件下，存在 i 使得：
-     *
+     * <p>
      * A[0] < A[1] < ... A[i-1] < A[i]
      * A[i] > A[i+1] > ... > A[A.length - 1]
      *  
-     *
+     * <p>
      * 你将 不能直接访问该山脉数组，必须通过 MountainArray 接口来获取数据：
-     *
+     * <p>
      * MountainArray.get(k) - 会返回数组中索引为k 的元素（下标从 0 开始）
      * MountainArray.length() - 会返回该数组的长度
      *  
-     *
+     * <p>
      * 注意：
-     *
+     * <p>
      * 对 MountainArray.get 发起超过 100 次调用的提交将被视为错误答案。此外，任何试图规避判题系统的解决方案都将会导致比赛资格被取消。
-     *
+     * <p>
      * 为了帮助大家更好地理解交互式问题，我们准备了一个样例 “答案”：https://leetcode-cn.com/playground/RKhe3ave，请注意这 不是一个正确答案。
      *
      * @param target
@@ -1147,12 +1147,12 @@ public class ArrayAlgorithm {
      * @return
      */
     public int findInMountainArray(int target, MountainArray mountainArr) {
-        if(mountainArr == null || mountainArr.length() == 0)
+        if (mountainArr == null || mountainArr.length() == 0)
             return -1;
         int left = 0, right = mountainArr.length() - 1;
-        int mid =  left + ((right - left) >> 1);
-        while (left < right){
-            if(mountainArr.get(mid) < mountainArr.get(mid + 1))
+        int mid = left + ((right - left) >> 1);
+        while (left < right) {
+            if (mountainArr.get(mid) < mountainArr.get(mid + 1))
                 left = mid + 1;
             else
                 right = mid;
@@ -1161,9 +1161,9 @@ public class ArrayAlgorithm {
         left = 0;
         int tmp = right;
         int midLeft = (left + right) / 2;
-        while (left < right){
-            if(mountainArr.get(midLeft) == target) return midLeft;
-            if(mountainArr.get(midLeft) > target)
+        while (left < right) {
+            if (mountainArr.get(midLeft) == target) return midLeft;
+            if (mountainArr.get(midLeft) > target)
                 right = midLeft;
             else
                 left = midLeft + 1;
@@ -1172,42 +1172,42 @@ public class ArrayAlgorithm {
         left = tmp;
         right = mountainArr.length();
         int midRight = (left + right) / 2;
-        while (left < right){
-            if(mountainArr.get(midRight) == target) return midRight;
-            if(mountainArr.get(midRight) > target)
+        while (left < right) {
+            if (mountainArr.get(midRight) == target) return midRight;
+            if (mountainArr.get(midRight) > target)
                 left = midRight + 1;
             else
                 right = midRight;
-            midRight = (left + right) /2;
+            midRight = (left + right) / 2;
         }
         return -1;
     }
 
     /**
      * 1313. 解压缩编码列表
-     *
+     * <p>
      * 给你一个以行程长度编码压缩的整数列表 nums 。
-     *
+     * <p>
      * 考虑每对相邻的两个元素 [freq, val] = [nums[2*i], nums[2*i+1]] （其中 i >= 0 ），每一对都表示解压后子列表中有 freq 个值为 val 的元素，你需要从左到右连接所有子列表以生成解压后的列表。
-     *
+     * <p>
      * 请你返回解压后的列表。
      *
      * @param nums
      * @return
      */
     public int[] decompressRLElist(int[] nums) {
-        if(nums == null || nums.length < 2)
+        if (nums == null || nums.length < 2)
             return new int[0];
         ArrayList<Integer> list = new ArrayList<>();
         int i = 0;
-        while (2 * i < nums.length){
-            for(int n = 0; n < nums[2 * i]; n++){
+        while (2 * i < nums.length) {
+            for (int n = 0; n < nums[2 * i]; n++) {
                 list.add(nums[2 * i + 1]);
             }
-            i ++;
+            i++;
         }
         int[] resultArray = new int[list.size()];
-        for(int n = 0; n < list.size();n++){
+        for (int n = 0; n < list.size(); n++) {
             resultArray[n] = list.get(n);
         }
         return resultArray;
@@ -1215,31 +1215,31 @@ public class ArrayAlgorithm {
 
     /**
      * 1365. 有多少小于当前数字的数字
-     *
+     * <p>
      * 给你一个数组 nums，对于其中每个元素 nums[i]，请你统计数组中比它小的所有数字的数目。
-     *
+     * <p>
      * 换而言之，对于每个 nums[i] 你必须计算出有效的 j 的数量，其中 j 满足 j != i 且 nums[j] < nums[i] 。
-     *
+     * <p>
      * 以数组形式返回答案。
      *
      * @param nums
      * @return
      */
     public int[] smallerNumbersThanCurrent(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return new int[0];
         int[] temp = new int[101];
-        for(int i = 0; i < nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             temp[nums[i]] += 1;
         }
-        for(int i = 1; i < temp.length; i++){
+        for (int i = 1; i < temp.length; i++) {
             temp[i] = temp[i - 1] + temp[i];
         }
         int[] result = new int[nums.length];
-        for(int i = 0; i < result.length; i ++){
-            if(nums[i]==0)
+        for (int i = 0; i < result.length; i++) {
+            if (nums[i] == 0)
                 result[i] = 0;
-            else{
+            else {
                 result[i] = temp[nums[i] - 1];
             }
         }
@@ -1249,21 +1249,22 @@ public class ArrayAlgorithm {
     /**
      * 3. 无重复字符的最长子串
      * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+     *
      * @param s
      * @return
      */
     public int lengthOfLongestSubstring(String s) {
         Set<Character> occ = new HashSet<>();
         int n = s.length();
-        int rk = -1,ans = 0;
-        for(int i = 0; i < n; ++i){
-            if(i!=0)
+        int rk = -1, ans = 0;
+        for (int i = 0; i < n; ++i) {
+            if (i != 0)
                 occ.remove(s.charAt(i - 1));
-            while (rk + 1 < n && !occ.contains(s.charAt(rk + 1))){
+            while (rk + 1 < n && !occ.contains(s.charAt(rk + 1))) {
                 occ.add(s.charAt(rk + 1));
                 ++rk;
             }
-            ans = Math.max(ans,rk - i + 1);
+            ans = Math.max(ans, rk - i + 1);
         }
         return ans;
 
@@ -1272,12 +1273,12 @@ public class ArrayAlgorithm {
     /**
      * 1389. 按既定顺序创建目标数组
      * 给你两个整数数组 nums 和 index。你需要按照以下规则创建目标数组：
-     *
+     * <p>
      * 目标数组 target 最初为空。
      * 按从左到右的顺序依次读取 nums[i] 和 index[i]，在 target 数组中的下标 index[i] 处插入值 nums[i] 。
      * 重复上一步，直到在 nums 和 index 中都没有要读取的元素。
      * 请你返回目标数组。
-     *
+     * <p>
      * 题目保证数字插入位置总是存在。
      *
      * @param nums
@@ -1285,14 +1286,14 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] createTargetArray(int[] nums, int[] index) {
-        if(nums == null || nums.length == 0 || index == null || index.length == 0)
+        if (nums == null || nums.length == 0 || index == null || index.length == 0)
             return new int[0];
         ArrayList<Integer> resultList = new ArrayList<>();
-        for(int i = 0; i < index.length && i < nums.length; i++){
-            resultList.add(index[i],nums[i]);
+        for (int i = 0; i < index.length && i < nums.length; i++) {
+            resultList.add(index[i], nums[i]);
         }
         int[] result = new int[resultList.size()];
-        for(int i = 0; i < resultList.size();i++){
+        for (int i = 0; i < resultList.size(); i++) {
             result[i] = resultList.get(i);
         }
         return result;
@@ -1301,22 +1302,22 @@ public class ArrayAlgorithm {
     /**
      * 45. 跳跃游戏 II
      * 给定一个非负整数数组，你最初位于数组的第一个位置。
-     *
+     * <p>
      * 数组中的每个元素代表你在该位置可以跳跃的最大长度。
-     *
+     * <p>
      * 你的目标是使用最少的跳跃次数到达数组的最后一个位置。
      *
      * @param nums
      * @return
      */
     public int jump(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return 0;
         int position = nums.length - 1;
         int step = 0;
-        while (position > 0){
-            for(int i = 0 ; i < position; i++){
-                if(i + nums[i] >= position){
+        while (position > 0) {
+            for (int i = 0; i < position; i++) {
+                if (i + nums[i] >= position) {
                     position = i;
                     step++;
                     break;
@@ -1326,17 +1327,17 @@ public class ArrayAlgorithm {
         return step;
     }
 
-    public int jump2(int[] nums){
-        if(nums == null || nums.length == 0)
+    public int jump2(int[] nums) {
+        if (nums == null || nums.length == 0)
             return 0;
         int maxPosition = 0;
         int step = 0;
         int end = 0;
-        for(int i = 0; i < nums.length; i++){
-            maxPosition = Math.max(maxPosition,i + nums[i]);
-            if(end == i){
+        for (int i = 0; i < nums.length; i++) {
+            maxPosition = Math.max(maxPosition, i + nums[i]);
+            if (end == i) {
                 end = maxPosition;
-                step ++;
+                step++;
             }
         }
         return step;
@@ -1344,27 +1345,27 @@ public class ArrayAlgorithm {
 
     /**
      * 221. 最大正方形
-     *
+     * <p>
      * 在一个由 0 和 1 组成的二维矩阵内，找到只包含 1 的最大正方形，并返回其面积。
      *
      * @param matrix
      * @return
      */
     public int maximalSquare(char[][] matrix) {
-        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
             return 0;
         int maxSide = 0;
         int rows = matrix.length, columns = matrix[0].length;
-        int [][] dp = new int[rows][columns];
-        for(int i = 0; i < rows;i++){
-            for(int j = 0; j < columns; j++){
-                if(matrix[i][j] == '1'){
-                    if(i == 0 || j == 0){
+        int[][] dp = new int[rows][columns];
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                if (matrix[i][j] == '1') {
+                    if (i == 0 || j == 0) {
                         dp[i][j] = 1;
-                    }else{
-                        dp[i][j] = Math.min(Math.min(dp[i-1][j],dp[i][j-1]),dp[i-1][j-1]) + 1;
+                    } else {
+                        dp[i][j] = Math.min(Math.min(dp[i - 1][j], dp[i][j - 1]), dp[i - 1][j - 1]) + 1;
                     }
-                    maxSide = Math.max(maxSide,dp[i][j]);
+                    maxSide = Math.max(maxSide, dp[i][j]);
                 }
             }
         }
@@ -1373,9 +1374,9 @@ public class ArrayAlgorithm {
 
     /**
      * 1431. 拥有最多糖果的孩子
-     *
+     * <p>
      * 给你一个数组 candies 和一个整数 extraCandies ，其中 candies[i] 代表第 i 个孩子拥有的糖果数目。
-     *
+     * <p>
      * 对每一个孩子，检查是否存在一种方案，将额外的 extraCandies 个糖果分配给孩子们之后，此孩子有 最多 的糖果。注意，允许有多个孩子同时拥有 最多 的糖果数目。
      *
      * @param candies
@@ -1383,16 +1384,16 @@ public class ArrayAlgorithm {
      * @return
      */
     public List<Boolean> kidsWithCandies(int[] candies, int extraCandies) {
-        if(candies == null || candies.length == 0)
+        if (candies == null || candies.length == 0)
             return new ArrayList<>();
         List<Boolean> resultList = new ArrayList<>();
         int max = 0;
-        for(int candy : candies){
-            if(max < candy)
+        for (int candy : candies) {
+            if (max < candy)
                 max = candy;
         }
-        for(int i = 0; i < candies.length; i++){
-            if(candies[i] + extraCandies >= max)
+        for (int i = 0; i < candies.length; i++) {
+            if (candies[i] + extraCandies >= max)
                 resultList.add(true);
             else
                 resultList.add(false);
@@ -1402,19 +1403,19 @@ public class ArrayAlgorithm {
 
     /**
      * LCP 06. 拿硬币
-     *
+     * <p>
      * 桌上有 n 堆力扣币，每堆的数量保存在数组 coins 中。我们每次可以选择任意一堆，拿走其中的一枚或者两枚，求拿完所有力扣币的最少次数。
      *
      * @param coins
      * @return
      */
     public int minCount(int[] coins) {
-        if(coins == null || coins.length == 0)
+        if (coins == null || coins.length == 0)
             return 0;
         int result = 0;
-        for(int i = 0; i < coins.length; i++){
+        for (int i = 0; i < coins.length; i++) {
             result += coins[i] / 2;
-            if(coins[i] % 2 != 0)
+            if (coins[i] % 2 != 0)
                 result++;
 
         }
@@ -1422,48 +1423,47 @@ public class ArrayAlgorithm {
     }
 
     /**
-     *
      * @param nums
      * @param k
      * @return
      */
     public int subarraySum(int[] nums, int k) {
-        if(nums == null && nums.length == 0)
+        if (nums == null && nums.length == 0)
             return 0;
         int count = 0;
-        for(int start = 0; start < nums.length; start++){
+        for (int start = 0; start < nums.length; start++) {
             int sum = 0;
-            for(int end = start; end < nums.length; end++){
+            for (int end = start; end < nums.length; end++) {
                 sum += nums[end];
-                if(sum == k)
+                if (sum == k)
                     count++;
             }
         }
         return count;
     }
 
-    public int subarraySumV2(int[] nums, int k){
+    public int subarraySumV2(int[] nums, int k) {
         int count = 0, pre = 0;
         HashMap<Integer, Integer> mp = new HashMap<>();
-        mp.put(0,1);
-        for(int i = 0; i < nums.length; i++){
+        mp.put(0, 1);
+        for (int i = 0; i < nums.length; i++) {
             pre += nums[i];
-            if(mp.containsKey(pre - k))
+            if (mp.containsKey(pre - k))
                 count += mp.get(pre - k);
-            mp.put(pre,mp.getOrDefault(pre,0) + 1);
+            mp.put(pre, mp.getOrDefault(pre, 0) + 1);
         }
         return count;
     }
 
     /**
      * 210. 课程表 II
-     *
+     * <p>
      * 现在你总共有 n 门课需要选，记为 0 到 n-1。
-     *
+     * <p>
      * 在选修某些课程之前需要一些先修课程。 例如，想要学习课程 0 ，你需要先完成课程 1 ，我们用一个匹配来表示他们: [0,1]
-     *
+     * <p>
      * 给定课程总量以及它们的先决条件，返回你为了学完所有课程所安排的学习顺序。
-     *
+     * <p>
      * 可能会有多个正确的顺序，你只要返回一种就可以了。如果不可能完成所有课程，返回一个空数组。
      *
      * @param numCourses
@@ -1471,58 +1471,59 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] findOrder(int numCourses, int[][] prerequisites) {
-        if(numCourses == 0) return new int[0];
+        if (numCourses == 0) return new int[0];
         int[] inDegrees = new int[numCourses];
-        for(int[] p : prerequisites){
+        for (int[] p : prerequisites) {
             inDegrees[p[0]]++;
         }
         Queue<Integer> queue = new LinkedList<>();
-        for(int i = 0; i < inDegrees.length; i++){
-            if(inDegrees[i] == 0) queue.offer(i);
+        for (int i = 0; i < inDegrees.length; i++) {
+            if (inDegrees[i] == 0) queue.offer(i);
         }
         int count = 0;
         int[] res = new int[numCourses];
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int curr = queue.poll();
             res[count++] = curr;
-            for(int[]p : prerequisites){
-                if(p[1] == curr){
+            for (int[] p : prerequisites) {
+                if (p[1] == curr) {
                     inDegrees[p[0]]--;
-                    if(inDegrees[p[0]] == 0)queue.offer(p[0]);
+                    if (inDegrees[p[0]] == 0) queue.offer(p[0]);
                 }
             }
         }
-        if(count==numCourses)return res;
+        if (count == numCourses) return res;
         return new int[0];
     }
 
     /**
      * 152. 乘积最大子数组
-     *
+     * <p>
      * 给你一个整数数组 nums ，请你找出数组中乘积最大的连续子数组（该子数组中至少包含一个数字），并返回该子数组所对应的乘积。
+     *
      * @param nums
      * @return
      */
     public int maxProduct(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return 0;
         int maxF = nums[0], minF = nums[0], ans = nums[0];
-        for(int i = 1; i < nums.length;i++){
-            int mx = maxF,mn = minF;
-            maxF = Math.max(mx * nums[i],Math.max(nums[i],mn * nums[i]));
-            minF = Math.min(mn * nums[i],Math.min(nums[i],mx * nums[i]));
-            ans = Math.max(maxF,ans);
+        for (int i = 1; i < nums.length; i++) {
+            int mx = maxF, mn = minF;
+            maxF = Math.max(mx * nums[i], Math.max(nums[i], mn * nums[i]));
+            minF = Math.min(mn * nums[i], Math.min(nums[i], mx * nums[i]));
+            ans = Math.max(maxF, ans);
         }
         return ans;
     }
 
     /**
      * 4. 寻找两个正序数组的中位数
-     *
+     * <p>
      * 给定两个大小为 m 和 n 的正序（从小到大）数组 nums1 和 nums2。
-     *
+     * <p>
      * 请你找出这两个正序数组的中位数，并且要求算法的时间复杂度为 O(log(m + n))。
-     *
+     * <p>
      * 你可以假设 nums1 和 nums2 不会同时为空。
      *
      * @param nums1
@@ -1530,52 +1531,52 @@ public class ArrayAlgorithm {
      * @return
      */
     public double findMedianSortedArrays(int[] nums1, int[] nums2) {
-        if(nums1 == null && nums2 == null)
+        if (nums1 == null && nums2 == null)
             return 0.0;
-        if(nums1 == null || nums1.length == 0){
-            if(nums2.length == 0)
+        if (nums1 == null || nums1.length == 0) {
+            if (nums2.length == 0)
                 return 0.0;
             else
                 return nums2[nums2.length / 2];
         }
-        if(nums2 == null || nums2.length == 0){
-            if(nums1.length == 0)
+        if (nums2 == null || nums2.length == 0) {
+            if (nums1.length == 0)
                 return 0.0;
             else
                 return nums1[nums1.length / 2];
         }
-        if(nums1.length > nums2.length)
-            return findMedianSortedArrays(nums2,nums1);
+        if (nums1.length > nums2.length)
+            return findMedianSortedArrays(nums2, nums1);
         int m = nums1.length;
         int n = nums2.length;
         int left = 0, right = m, ansi = -1;
-        int median1 = 0,median2 = 0;
+        int median1 = 0, median2 = 0;
 
-        while (left <= right){
+        while (left <= right) {
             int i = (left + right) / 2;
             int j = (m + n + 1) / 2 - i;
 
             int nums_im1 = (i == 0 ? Integer.MIN_VALUE : nums1[i - 1]);
             int nums_i = (i == m ? Integer.MAX_VALUE : nums1[i]);
-            int nums_jm1 = (j == 0? Integer.MIN_VALUE : nums2[j - 1]);
+            int nums_jm1 = (j == 0 ? Integer.MIN_VALUE : nums2[j - 1]);
             int nums_j = (j == n ? Integer.MAX_VALUE : nums2[j]);
 
-            if( nums_im1 <= nums_j){
+            if (nums_im1 <= nums_j) {
                 ansi = i;
-                median1 = Math.max(nums_im1,nums_jm1);
-                median2 = Math.min(nums_i,nums_j);
+                median1 = Math.max(nums_im1, nums_jm1);
+                median2 = Math.min(nums_i, nums_j);
                 left = i + 1;
-            }else {
+            } else {
                 right = i - 1;
             }
         }
-        return (m + n) % 2 == 0 ? (median1 + median2) / 2.0:median1;
+        return (m + n) % 2 == 0 ? (median1 + median2) / 2.0 : median1;
 
     }
 
     /**
      * 287. 寻找重复数
-     *
+     * <p>
      * 给定一个包含 n + 1 个整数的数组 nums，其数字都在 1 到 n 之间（包括 1 和 n），可知至少存在一个重复的整数。假设只有一个重复的整数，找出这个重复的数。
      *
      * @param nums
@@ -1583,12 +1584,12 @@ public class ArrayAlgorithm {
      */
     public int findDuplicate(int[] nums) {
         int slow = 0, fast = 0;
-        do{
+        do {
             slow = nums[slow];
             fast = nums[nums[fast]];
-        }while (slow != fast);
+        } while (slow != fast);
         slow = 0;
-        while (slow != fast){
+        while (slow != fast) {
             slow = nums[slow];
             fast = nums[fast];
         }
@@ -1597,7 +1598,7 @@ public class ArrayAlgorithm {
 
     /**
      * 974. 和可被 K 整除的子数组
-     *
+     * <p>
      * 给定一个整数数组 A，返回其中元素之和可被 K 整除的（连续、非空）子数组的数目。
      *
      * @param A
@@ -1605,15 +1606,15 @@ public class ArrayAlgorithm {
      * @return
      */
     public int subarraysDivByK(int[] A, int K) {
-        Map<Integer,Integer> record = new HashMap<>();
-        record.put(0,1);
+        Map<Integer, Integer> record = new HashMap<>();
+        record.put(0, 1);
         int sum = 0, ans = 0;
-        for(int elem : A){
+        for (int elem : A) {
             sum += elem;
             int modules = (sum % K + K) % K;
             int same = record.getOrDefault(modules, 0);
             ans += same;
-            record.put(modules,same + 1);
+            record.put(modules, same + 1);
         }
         return ans;
     }
@@ -1621,8 +1622,9 @@ public class ArrayAlgorithm {
     /**
      * 84. 柱状图中最大的矩形
      * 给定 n 个非负整数，用来表示柱状图中各个柱子的高度。每个柱子彼此相邻，且宽度为 1 。
-     *
+     * <p>
      * 求在该柱状图中，能够勾勒出来的矩形的最大面积。
+     *
      * @param heights
      * @return
      */
@@ -1660,9 +1662,9 @@ public class ArrayAlgorithm {
     /**
      * 1460. 通过翻转子数组使两个数组相等
      * 给你两个长度相同的整数数组 target 和 arr 。
-     *
+     * <p>
      * 每一步中，你可以选择 arr 的任意 非空子数组 并将它翻转。你可以执行此过程任意次。
-     *
+     * <p>
      * 如果你能让 arr 变得与 target 相同，返回 True；否则，返回 False 。
      *
      * @param target
@@ -1670,24 +1672,24 @@ public class ArrayAlgorithm {
      * @return
      */
     public boolean canBeEqual(int[] target, int[] arr) {
-        if(target == null && arr == null)
+        if (target == null && arr == null)
             return true;
-        if(target == null || arr == null)
+        if (target == null || arr == null)
             return false;
-        if(target.length != arr.length)
+        if (target.length != arr.length)
             return false;
-        HashMap<Integer,Integer> hashMap = new HashMap();
-        for(int i = 0; i < target.length; i++){
-            hashMap.put(target[i],hashMap.getOrDefault(target[i],0) + 1);
+        HashMap<Integer, Integer> hashMap = new HashMap();
+        for (int i = 0; i < target.length; i++) {
+            hashMap.put(target[i], hashMap.getOrDefault(target[i], 0) + 1);
         }
-        for(int i = 0; i < arr.length; i++){
-            if(hashMap.containsKey(arr[i])){
-                if(hashMap.get(arr[i]) > 0){
-                    hashMap.put(arr[i],hashMap.get(arr[i]) - 1);
-                }else{
+        for (int i = 0; i < arr.length; i++) {
+            if (hashMap.containsKey(arr[i])) {
+                if (hashMap.get(arr[i]) > 0) {
+                    hashMap.put(arr[i], hashMap.get(arr[i]) - 1);
+                } else {
                     return false;
                 }
-            }else
+            } else
                 return false;
         }
         return true;
@@ -1695,13 +1697,12 @@ public class ArrayAlgorithm {
 
     /**
      * 1450. 在既定时间做作业的学生人数
-     *
+     * <p>
      * 给你两个整数数组 startTime（开始时间）和 endTime（结束时间），并指定一个整数 queryTime 作为查询时间。
-     *
+     * <p>
      * 已知，第 i 名学生在 startTime[i] 时开始写作业并于 endTime[i] 时完成作业。
-     *
+     * <p>
      * 请返回在查询时间 queryTime 时正在做作业的学生人数。形式上，返回能够使 queryTime 处于区间 [startTime[i], endTime[i]]（含）的学生人数。
-     *
      *
      * @param startTime
      * @param endTime
@@ -1709,12 +1710,12 @@ public class ArrayAlgorithm {
      * @return
      */
     public int busyStudent(int[] startTime, int[] endTime, int queryTime) {
-        if(startTime == null || startTime.length == 0 || endTime == null || endTime.length == 0)
+        if (startTime == null || startTime.length == 0 || endTime == null || endTime.length == 0)
             return 0;
-        int length = Math.min(startTime.length,endTime.length);
+        int length = Math.min(startTime.length, endTime.length);
         int count = 0;
-        for(int i = 0; i < length;i++){
-            if(queryTime >= startTime[i] && queryTime <= endTime[i])
+        for (int i = 0; i < length; i++) {
+            if (queryTime >= startTime[i] && queryTime <= endTime[i])
                 count++;
         }
         return count;
@@ -1728,29 +1729,29 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] productExceptSelf(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return new int[0];
         int mulAll = 1;
         int haveZero = 0;
         int[] result = new int[nums.length];
-        for(int i = 0; i < nums.length; i ++){
-            if(nums[i] == 0)
+        for (int i = 0; i < nums.length; i++) {
+            if (nums[i] == 0)
                 haveZero++;
             else
                 mulAll = mulAll * nums[i];
         }
-        if(haveZero >= 2){
+        if (haveZero >= 2) {
             return result;
-        }else if(haveZero == 1){
-            for(int i = 0; i < nums.length ; i++){
-                if(nums[i] == 0){
+        } else if (haveZero == 1) {
+            for (int i = 0; i < nums.length; i++) {
+                if (nums[i] == 0) {
                     result[i] = mulAll;
                     return result;
                 }
 
             }
         }
-        for(int i = 0; i < nums.length;i++){
+        for (int i = 0; i < nums.length; i++) {
             result[i] = mulAll / nums[i];
         }
         return result;
@@ -1759,31 +1760,31 @@ public class ArrayAlgorithm {
 
     /**
      * 面试题29. 顺时针打印矩阵
-     *
+     * <p>
      * 输入一个矩阵，按照从外向里以顺时针的顺序依次打印出每一个数字。
      *
      * @param matrix
      * @return
      */
     public int[] spiralOrder(int[][] matrix) {
-        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
             return new int[0];
         int rows = matrix.length, columns = matrix[0].length;
         int[] order = new int[rows * columns];
         int index = 0;
         int left = 0, right = columns - 1, top = 0, bottom = rows - 1;
-        while (left <= right && top <= bottom){
-            for(int column = left;column <= right;column ++)
+        while (left <= right && top <= bottom) {
+            for (int column = left; column <= right; column++)
                 order[index++] = matrix[top][column];
-            for(int row = top + 1; row <= bottom;row ++)
+            for (int row = top + 1; row <= bottom; row++)
                 order[index++] = matrix[row][right];
-            if(left < right && top < bottom){
-                for(int column = right - 1; column > left; column--)
+            if (left < right && top < bottom) {
+                for (int column = right - 1; column > left; column--)
                     order[index++] = matrix[bottom][column];
-                for(int row = bottom; row > top; row--)
+                for (int row = bottom; row > top; row--)
                     order[index++] = matrix[row][left];
             }
-            left ++;
+            left++;
             right--;
             top++;
             bottom--;
@@ -1793,9 +1794,9 @@ public class ArrayAlgorithm {
 
     /**
      * 128. 最长连续序列
-     *
+     * <p>
      * 给定一个未排序的整数数组，找出最长连续序列的长度。
-     *
+     * <p>
      * 要求算法的时间复杂度为 O(n)。
      *
      * @param nums
@@ -1803,19 +1804,19 @@ public class ArrayAlgorithm {
      */
     public int longestConsecutive(int[] nums) {
         Set<Integer> num_set = new HashSet<>();
-        for(int num : nums){
+        for (int num : nums) {
             num_set.add(num);
         }
         int longestSteak = 0;
-        for(int num:num_set){
-            if(!num_set.contains(num - 1)){
+        for (int num : num_set) {
+            if (!num_set.contains(num - 1)) {
                 int currentNum = num;
                 int currentStreak = 1;
-                while (num_set.contains(currentNum + 1)){
+                while (num_set.contains(currentNum + 1)) {
                     currentNum += 1;
                     currentStreak += 1;
                 }
-                longestSteak = Math.max(longestSteak,currentStreak);
+                longestSteak = Math.max(longestSteak, currentStreak);
             }
         }
         return longestSteak;
@@ -1823,25 +1824,25 @@ public class ArrayAlgorithm {
 
     /**
      * 739. 每日温度
-     *
+     * <p>
      * 根据每日 气温 列表，请重新生成一个列表，对应位置的输出是需要再等待多久温度才会升高超过该日的天数。如果之后都不会升高，请在该位置用 0 来代替。
-     *
+     * <p>
      * 例如，给定一个列表 temperatures = [73, 74, 75, 71, 69, 72, 76, 73]，你的输出应该是 [1, 1, 4, 2, 1, 1, 0, 0]。
-     *
+     * <p>
      * 提示：气温 列表长度的范围是 [1, 30000]。每个气温的值的均为华氏度，都是在 [30, 100] 范围内的整数。
      *
      * @param T
      * @return
      */
     public int[] dailyTemperatures(int[] T) {
-        if(T == null)
+        if (T == null)
             return new int[0];
         int length = T.length;
         int[] ans = new int[length];
         Deque<Integer> stack = new LinkedList<Integer>();
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             int temperature = T[i];
-            while (!stack.isEmpty() && temperature > T[stack.peek()]){
+            while (!stack.isEmpty() && temperature > T[stack.peek()]) {
                 int prevIndex = stack.pop();
                 ans[prevIndex] = i - prevIndex;
             }
@@ -1854,7 +1855,7 @@ public class ArrayAlgorithm {
     /**
      * 15. 三数之和
      * 给你一个包含 n 个整数的数组 nums，判断 nums 中是否存在三个元素 a，b，c ，使得 a + b + c = 0 ？请你找出所有满足条件且不重复的三元组。
-     *
+     * <p>
      * 注意：答案中不可以包含重复的三元组。
      *
      * @param nums
@@ -1863,22 +1864,22 @@ public class ArrayAlgorithm {
     public List<List<Integer>> threeSum(int[] nums) {
         Arrays.sort(nums);
         List<List<Integer>> result = new ArrayList<List<Integer>>();
-        for (int i = 0; i < nums.length - 2; i++){
-            if(i==0 || (i > 0 && nums[i] != nums[i-1])){
+        for (int i = 0; i < nums.length - 2; i++) {
+            if (i == 0 || (i > 0 && nums[i] != nums[i - 1])) {
                 int left = i + 1, right = nums.length - 1, sum = 0 - nums[i];
-                while (left < right){
-                    if(nums[left] + nums[right] == sum){
-                        result.add(Arrays.asList(nums[i],nums[left],nums[right]));
+                while (left < right) {
+                    if (nums[left] + nums[right] == sum) {
+                        result.add(Arrays.asList(nums[i], nums[left], nums[right]));
                         while (left < right && nums[left] == nums[left + 1]) left++;
-                        while (left < right && nums[right] == nums[right - 1]) right --;
-                        left ++;
-                        right --;
-                    }else if(nums[left] + nums[right] < sum){
+                        while (left < right && nums[right] == nums[right - 1]) right--;
+                        left++;
+                        right--;
+                    } else if (nums[left] + nums[right] < sum) {
                         while (left < right && nums[left] == nums[left + 1]) left++;
                         left++;
-                    }else if(nums[left] + nums[right] > sum){
-                        while (left < right && nums[right] == nums[right - 1]) right --;
-                        right --;
+                    } else if (nums[left] + nums[right] > sum) {
+                        while (left < right && nums[right] == nums[right - 1]) right--;
+                        right--;
                     }
                 }
             }
@@ -1890,74 +1891,74 @@ public class ArrayAlgorithm {
         Arrays.sort(arr);
         int n = arr.length;
         int[] prefix = new int[n + 1];
-        for(int i = 1; i <= n; ++i){
+        for (int i = 1; i <= n; ++i) {
             prefix[i] = prefix[i - 1] + arr[i - 1];
         }
-        int l = 0, r = arr[n - 1],ans = -1;
-        while (l <= r){
+        int l = 0, r = arr[n - 1], ans = -1;
+        while (l <= r) {
             int mid = (l + r) / 2;
-            int index = Arrays.binarySearch(arr,mid);
-            if(index < 0){
-                index = - index - 1;
+            int index = Arrays.binarySearch(arr, mid);
+            if (index < 0) {
+                index = -index - 1;
             }
             int cur = prefix[index] + (n - index) * mid;
-            if(cur <= target){
+            if (cur <= target) {
                 ans = mid;
                 l = mid + 1;
-            }else {
+            } else {
                 r = mid - 1;
             }
         }
-        int chooseSmall = check(arr,ans);
-        int chooseBig = check(arr,ans  + 1);
+        int chooseSmall = check(arr, ans);
+        int chooseBig = check(arr, ans + 1);
         return Math.abs(chooseSmall - target) <= Math.abs(chooseBig - target) ? ans : ans + 1;
     }
 
-    public int check(int[] arr,int x){
+    public int check(int[] arr, int x) {
         int ret = 0;
-        for(int num : arr){
-            ret += Math.min(num,x);
+        for (int num : arr) {
+            ret += Math.min(num, x);
         }
         return ret;
     }
 
     /**
      * 14. 最长公共前缀
-     *
+     * <p>
      * 编写一个函数来查找字符串数组中的最长公共前缀。
-     *
+     * <p>
      * 如果不存在公共前缀，返回空字符串 ""。
      *
      * @param strs
      * @return
      */
     public String longestCommonPrefix(String[] strs) {
-        if(strs == null || strs.length == 0 || strs[0] == null || strs[0].length() == 0)
+        if (strs == null || strs.length == 0 || strs[0] == null || strs[0].length() == 0)
             return "";
         int minLength = strs[0].length();
-        for(String str : strs){
-            minLength = Math.min(minLength,str.length());
+        for (String str : strs) {
+            minLength = Math.min(minLength, str.length());
         }
         int low = 0, high = minLength;
-        while (low< high){
+        while (low < high) {
             int mid = (high - low + 1) / 2 + low;
-            if(isCommonPrefix(strs,mid)){
+            if (isCommonPrefix(strs, mid)) {
                 low = mid;
-            }else {
+            } else {
                 high = mid - 1;
             }
         }
-        return strs[0].substring(0,low);
+        return strs[0].substring(0, low);
 
     }
 
-    private boolean isCommonPrefix(String[] strs,int length){
-        String str0 = strs[0].substring(0,length);
+    private boolean isCommonPrefix(String[] strs, int length) {
+        String str0 = strs[0].substring(0, length);
         int count = strs.length;
-        for(int i = 1; i < count; i++){
+        for (int i = 1; i < count; i++) {
             String str = strs[i];
-            for(int j = 0; j < length; j++){
-                if(str0.charAt(j) != str.charAt(j)){
+            for (int j = 0; j < length; j++) {
+                if (str0.charAt(j) != str.charAt(j)) {
                     return false;
                 }
             }
@@ -1965,32 +1966,32 @@ public class ArrayAlgorithm {
         return true;
     }
 
-    public int maxScoreSightseeingPair(int[] A){
+    public int maxScoreSightseeingPair(int[] A) {
         int ans = 0, mx = A[0] + 0;
-        for(int j = 1; j < A.length;j++){
-            ans = Math.max(ans,mx + A[j] - j);
-            mx = Math.max(mx,A[j] + j);
+        for (int j = 1; j < A.length; j++) {
+            ans = Math.max(ans, mx + A[j] - j);
+            mx = Math.max(mx, A[j] + j);
         }
         return ans;
     }
 
     /**
      * 1480. 一维数组的动态和
-     *
+     * <p>
      * 给你一个数组 nums 。数组「动态和」的计算公式为：runningSum[i] = sum(nums[0]…nums[i]) 。
-     *
+     * <p>
      * 请返回 nums 的动态和。
      *
      * @param nums
      * @return
      */
     public int[] runningSum(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return new int[0];
         int[] runningSum = new int[nums.length];
         runningSum[0] = nums[0];
         int i = 1;
-        while (i < nums.length){
+        while (i < nums.length) {
             runningSum[i] = runningSum[i - 1] + nums[i];
             i++;
         }
@@ -1999,9 +2000,9 @@ public class ArrayAlgorithm {
 
     /**
      * 1470. 重新排列数组
-     *
+     * <p>
      * 给你一个数组 nums ，数组中有 2n 个元素，按 [x1,x2,...,xn,y1,y2,...,yn] 的格式排列。
-     *
+     * <p>
      * 请你将数组按 [x1,y1,x2,y2,...,xn,yn] 格式重新排列，返回重排后的数组。
      *
      * @param nums
@@ -2009,12 +2010,12 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] shuffle(int[] nums, int n) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return new int[0];
-        if(nums.length < 2 * n)
+        if (nums.length < 2 * n)
             n = nums.length / 2;
         int[] result = new int[2 * n];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             result[2 * i] = nums[i];
             result[2 * i + 1] = nums[n + i];
         }
@@ -2023,7 +2024,7 @@ public class ArrayAlgorithm {
 
     /**
      * 209. 长度最小的子数组
-     *
+     * <p>
      * 给定一个含有 n 个正整数的数组和一个正整数 s ，找出该数组中满足其和 ≥ s 的长度最小的连续子数组，并返回其长度。如果不存在符合条件的连续子数组，返回 0。
      *
      * @param s
@@ -2031,14 +2032,14 @@ public class ArrayAlgorithm {
      * @return
      */
     public int minSubArrayLen(int s, int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return 0;
-        int minLength = Integer.MAX_VALUE,sum = 0;
-        int left=0,right=0;
-        while (right < nums.length){
+        int minLength = Integer.MAX_VALUE, sum = 0;
+        int left = 0, right = 0;
+        while (right < nums.length) {
             sum += nums[right];
-            while (sum >= s){
-                minLength = Math.min(minLength,right - left + 1);
+            while (sum >= s) {
+                minLength = Math.min(minLength, right - left + 1);
                 sum -= nums[left];
                 left++;
             }
@@ -2049,7 +2050,7 @@ public class ArrayAlgorithm {
 
     /**
      * 215. 数组中的第K个最大元素
-     *
+     * <p>
      * 在未排序的数组中找到第 k 个最大的元素。请注意，你需要找的是数组排序后的第 k 个最大的元素，而不是第 k 个不同的元素。
      *
      * @param nums
@@ -2058,32 +2059,32 @@ public class ArrayAlgorithm {
      */
     public int findKthLargest(int[] nums, int k) {
         int heapSize = nums.length;
-        buildMaxHeap(nums,heapSize);
-        for(int i = nums.length - 1; i >= nums.length - k + 1; i--){
-            swap(nums, 0 ,i);
+        buildMaxHeap(nums, heapSize);
+        for (int i = nums.length - 1; i >= nums.length - k + 1; i--) {
+            swap(nums, 0, i);
             heapSize--;
-            maxHeapify(nums,0,heapSize);
+            maxHeapify(nums, 0, heapSize);
         }
         return nums[0];
     }
 
-    private void buildMaxHeap(int[] a,int heapSize){
-        for(int i = heapSize / 2; i >= 0; i--){
-            maxHeapify(a,i,heapSize);
+    private void buildMaxHeap(int[] a, int heapSize) {
+        for (int i = heapSize / 2; i >= 0; i--) {
+            maxHeapify(a, i, heapSize);
         }
     }
 
-    private void maxHeapify(int[] a,int i, int heapSize){
+    private void maxHeapify(int[] a, int i, int heapSize) {
         int l = i * 2 + 1, r = i * 2 + 2, largest = i;
-        if(l < heapSize && a[l] > a[largest]){
+        if (l < heapSize && a[l] > a[largest]) {
             largest = l;
         }
-        if(r < heapSize && a[r] > a[largest]){
+        if (r < heapSize && a[r] > a[largest]) {
             largest = r;
         }
-        if(largest != i){
-            swap(a,i,largest);
-            maxHeapify(a,largest,heapSize);
+        if (largest != i) {
+            swap(a, i, largest);
+            maxHeapify(a, largest, heapSize);
         }
     }
 
@@ -2098,30 +2099,31 @@ public class ArrayAlgorithm {
      * @return
      */
     public int kthSmallest(int[][] matrix, int k) {
-        if(matrix == null || matrix.length == 0 || matrix[0].length == 0)
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
             return 0;
         int n = matrix.length;
         int left = matrix[0][0];
         int right = matrix[n - 1][n - 1];
-        while (left < right){
+        while (left < right) {
             int mid = left + ((right - left) >> 1);
-            if(checkKthSmallest(matrix,mid,k,n)){
+            if (checkKthSmallest(matrix, mid, k, n)) {
                 right = mid;
-            }else
+            } else
                 left = mid + 1;
         }
         return left;
 
     }
-    private boolean checkKthSmallest(int[][] matrix,int mid,int k,int n){
+
+    private boolean checkKthSmallest(int[][] matrix, int mid, int k, int n) {
         int i = n - 1;
         int j = 0;
         int num = 0;
-        while (i >= 0 && j < n){
-            if(matrix[i][j] <= mid){
+        while (i >= 0 && j < n) {
+            if (matrix[i][j] <= mid) {
                 num += i + 1;
                 j++;
-            }else{
+            } else {
                 i--;
             }
         }
@@ -2130,70 +2132,69 @@ public class ArrayAlgorithm {
 
     /**
      * 108. 将有序数组转换为二叉搜索树
-     *
+     * <p>
      * 将一个按照升序排列的有序数组，转换为一棵高度平衡二叉搜索树。
-     *
+     * <p>
      * 本题中，一个高度平衡二叉树是指一个二叉树每个节点 的左右两个子树的高度差的绝对值不超过 1。
      *
      * @param nums
      * @return
      */
     public TreeNode sortedArrayToBST(int[] nums) {
-        return sortedArrayToBSTHelper(nums,0,nums.length - 1);
+        return sortedArrayToBSTHelper(nums, 0, nums.length - 1);
     }
 
-    private TreeNode sortedArrayToBSTHelper(int[] nums,int left, int right){
-        if(left > right)
+    private TreeNode sortedArrayToBSTHelper(int[] nums, int left, int right) {
+        if (left > right)
             return null;
         int mid = (left + right) / 2;
         TreeNode root = new TreeNode(nums[mid]);
-        root.left = sortedArrayToBSTHelper(nums,left,mid -1 );
-        root.right = sortedArrayToBSTHelper(nums,mid + 1,right);
+        root.left = sortedArrayToBSTHelper(nums, left, mid - 1);
+        root.right = sortedArrayToBSTHelper(nums, mid + 1, right);
         return root;
     }
 
     /**
      * 63. 不同路径 II
      * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为“Start” ）。
-     *
+     * <p>
      * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为“Finish”）。
-     *
+     * <p>
      * 现在考虑网格中有障碍物。那么从左上角到右下角将会有多少条不同的路径？
-     *
      *
      * @param obstacleGrid
      * @return
      */
     public int uniquePathsWithObstacles(int[][] obstacleGrid) {
-        if(obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0)
+        if (obstacleGrid == null || obstacleGrid.length == 0 || obstacleGrid[0].length == 0)
             return 0;
         int width = obstacleGrid.length;
         int hight = obstacleGrid[0].length;
         int[][] result = new int[width][hight];
-        for(int i = 0; i < width; i++){
-            for(int j = 0; j < hight;j++){
-                if(obstacleGrid[i][j]== 1){
+        for (int i = 0; i < width; i++) {
+            for (int j = 0; j < hight; j++) {
+                if (obstacleGrid[i][j] == 1) {
                     result[i][j] = 0;
-                }else{
-                    if(i == 0 && j == 0)
+                } else {
+                    if (i == 0 && j == 0)
                         result[i][j] = 1;
-                    if(i >  0)
+                    if (i > 0)
                         result[i][j] = result[i - 1][j] + result[i][j];
-                    if(j > 0)
+                    if (j > 0)
                         result[i][j] = result[i][j - 1] + result[i][j];
                 }
             }
         }
-        return result[width -1][hight-1];
+        return result[width - 1][hight - 1];
     }
 
     /**
      * 309. 最佳买卖股票时机含冷冻期
-     *
+     * <p>
      * 给定一个整数数组，其中第 i 个元素代表了第 i 天的股票价格 。​
-     *
+     * <p>
      * 设计一个算法计算出最大利润。在满足以下约束条件下，你可以尽可能地完成更多的交易（多次买卖一支股票）:
-     *
+     * <p>
      * 你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
      * 卖出股票后，你无法在第二天买入股票 (即冷冻期为 1 天)。
      *
@@ -2201,78 +2202,80 @@ public class ArrayAlgorithm {
      * @return
      */
     public int maxProfit(int[] prices) {
-        if(prices == null || prices.length == 0)
+        if (prices == null || prices.length == 0)
             return 0;
         int n = prices.length;
         int f0 = -prices[0];
         int f1 = 0;
         int f2 = 0;
-        for(int i = 1; i < n; i++){
-            int newf0 = Math.max(f0,f2 - prices[i]);
+        for (int i = 1; i < n; i++) {
+            int newf0 = Math.max(f0, f2 - prices[i]);
             int newf1 = f0 + prices[i];
-            int newf2 = Math.max(f1,f2);
+            int newf2 = Math.max(f1, f2);
             f0 = newf0;
             f1 = newf1;
             f2 = newf2;
         }
-        return Math.max(f1,f2);
+        return Math.max(f1, f2);
     }
 
 
     /**
      * 两个数组的交集2
      * 给定两个数组，编写一个函数来计算它们的交集。
+     *
      * @param nums1
      * @param nums2
      * @return
      */
     public int[] intersect(int[] nums1, int[] nums2) {
-        if(nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0)
+        if (nums1 == null || nums1.length == 0 || nums2 == null || nums2.length == 0)
             return new int[0];
-        HashMap<Integer,Integer> nums1HM = new HashMap<>();
-        for(int num : nums1){
-            int count = nums1HM.getOrDefault(num,0) + 1;
-            nums1HM.put(num,count);
+        HashMap<Integer, Integer> nums1HM = new HashMap<>();
+        for (int num : nums1) {
+            int count = nums1HM.getOrDefault(num, 0) + 1;
+            nums1HM.put(num, count);
         }
-        int[] intersection = new int[Math.min(nums1.length,nums2.length)];
+        int[] intersection = new int[Math.min(nums1.length, nums2.length)];
         int index = 0;
-        for(int num : nums2){
-            int count = nums1HM.getOrDefault(num,0);
-            if(count > 0){
+        for (int num : nums2) {
+            int count = nums1HM.getOrDefault(num, 0);
+            if (count > 0) {
                 intersection[index++] = num;
-                count --;
-                if(count > 0)
-                    nums1HM.put(num,count);
+                count--;
+                if (count > 0)
+                    nums1HM.put(num, count);
                 else
                     nums1HM.remove(num);
             }
 
         }
-        return Arrays.copyOfRange(intersection,0,index);
+        return Arrays.copyOfRange(intersection, 0, index);
     }
 
     /**
      * 1512. 好数对的数目
-     *
+     * <p>
      * 给你一个整数数组 nums 。
-     *
+     * <p>
      * 如果一组数字 (i,j) 满足 nums[i] == nums[j] 且 i < j ，就可以认为这是一组 好数对 。
-     *
+     * <p>
      * 返回好数对的数目。
-     *
+     * <p>
      *  
+     *
      * @param nums
      * @return
      */
     public int numIdenticalPairs(int[] nums) {
-        if(nums == null || nums.length == 0)
+        if (nums == null || nums.length == 0)
             return 0;
         int count = 0;
-        HashMap<Integer,Integer> mHashMap = new HashMap<>();
-        for(int i : nums){
-            mHashMap.put(i,mHashMap.getOrDefault(i,-1) + 1);
+        HashMap<Integer, Integer> mHashMap = new HashMap<>();
+        for (int i : nums) {
+            mHashMap.put(i, mHashMap.getOrDefault(i, -1) + 1);
         }
-        for(int i : mHashMap.keySet()){
+        for (int i : mHashMap.keySet()) {
             int v = mHashMap.get(i);
             count += (1 + v) * v / 2;
         }
@@ -2286,19 +2289,19 @@ public class ArrayAlgorithm {
      * @return
      */
     public int minArray(int[] numbers) {
-        if(numbers == null || numbers.length == 0){
+        if (numbers == null || numbers.length == 0) {
             return 0;
         }
-        if(numbers.length == 1)
+        if (numbers.length == 1)
             return numbers[0];
-        int low = 0,hight = numbers.length - 1;
-        while (low < hight){
+        int low = 0, hight = numbers.length - 1;
+        while (low < hight) {
             int pivot = low + (hight - low) / 2;
-            if(numbers[pivot] < numbers[hight]){
+            if (numbers[pivot] < numbers[hight]) {
                 hight = pivot;
-            }else if(numbers[pivot] > numbers[hight]){
+            } else if (numbers[pivot] > numbers[hight]) {
                 low = pivot + 1;
-            }else {
+            } else {
                 hight -= 1;
             }
         }
@@ -2308,29 +2311,29 @@ public class ArrayAlgorithm {
 
     /**
      * 64. 最小路径和
-     *
+     * <p>
      * 给定一个包含非负整数的 m x n 网格，请找出一条从左上角到右下角的路径，使得路径上的数字总和为最小。
-     *
+     * <p>
      * 说明：每次只能向下或者向右移动一步。
      *
      * @param grid
      * @return
      */
     public int minPathSum(int[][] grid) {
-        if(grid == null || grid.length == 0 || grid[0].length == 0)
+        if (grid == null || grid.length == 0 || grid[0].length == 0)
             return 0;
         int m = grid.length, n = grid[0].length;
         int[][] result = new int[m][n];
-        for(int mIndex = 0;mIndex < m; mIndex++){
-            for(int nIndex = 0; nIndex < n; nIndex++){
-                if(mIndex == 0 && nIndex == 0)
+        for (int mIndex = 0; mIndex < m; mIndex++) {
+            for (int nIndex = 0; nIndex < n; nIndex++) {
+                if (mIndex == 0 && nIndex == 0)
                     result[0][0] = grid[0][0];
-                else if(mIndex == 0)
+                else if (mIndex == 0)
                     result[mIndex][nIndex] = result[mIndex][nIndex - 1] + grid[mIndex][nIndex];
-                else if(nIndex == 0)
+                else if (nIndex == 0)
                     result[mIndex][nIndex] = result[mIndex - 1][nIndex] + grid[mIndex][nIndex];
-                else{
-                    result[mIndex][nIndex] = Math.min(result[mIndex - 1][nIndex],result[mIndex][nIndex - 1]) + grid[mIndex][nIndex];
+                else {
+                    result[mIndex][nIndex] = Math.min(result[mIndex - 1][nIndex], result[mIndex][nIndex - 1]) + grid[mIndex][nIndex];
                 }
             }
         }
@@ -2339,12 +2342,12 @@ public class ArrayAlgorithm {
 
     /**
      * 410. 分割数组的最大值
-     *
+     * <p>
      * 给定一个非负整数数组和一个整数 m，你需要将这个数组分成 m 个非空的连续子数组。设计一个算法使得这 m 个子数组各自和的最大值最小。
-     *
+     * <p>
      * 注意:
      * 数组长度 n 满足以下条件:
-     *
+     * <p>
      * 1 ≤ n ≤ 1000
      * 1 ≤ m ≤ min(50, n)
      * 示例:
@@ -2355,19 +2358,19 @@ public class ArrayAlgorithm {
      */
     public int splitArray(int[] nums, int m) {
         int n = nums.length;
-        int[][] f = new int[n+1][m+1];
-        for(int i = 0; i <= n; i++){
-            Arrays.fill(f[i],Integer.MAX_VALUE);
+        int[][] f = new int[n + 1][m + 1];
+        for (int i = 0; i <= n; i++) {
+            Arrays.fill(f[i], Integer.MAX_VALUE);
         }
         int[] sub = new int[n + 1];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             sub[i + 1] = sub[i] + nums[i];
         }
         f[0][0] = 0;
-        for(int i = 1; i <= n; i++){
-            for(int j = 1; j <= Math.min(i,m);j++){
-                for(int k = 0; k < i; k++){
-                    f[i][j] = Math.min(f[i][j],Math.max(f[k][j-1],sub[i] - sub[k]));
+        for (int i = 1; i <= n; i++) {
+            for (int j = 1; j <= Math.min(i, m); j++) {
+                for (int k = 0; k < i; k++) {
+                    f[i][j] = Math.min(f[i][j], Math.max(f[k][j - 1], sub[i] - sub[k]));
                 }
             }
         }
@@ -2377,39 +2380,40 @@ public class ArrayAlgorithm {
 
     /**
      * 329. 矩阵中的最长递增路径
-     *
+     * <p>
      * 给定一个整数矩阵，找出最长递增路径的长度。
-     *
+     * <p>
      * 对于每个单元格，你可以往上，下，左，右四个方向移动。 你不能在对角线方向上移动或移动到边界外（即不允许环绕）。
      *
      * @param matrix
      * @return
      */
-    public int[][] dirs={{-1,0},{1,0},{0,-1},{0,1}};
+    public int[][] dirs = {{-1, 0}, {1, 0}, {0, -1}, {0, 1}};
     public int rows, columns;
+
     public int longestIncreasingPath(int[][] matrix) {
-        if(matrix == null || matrix.length == 0 || matrix[0].length ==0)
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0)
             return 0;
         rows = matrix.length;
         columns = matrix[0].length;
         int[][] memo = new int[rows][columns];
         int ans = 0;
-        for(int i = 0; i < rows; i++){
-            for(int j = 0; j < columns; j++){
-                ans = Math.max(ans,lIPDFS(matrix,i,j,memo));
+        for (int i = 0; i < rows; i++) {
+            for (int j = 0; j < columns; j++) {
+                ans = Math.max(ans, lIPDFS(matrix, i, j, memo));
             }
         }
         return ans;
     }
 
-    private int lIPDFS(int[][] matrix,int row,int column,int[][] memo){
-        if(memo[row][column] != 0)
+    private int lIPDFS(int[][] matrix, int row, int column, int[][] memo) {
+        if (memo[row][column] != 0)
             return memo[row][column];
         memo[row][column]++;
-        for(int []dir : dirs){
+        for (int[] dir : dirs) {
             int newRow = row + dir[0], newColumn = column + dir[1];
-            if(newRow >= 0 && newRow < rows && newColumn >= 0 && newColumn < columns && matrix[newRow][newColumn] > matrix[row][column]){
-                memo[row][column] = Math.max(memo[row][column],lIPDFS(matrix,newRow,newColumn,memo) + 1);
+            if (newRow >= 0 && newRow < rows && newColumn >= 0 && newColumn < columns && matrix[newRow][newColumn] > matrix[row][column]) {
+                memo[row][column] = Math.max(memo[row][column], lIPDFS(matrix, newRow, newColumn, memo) + 1);
             }
         }
         return memo[row][column];
@@ -2418,21 +2422,22 @@ public class ArrayAlgorithm {
     /**
      * LCP 13. 寻宝
      * 我们得到了一副藏宝图，藏宝图显示，在一个迷宫中存在着未被世人发现的宝藏。
-     *
+     * <p>
      * 迷宫是一个二维矩阵，用一个字符串数组表示。它标识了唯一的入口（用 'S' 表示），和唯一的宝藏地点（用 'T' 表示）。但是，宝藏被一些隐蔽的机关保护了起来。在地图上有若干个机关点（用 'M' 表示），只有所有机关均被触发，才可以拿到宝藏。
-     *
+     * <p>
      * 要保持机关的触发，需要把一个重石放在上面。迷宫中有若干个石堆（用 'O' 表示），每个石堆都有无限个足够触发机关的重石。但是由于石头太重，我们一次只能搬一个石头到指定地点。
-     *
+     * <p>
      * 迷宫中同样有一些墙壁（用 '#' 表示），我们不能走入墙壁。剩余的都是可随意通行的点（用 '.' 表示）。石堆、机关、起点和终点（无论是否能拿到宝藏）也是可以通行的。
-     *
+     * <p>
      * 我们每步可以选择向上/向下/向左/向右移动一格，并且不能移出迷宫。搬起石头和放下石头不算步数。那么，从起点开始，我们最少需要多少步才能最后拿到宝藏呢？如果无法拿到宝藏，返回 -1 。
      *
      * @param maze
      * @return
      */
-    int[] dx = {1,-1,0,0};
-    int[] dy = {0,0,1,-1};
-    int n,m;
+    int[] dx = {1, -1, 0, 0};
+    int[] dy = {0, 0, 1, -1};
+    int n, m;
+
     public int minimalSteps(String[] maze) {
         n = maze.length;
         m = maze[0].length();
@@ -2441,19 +2446,19 @@ public class ArrayAlgorithm {
         List<int[]> stones = new ArrayList<>();
 
         int sx = -1, sy = -1, tx = -1, ty = -1;
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(maze[i].charAt(j) == 'M'){
-                    buttons.add(new int[]{i,j});
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (maze[i].charAt(j) == 'M') {
+                    buttons.add(new int[]{i, j});
                 }
-                if(maze[i].charAt(j) == 'O'){
-                    stones.add(new int[]{i,j});
+                if (maze[i].charAt(j) == 'O') {
+                    stones.add(new int[]{i, j});
                 }
-                if(maze[i].charAt(j) == 'S'){
+                if (maze[i].charAt(j) == 'S') {
                     sx = i;
                     sy = j;
                 }
-                if(maze[i].charAt(j) == 'T'){
+                if (maze[i].charAt(j) == 'T') {
                     tx = i;
                     ty = j;
                 }
@@ -2461,17 +2466,17 @@ public class ArrayAlgorithm {
         }
         int nb = buttons.size();
         int ns = stones.size();
-        int[][] startDist = bfsMS(sx,sy,maze);
+        int[][] startDist = bfsMS(sx, sy, maze);
 
-        if(nb == 0)
+        if (nb == 0)
             return startDist[tx][ty];
         int[][] dist = new int[nb][nb + 2];
-        for(int i = 0; i < nb; i++){
+        for (int i = 0; i < nb; i++) {
             Arrays.fill(dist[i], -1);
         }
         int[][][] dd = new int[nb][][];
-        for(int i = 0; i < nb; i++){
-            int[][] d = bfsMS(buttons.get(i)[0],buttons.get(i)[1],maze);
+        for (int i = 0; i < nb; i++) {
+            int[][] d = bfsMS(buttons.get(i)[0], buttons.get(i)[1], maze);
             dd[i] = d;
             dist[i][nb + 1] = d[tx][ty];
         }
@@ -2546,29 +2551,29 @@ public class ArrayAlgorithm {
         return ret;
     }
 
-    private int[][] bfsMS(int x,int y,String[] maze){
+    private int[][] bfsMS(int x, int y, String[] maze) {
         int[][] ret = new int[n][m];
-        for(int i = 0; i < n; i++){
-            Arrays.fill(ret[i],-1);
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(ret[i], -1);
         }
         ret[x][y] = 0;
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{x,y});
-        while (!queue.isEmpty()){
+        queue.offer(new int[]{x, y});
+        while (!queue.isEmpty()) {
             int[] p = queue.poll();
-            int curx = p[0],cury = p[1];
-            for(int k = 0; k < 4 ; k++){
+            int curx = p[0], cury = p[1];
+            for (int k = 0; k < 4; k++) {
                 int nx = curx + dx[k], ny = cury + dy[k];
-                if(inBoundMS(nx,ny) && maze[nx].charAt(ny) != '#' && ret[nx][ny] == -1){
+                if (inBoundMS(nx, ny) && maze[nx].charAt(ny) != '#' && ret[nx][ny] == -1) {
                     ret[nx][ny] = ret[curx][cury] + 1;
-                    queue.offer(new int[]{nx,ny});
+                    queue.offer(new int[]{nx, ny});
                 }
             }
         }
         return ret;
     }
 
-    private boolean inBoundMS(int x,int y){
+    private boolean inBoundMS(int x, int y) {
         return x >= 0 && x < n && y >= 0 && y < m;
     }
 
@@ -2580,68 +2585,69 @@ public class ArrayAlgorithm {
      * @return
      */
     public int findMagicIndex(int[] nums) {
-        return getAnswer(nums,0,nums.length - 1);
+        return getAnswer(nums, 0, nums.length - 1);
     }
 
-    private int getAnswer(int[] nums,int left,int right){
-        if(left > right)
+    private int getAnswer(int[] nums, int left, int right) {
+        if (left > right)
             return -1;
         int mid = (right - left) / 2 + left;
-        int leftAnswer = getAnswer(nums,left,mid - 1);
-        if(leftAnswer != -1)
+        int leftAnswer = getAnswer(nums, left, mid - 1);
+        if (leftAnswer != -1)
             return leftAnswer;
-        else if(nums[mid] == mid){
+        else if (nums[mid] == mid) {
             return mid;
         }
-        return getAnswer(nums,mid + 1,right);
+        return getAnswer(nums, mid + 1, right);
     }
 
     /**
      * 130. 被围绕的区域
-     *
+     * <p>
      * 给定一个二维的矩阵，包含 'X' 和 'O'（字母 O）。
-     *
+     * <p>
      * 找到所有被 'X' 围绕的区域，并将这些区域里所有的 'O' 用 'X' 填充。
      *
      * @param board
      */
-    private int[] solveDx = {1,-1,0,0};
-    private int[] solveDy = {0,0,1,-1};
+    private int[] solveDx = {1, -1, 0, 0};
+    private int[] solveDy = {0, 0, 1, -1};
+
     public void solve(char[][] board) {
         int n = board.length;
-        if(n == 0)
+        if (n == 0)
             return;
         int m = board[0].length;
         Queue<int[]> queue = new LinkedList<>();
-        for(int i = 0; i < n; i++){
-            if(board[i][0] == 'O')
-                queue.offer(new int[]{i,0});
-            if(board[i][m -1] == 'O')
-                queue.offer(new int[]{i,m - 1});
+        for (int i = 0; i < n; i++) {
+            if (board[i][0] == 'O')
+                queue.offer(new int[]{i, 0});
+            if (board[i][m - 1] == 'O')
+                queue.offer(new int[]{i, m - 1});
 
         }
-        for(int i = 1; i < m - 1; i++){
-            if(board[0][i] == 'O')
-                queue.offer(new int[]{0,i});
-            if(board[n - 1][i] == 'O')
-                queue.offer(new int[]{n - 1,i});
+        for (int i = 1; i < m - 1; i++) {
+            if (board[0][i] == 'O')
+                queue.offer(new int[]{0, i});
+            if (board[n - 1][i] == 'O')
+                queue.offer(new int[]{n - 1, i});
         }
-        while (! queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int[] cell = queue.poll();
-            int x = cell[0],y = cell[1];
+            int x = cell[0], y = cell[1];
             board[x][y] = 'A';
-            for(int i = 0; i < 4 ; i++){
+            for (int i = 0; i < 4; i++) {
                 int mx = x + solveDx[i], my = y + solveDy[i];
-                if(mx < 0 || my < 0 || mx >= n || my >= m || board[mx][my] != 'O')
+                if (mx < 0 || my < 0 || mx >= n || my >= m || board[mx][my] != 'O')
                     continue;
-                queue.offer(new int[]{mx,my});
+                queue.offer(new int[]{mx, my});
             }
         }
-        for(int i = 0; i < n; i++){
-            for(int j = 0; j < m; j++){
-                if(board[i][j] == 'A')
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < m; j++) {
+                if (board[i][j] == 'A')
                     board[i][j] = 'O';
-                else if(board[i][j] == 'O'){
+                else if (board[i][j] == 'O') {
                     board[i][j] = 'X';
                 }
             }
@@ -2650,13 +2656,13 @@ public class ArrayAlgorithm {
 
     /**
      * 733. 图像渲染
-     *
+     * <p>
      * 有一幅以二维整数数组表示的图画，每一个整数表示该图画的像素值大小，数值在 0 到 65535 之间。
-     *
+     * <p>
      * 给你一个坐标 (sr, sc) 表示图像渲染开始的像素值（行 ，列）和一个新的颜色值 newColor，让你重新上色这幅图像。
-     *
+     * <p>
      * 为了完成上色工作，从初始坐标开始，记录初始坐标的上下左右四个方向上像素值与初始坐标相同的相连像素点，接着再记录这四个方向上符合条件的像素点与他们对应四个方向上像素值与初始坐标相同的相连像素点，……，重复该过程。将所有有记录的像素点的颜色值改为新的颜色值。
-     *
+     * <p>
      * 最后返回经过上色渲染后的图像
      *
      * @param image
@@ -2665,23 +2671,24 @@ public class ArrayAlgorithm {
      * @param newColor
      * @return
      */
-    int[] dxFloodFill = {1,0,0,-1};
-    int[] dyFloodFill = {0,1,-1,0};
+    int[] dxFloodFill = {1, 0, 0, -1};
+    int[] dyFloodFill = {0, 1, -1, 0};
+
     public int[][] floodFill(int[][] image, int sr, int sc, int newColor) {
         int currColor = image[sr][sc];
-        if(currColor == newColor)
+        if (currColor == newColor)
             return image;
         int n = image.length, m = image[0].length;
         Queue<int[]> queue = new LinkedList<>();
-        queue.offer(new int[]{sr,sc});
+        queue.offer(new int[]{sr, sc});
         image[sr][sc] = newColor;
-        while (!queue.isEmpty()){
+        while (!queue.isEmpty()) {
             int[] cell = queue.poll();
             int x = cell[0], y = cell[1];
-            for(int i = 0; i < 4; i++){
-                int mx = x + dxFloodFill[i],my = y + dyFloodFill[i];
-                if(mx >= 0 && mx < n && my >= 0 && my < m && image[mx][my] == currColor){
-                    queue.offer(new int[]{mx,my});
+            for (int i = 0; i < 4; i++) {
+                int mx = x + dxFloodFill[i], my = y + dyFloodFill[i];
+                if (mx >= 0 && mx < n && my >= 0 && my < m && image[mx][my] == currColor) {
+                    queue.offer(new int[]{mx, my});
                     image[mx][my] = newColor;
                 }
             }
@@ -2691,7 +2698,7 @@ public class ArrayAlgorithm {
 
     /**
      * 491. 递增子序列
-     *
+     * <p>
      * 给定一个整型数组, 你的任务是找到所有该数组的递增子序列，递增子序列的长度至少是2。
      *
      * @param nums
@@ -2699,31 +2706,32 @@ public class ArrayAlgorithm {
      */
     List<Integer> temp = new ArrayList<>();
     List<List<Integer>> ans = new ArrayList<>();
+
     public List<List<Integer>> findSubsequences(int[] nums) {
-        dfsFindSubsequences(0,Integer.MIN_VALUE,nums);
+        dfsFindSubsequences(0, Integer.MIN_VALUE, nums);
         return ans;
     }
 
-    private void dfsFindSubsequences(int cur,int last,int[] nums){
-        if(cur == nums.length){
-            if(temp.size() >= 2){
+    private void dfsFindSubsequences(int cur, int last, int[] nums) {
+        if (cur == nums.length) {
+            if (temp.size() >= 2) {
                 ans.add(new ArrayList<>(temp));
             }
             return;
         }
-        if(nums[cur] >= last){
+        if (nums[cur] >= last) {
             temp.add(nums[cur]);
-            dfsFindSubsequences(cur + 1,nums[cur],nums);
+            dfsFindSubsequences(cur + 1, nums[cur], nums);
             temp.remove(temp.size() - 1);
         }
-        if(nums[cur] != last){
-            dfsFindSubsequences(cur + 1,last,nums);
+        if (nums[cur] != last) {
+            dfsFindSubsequences(cur + 1, last, nums);
         }
     }
 
     /**
      * 39. 组合总和
-     *
+     * <p>
      * 给定一个无重复元素的数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
      * candidates 中的数字可以无限制重复被选取。
      *
@@ -2734,22 +2742,22 @@ public class ArrayAlgorithm {
     public List<List<Integer>> combinationSum(int[] candidates, int target) {
         List<List<Integer>> ans = new ArrayList<>();
         List<Integer> combine = new ArrayList<>();
-        dfsCombinationSum(candidates,target,ans,combine,0);
+        dfsCombinationSum(candidates, target, ans, combine, 0);
         return ans;
     }
 
-    private void dfsCombinationSum(int[] candidates,int target,List<List<Integer>>ans,List<Integer> combine, int idx){
-        if(idx == candidates.length){
+    private void dfsCombinationSum(int[] candidates, int target, List<List<Integer>> ans, List<Integer> combine, int idx) {
+        if (idx == candidates.length) {
             return;
         }
-        if(target == 0){
+        if (target == 0) {
             ans.add(new ArrayList<>(combine));
             return;
         }
-        dfsCombinationSum(candidates,target,ans,combine,idx + 1);
-        if(target - candidates[idx] >= 0){
+        dfsCombinationSum(candidates, target, ans, combine, idx + 1);
+        if (target - candidates[idx] >= 0) {
             combine.add(candidates[idx]);
-            dfsCombinationSum(candidates,target - candidates[idx],ans,combine,idx);
+            dfsCombinationSum(candidates, target - candidates[idx], ans, combine, idx);
             combine.remove(combine.size() - 1);
         }
     }
@@ -2757,11 +2765,11 @@ public class ArrayAlgorithm {
     /**
      * 40. 组合总和 II
      * 给定一个数组 candidates 和一个目标数 target ，找出 candidates 中所有可以使数字和为 target 的组合。
-     *
+     * <p>
      * candidates 中的每个数字在每个组合中只能使用一次。
-     *
+     * <p>
      * 说明：
-     *
+     * <p>
      * 所有数字（包括目标数）都是正整数。
      * 解集不能包含重复的组合。 
      *
@@ -2772,34 +2780,36 @@ public class ArrayAlgorithm {
     List<int[]> freq = new ArrayList<>();
     List<List<Integer>> ansCombinationSum2 = new ArrayList<>();
     List<Integer> sequence = new ArrayList<>();
+
     public List<List<Integer>> combinationSum2(int[] candidates, int target) {
         Arrays.sort(candidates);
-        for(int num : candidates){
+        for (int num : candidates) {
             int size = freq.size();
-            if(freq.isEmpty() || num != freq.get(size - 1)[0]){
-                freq.add(new int[]{num,1});
-            }else{
+            if (freq.isEmpty() || num != freq.get(size - 1)[0]) {
+                freq.add(new int[]{num, 1});
+            } else {
                 freq.get(size - 1)[1]++;
             }
         }
-        dfsCombinationSum2(0,target);
+        dfsCombinationSum2(0, target);
         return ansCombinationSum2;
     }
-    private void dfsCombinationSum2(int pos,int rest){
-        if(rest == 0){
+
+    private void dfsCombinationSum2(int pos, int rest) {
+        if (rest == 0) {
             ansCombinationSum2.add(new ArrayList<>(sequence));
             return;
         }
-        if(pos == freq.size() || rest < freq.get(pos)[0]){
+        if (pos == freq.size() || rest < freq.get(pos)[0]) {
             return;
         }
         dfsCombinationSum2(pos + 1, rest);
         int most = Math.min(rest / freq.get(pos)[0], freq.get(pos)[1]);
-        for(int i = 1; i <= most; i++){
+        for (int i = 1; i <= most; i++) {
             sequence.add(freq.get(pos)[0]);
-            dfsCombinationSum2(pos + 1, rest -i * freq.get(pos)[0]);
+            dfsCombinationSum2(pos + 1, rest - i * freq.get(pos)[0]);
         }
-        for(int i = 1; i <= most; i++){
+        for (int i = 1; i <= most; i++) {
             sequence.remove(sequence.size() - 1);
         }
     }
@@ -2808,19 +2818,20 @@ public class ArrayAlgorithm {
      * 79. 单词搜索
      * 给定一个二维网格和一个单词，找出该单词是否存在于网格中。
      * 单词必须按照字母顺序，通过相邻的单元格内的字母构成，其中“相邻”单元格是那些水平相邻或垂直相邻的单元格。同一个单元格内的字母不允许被重复使用。
+     *
      * @param board
      * @param word
      * @return
      */
     public boolean exist(char[][] board, String word) {
-        if(board == null || board.length == 0 )
+        if (board == null || board.length == 0)
             return false;
-        int h = board.length,w = board[0].length;
+        int h = board.length, w = board[0].length;
         boolean[][] visited = new boolean[h][w];
-        for(int i = 0; i < h; i++){
-            for(int j = 0; j < w; j++){
-                boolean flag = checkExist(board,visited,i,j,word,0);
-                if(flag){
+        for (int i = 0; i < h; i++) {
+            for (int j = 0; j < w; j++) {
+                boolean flag = checkExist(board, visited, i, j, word, 0);
+                if (flag) {
                     return true;
                 }
             }
@@ -2828,28 +2839,28 @@ public class ArrayAlgorithm {
         return false;
     }
 
-    private boolean checkExist(char[][] board,boolean[][] visited, int i,int j,String s,int k){
-        if(board[i][j] != s.charAt(k)){
+    private boolean checkExist(char[][] board, boolean[][] visited, int i, int j, String s, int k) {
+        if (board[i][j] != s.charAt(k)) {
             return false;
-        }else if(k == s.length() - 1){
+        } else if (k == s.length() - 1) {
             return true;
         }
         visited[i][j] = true;
-        int[][] directions = {{0,1},{0,-1},{1,0},{-1,0}};
+        int[][] directions = {{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
         boolean result = false;
-        for(int[] dir: directions){
+        for (int[] dir : directions) {
             int newi = i + dir[0], newj = j + dir[1];
-            if(newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length){
-                if(!visited[newi][newj]){
-                    boolean flag = checkExist(board,visited,newi,newj,s,k+1);
-                    if(flag){
+            if (newi >= 0 && newi < board.length && newj >= 0 && newj < board[0].length) {
+                if (!visited[newi][newj]) {
+                    boolean flag = checkExist(board, visited, newi, newj, s, k + 1);
+                    if (flag) {
                         result = true;
                         break;
                     }
                 }
             }
         }
-        visited[i][j]=false;
+        visited[i][j] = false;
         return result;
 
     }
@@ -2857,7 +2868,7 @@ public class ArrayAlgorithm {
     /**
      * 78. 子集
      * 给定一组不含重复元素的整数数组 nums，返回该数组所有可能的子集（幂集）。
-     *
+     * <p>
      * 说明：解集不能包含重复的子集。
      *
      * @param nums
@@ -2865,13 +2876,14 @@ public class ArrayAlgorithm {
      */
     List<Integer> tSubsets = new ArrayList<>();
     List<List<Integer>> ansSubsets = new ArrayList<>();
+
     public List<List<Integer>> subsets(int[] nums) {
         int n = nums.length;
-        for(int mask = 0; mask < (1 << n); mask++){
+        for (int mask = 0; mask < (1 << n); mask++) {
             tSubsets.clear();
-            for(int i = 0; i < n; i++){
+            for (int i = 0; i < n; i++) {
 
-                if((mask & (1 << i)) != 0){
+                if ((mask & (1 << i)) != 0) {
                     tSubsets.add(nums[i]);
                 }
             }
@@ -2883,9 +2895,9 @@ public class ArrayAlgorithm {
     /**
      * 416. 分割等和子集
      * 给定一个只包含正整数的非空数组。是否可以将这个数组分割成两个子集，使得两个子集的元素和相等。
-     *
+     * <p>
      * 注意:
-     *
+     * <p>
      * 每个数组中的元素不会超过 100
      * 数组的大小不会超过 200
      *
@@ -2894,36 +2906,36 @@ public class ArrayAlgorithm {
      */
     public boolean canPartition(int[] nums) {
         int n = nums.length;
-        if(n < 2){
+        if (n < 2) {
             return false;
         }
         int sum = 0, maxNum = 0;
-        for(int num: nums){
+        for (int num : nums) {
             sum += num;
-            maxNum = Math.max(maxNum,num);
+            maxNum = Math.max(maxNum, num);
         }
-        if(sum % 2 != 0){
+        if (sum % 2 != 0) {
             return false;
         }
         int target = sum / 2;
-        if(maxNum > target){
+        if (maxNum > target) {
             return false;
         }
         boolean[][] dp = new boolean[n][target + 1];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             dp[i][0] = true;
         }
         dp[0][nums[0]] = true;
-        for(int i = 1; i < n; i++){
+        for (int i = 1; i < n; i++) {
             dp[i][0] = true;
         }
         dp[0][nums[0]] = true;
-        for(int i  = 1; i < n; i++){
+        for (int i = 1; i < n; i++) {
             int num = nums[i];
-            for(int j = 1; j <= target; j++){
-                if(j >= num){
+            for (int j = 1; j <= target; j++) {
+                if (j >= num) {
                     dp[i][j] = dp[i - 1][j] | dp[i - 1][j - num];
-                }else {
+                } else {
                     dp[i][j] = dp[i - 1][j];
                 }
             }
@@ -2933,29 +2945,30 @@ public class ArrayAlgorithm {
 
     /**
      * 977. 有序数组的平方
+     *
      * @param A
      * @return
      */
     public int[] sortedSquares(int[] A) {
-        if(A == null){
+        if (A == null) {
             return null;
         }
         int[] result = new int[A.length];
-        for(int i = 0; i < A.length; i++){
+        for (int i = 0; i < A.length; i++) {
             result[i] = A[i] * A[i];
         }
         Arrays.sort(result);
         return result;
     }
 
-    public int[] sortedSquares_v2(int[] A){
+    public int[] sortedSquares_v2(int[] A) {
         int n = A.length;
         int[] ans = new int[n];
-        for(int i = 0, j = n - 1, pos = n -1; i <= j;){
+        for (int i = 0, j = n - 1, pos = n - 1; i <= j; ) {
             if (A[i] * A[i] > A[j] * A[j]) {
                 ans[pos] = A[i] * A[i];
                 i++;
-            }else{
+            } else {
                 ans[pos] = A[j] * A[j];
                 j--;
             }
@@ -2968,13 +2981,13 @@ public class ArrayAlgorithm {
     /**
      * 845. 数组中的最长山脉
      * 我们把数组 A 中符合下列属性的任意连续子数组 B 称为 “山脉”：
-     *
+     * <p>
      * B.length >= 3
      * 存在 0 < i < B.length - 1 使得 B[0] < B[1] < ... B[i-1] < B[i] > B[i+1] > ... > B[B.length - 1]
      * （注意：B 可以是 A 的任意子数组，包括整个数组 A。）
-     *
+     * <p>
      * 给出一个整数数组 A，返回最长 “山脉” 的长度。
-     *
+     * <p>
      * 如果不含有 “山脉” 则返回 0。
      *
      * @param A
@@ -2983,20 +2996,20 @@ public class ArrayAlgorithm {
     public int longestMountain(int[] A) {
         int result = 0;
         int n = A.length;
-        if(A != null && n > 2){
+        if (A != null && n > 2) {
             int left = 0;
-            while (left + 2 < n){
+            while (left + 2 < n) {
                 int right = left + 1;
-                if(A[left] < A[left + 1]){
-                    while (right + 1 < n && A[right] < A[right + 1]){
+                if (A[left] < A[left + 1]) {
+                    while (right + 1 < n && A[right] < A[right + 1]) {
                         right++;
                     }
-                    if(right < n - 1 && A[right] > A[right + 1]){
-                        while (right + 1 < n && A[right] > A[right + 1]){
+                    if (right < n - 1 && A[right] > A[right + 1]) {
+                        while (right + 1 < n && A[right] > A[right + 1]) {
                             right++;
                         }
-                        result  = Math.max(result,right - left + 1);
-                    }else {
+                        result = Math.max(result, right - left + 1);
+                    } else {
                         right++;
                     }
                 }
@@ -3008,21 +3021,21 @@ public class ArrayAlgorithm {
 
     /**
      * 1207. 独一无二的出现次数
-     *
+     * <p>
      * 给你一个整数数组 arr，请你帮忙统计数组中每个数的出现次数。
-     *
+     * <p>
      * 如果每个数的出现次数都是独一无二的，就返回 true；否则返回 false。
      *
      * @param arr
      * @return
      */
     public boolean uniqueOccurrences(int[] arr) {
-        Map<Integer,Integer> occur = new HashMap<>();
-        for(int x : arr){
-            occur.put(x,occur.getOrDefault(x,0) + 1);
+        Map<Integer, Integer> occur = new HashMap<>();
+        for (int x : arr) {
+            occur.put(x, occur.getOrDefault(x, 0) + 1);
         }
         Set<Integer> times = new HashSet<>();
-        for(Map.Entry<Integer,Integer> x : occur.entrySet()){
+        for (Map.Entry<Integer, Integer> x : occur.entrySet()) {
             times.add(x.getValue());
         }
         return times.size() == occur.size();
@@ -3030,7 +3043,7 @@ public class ArrayAlgorithm {
 
     /**
      * 349. 两个数组的交集
-     *
+     * <p>
      * 给定两个数组，编写一个函数来计算它们的交集。
      *
      * @param nums1
@@ -3038,22 +3051,22 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] intersection(int[] nums1, int[] nums2) {
-        if(nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0){
+        if (nums1 == null || nums2 == null || nums1.length == 0 || nums2.length == 0) {
             return new int[0];
         }
         Set<Integer> numCount = new HashSet<>();
-        for(int n : nums1){
+        for (int n : nums1) {
             numCount.add(n);
         }
         List<Integer> list = new ArrayList<>();
-        for(int n : nums2){
-            if(numCount.contains(n)){
+        for (int n : nums2) {
+            if (numCount.contains(n)) {
                 list.add(n);
                 numCount.remove(n);
             }
         }
         int[] result = new int[list.size()];
-        for(int i = 0; i < list.size();i++){
+        for (int i = 0; i < list.size(); i++) {
             result[i] = list.get(i);
         }
         return result;
@@ -3061,11 +3074,11 @@ public class ArrayAlgorithm {
 
     /**
      * 941. 有效的山脉数组
-     *
+     * <p>
      * 给定一个整数数组 A，如果它是有效的山脉数组就返回 true，否则返回 false。
-     *
+     * <p>
      * 让我们回顾一下，如果 A 满足下述条件，那么它是一个山脉数组：
-     *
+     * <p>
      * A.length >= 3
      * 在 0 < i < A.length - 1 条件下，存在 i 使得：
      * A[0] < A[1] < ... A[i-1] < A[i]
@@ -3077,13 +3090,13 @@ public class ArrayAlgorithm {
     public boolean validMountainArray(int[] A) {
         int N = A.length;
         int i = 0;
-        while (i + 1 < N && A[i] < A[i + 1]){
+        while (i + 1 < N && A[i] < A[i + 1]) {
             i++;
         }
-        if(i==0||i==N-1){
+        if (i == 0 || i == N - 1) {
             return false;
         }
-        while (i + 1 < N && A[i] > A[i + 1]){
+        while (i + 1 < N && A[i] > A[i + 1]) {
             i++;
         }
         return i == N - 1;
@@ -3092,7 +3105,7 @@ public class ArrayAlgorithm {
     /**
      * 57. 插入区间
      * 给出一个无重叠的 ，按照区间起始端点排序的区间列表。
-     *
+     * <p>
      * 在列表中插入一个新的区间，你需要确保列表中的区间仍然有序且不重叠（如果有必要的话，可以合并区间）。
      *
      * @param intervals
@@ -3100,34 +3113,144 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[][] insert(int[][] intervals, int[] newInterval) {
-        if(intervals == null && newInterval == null){
+        if (intervals == null && newInterval == null) {
             return null;
         }
         int left = newInterval[0];
         int right = newInterval[1];
         boolean placed = false;
         List<int[]> ansList = new ArrayList<>();
-        for(int[] interval:intervals){
-            if(interval[0] > right){
-                if(!placed){
-                    ansList.add(new int[]{left,right});
+        for (int[] interval : intervals) {
+            if (interval[0] > right) {
+                if (!placed) {
+                    ansList.add(new int[]{left, right});
                     placed = true;
                 }
                 ansList.add(interval);
-            }else if(interval[1] < left){
+            } else if (interval[1] < left) {
                 ansList.add(interval);
-            }else {
-                left = Math.min(left,interval[0]);
-                right = Math.max(right,interval[1]);
+            } else {
+                left = Math.min(left, interval[0]);
+                right = Math.max(right, interval[1]);
             }
         }
-        if(!placed){
-            ansList.add(new int[]{left,right});
+        if (!placed) {
+            ansList.add(new int[]{left, right});
         }
         int[][] ans = new int[ansList.size()][2];
-        for(int i = 0; i < ansList.size(); i++){
+        for (int i = 0; i < ansList.size(); i++) {
             ans[i] = ansList.get(i);
         }
         return ans;
+    }
+
+    /**
+     * 1356. 根据数字二进制下 1 的数目排序
+     * <p>
+     * 给你一个整数数组 arr 。请你将数组中的元素按照其二进制表示中数字 1 的数目升序排序。
+     * <p>
+     * 如果存在多个数字二进制中 1 的数目相同，则必须将它们按照数值大小升序排列。
+     * <p>
+     * 请你返回排序后的数组。
+     *
+     * @param arr
+     * @return
+     */
+    public int[] sortByBits(int[] arr) {
+        int[] bit = new int[10001];
+        List<Integer> list = new ArrayList<>();
+        int count = 0, tmp = 0;
+        for (int x : arr) {
+            list.add(x);
+            count = 0;
+            tmp = x;
+            while (tmp != 0) {
+                count += tmp % 2;
+                tmp /= 2;
+            }
+            bit[x] = count;
+        }
+        Collections.sort(list, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer o1, Integer o2) {
+                if (bit[o1] != bit[o2]) {
+                    return bit[o1] - bit[o2];
+                } else {
+                    return o1 - o2;
+                }
+            }
+        });
+        for (int i = 0; i < arr.length; i++) {
+            arr[i] = list.get(i);
+        }
+        return arr;
+    }
+
+    /**
+     * 给定一个整数数组nums，返回区间和在[lower, upper]之间的个数，包含lower和upper。
+     * 区间和S(i, j)表示在nums中，位置从i到j的元素之和，包含i和j(i ≤ j)。
+     * <p>
+     * 说明:
+     * 最直观的算法复杂度是O(n2) ，请在此基础上优化你的算法。
+     *
+     * @param nums
+     * @param lower
+     * @param upper
+     * @return
+     */
+    public int countRangeSum(int[] nums, int lower, int upper) {
+        long s = 0;
+        long[] sum = new long[nums.length + 1];
+        for (int i = 0; i < nums.length; i++) {
+            s += nums[i];
+            sum[i + 1] = s;
+        }
+        return countRangeSumRecursive(sum, lower, upper, 0, sum.length - 1);
+    }
+
+    private int countRangeSumRecursive(long[] sum, int lower, int upper, int left, int right) {
+        if (left == right) {
+            return 0;
+        } else {
+            int mid = (left + right) / 2;
+            int n1 = countRangeSumRecursive(sum, lower, upper, left, mid);
+            int n2 = countRangeSumRecursive(sum, lower, upper, mid + 1, right);
+            int ret = n1 + n2;
+
+            int i = left;
+            int l = mid + 1;
+            int r = mid + 1;
+            while (i <= mid){
+                while (l <= right && sum[l] - sum[i] < lower){
+                    l++;
+                }
+                while (r <= right && sum[r] - sum[i] <= upper){
+                    r++;
+                }
+                ret += r - l;
+                i++;
+            }
+            // 随后合并两个排序数组
+            int[] sorted = new int[right - left + 1];
+            int p1 = left, p2 = mid + 1;
+            int p = 0;
+            while (p1 <= mid || p2 <= right) {
+                if (p1 > mid) {
+                    sorted[p++] = (int) sum[p2++];
+                } else if (p2 > right) {
+                    sorted[p++] = (int) sum[p1++];
+                } else {
+                    if (sum[p1] < sum[p2]) {
+                        sorted[p++] = (int) sum[p1++];
+                    } else {
+                        sorted[p++] = (int) sum[p2++];
+                    }
+                }
+            }
+            for (int j = 0; j < sorted.length; j++) {
+                sum[left + j] = sorted[j];
+            }
+            return ret;
+        }
     }
 }
