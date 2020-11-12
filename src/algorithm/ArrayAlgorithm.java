@@ -3253,4 +3253,74 @@ public class ArrayAlgorithm {
             return ret;
         }
     }
+
+    /**
+     *
+     * @param nums
+     */
+    public void nextPermutation(int[] nums) {
+        int i = nums.length - 2;
+        while (i >= 0 && nums[i] >= nums[i + 1]){
+            i--;
+        }
+        if(i >= 0){
+            int j = nums.length - 1;
+            while (j >= 0 && nums[i] >= nums[j]){
+                j--;
+            }
+            swapNextPermutation(nums,i,j);
+        }
+        reverseNextPermutation(nums,i + 1);
+    }
+
+    private void swapNextPermutation(int[] nums,int i, int j){
+        int temp = nums[i];
+        nums[i] = nums[j];
+        nums[j] = temp;
+    }
+
+    private void reverseNextPermutation(int[] nums,int start){
+        int left = start, right = nums.length - 1;
+        while (left < right){
+            swapNextPermutation(nums,left,right);
+            left++;
+            right--;
+        }
+    }
+
+    /**
+     * 922. 按奇偶排序数组 II
+     *
+     * 给定一个非负整数数组 A， A 中一半整数是奇数，一半整数是偶数。
+     *
+     * 对数组进行排序，以便当 A[i] 为奇数时，i 也是奇数；当 A[i] 为偶数时， i 也是偶数。
+     *
+     * 你可以返回任何满足上述条件的数组作为答案。
+     *
+     *
+     * @param A
+     * @return
+     */
+    public int[] sortArrayByParityII(int[] A) {
+        if(A == null || A.length < 2){
+            return A;
+        }
+        int i = 0, j = 1;
+        while (i < A.length && j < A.length){
+            if(A[i] % 2 != 0){
+                while (j < A.length){
+                    if(A[j] % 2 == 0){
+                        int temp = A[j];
+                        A[j] = A[i];
+                        A[i] = temp;
+                        j += 2;
+                        break;
+                    }
+                    j+=2;
+                }
+            }
+            i += 2;
+        }
+        return A;
+    }
 }
