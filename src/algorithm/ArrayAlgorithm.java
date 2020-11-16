@@ -3323,4 +3323,74 @@ public class ArrayAlgorithm {
         }
         return A;
     }
+
+    /**
+     * 1122. 数组的相对排序
+     * 给你两个数组，arr1 和 arr2，
+     *
+     * arr2 中的元素各不相同
+     * arr2 中的每个元素都出现在 arr1 中
+     * 对 arr1 中的元素进行排序，使 arr1 中项的相对顺序和 arr2 中的相对顺序相同。未在 arr2 中出现过的元素需要按照升序放在 arr1 的末尾。
+     *
+     * @param arr1
+     * @param arr2
+     * @return
+     */
+    public int[] relativeSortArray(int[] arr1, int[] arr2) {
+        int upper = 0;
+        for(int x : arr1){
+            upper = Math.max(upper,x);
+        }
+        int[] frequency = new int[upper + 1];
+        for(int x : arr1){
+            frequency[x] ++;
+        }
+        int[] ans = new int[arr1.length];
+        int index = 0;
+        for(int x : arr2){
+            for(int i = 0; i < frequency[x]; i++){
+                ans[index++] = x;
+
+            }
+            frequency[x] = 0;
+        }
+        for(int x = 0; x <= upper; x++){
+            for(int i = 0; i < frequency[x]; i++){
+                ans[index++] = x;
+
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 406. 根据身高重建队列
+     *
+     * 假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
+     *
+     * 注意：
+     * 总人数少于1100人。
+     *
+     *
+     * @param people
+     * @return
+     */
+    public int[][] reconstructQueue(int[][] people) {
+        Arrays.sort(people, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if(o1[0] != o2[0]){
+                    return o2[0] - o1[0];
+                }else{
+                    return o1[1] - o2[1];
+                }
+            }
+        });
+        List<int[]> ans = new ArrayList<>();
+        for(int[] person : people){
+            ans.add(person[1],person);
+        }
+        return ans.toArray(new int[ans.size()][]);
+    }
+
 }
