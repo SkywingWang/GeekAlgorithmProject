@@ -1968,4 +1968,160 @@ public class VariousAlgorithm {
         return ret.length() == 0 ? "0" : ret.toString();
     }
 
+    /**
+     * 1030. 距离顺序排列矩阵单元格
+     *
+     * 给出 R 行 C 列的矩阵，其中的单元格的整数坐标为 (r, c)，满足 0 <= r < R 且 0 <= c < C。
+     *
+     * 另外，我们在该矩阵中给出了一个坐标为 (r0, c0) 的单元格。
+     *
+     * 返回矩阵中的所有单元格的坐标，并按到 (r0, c0) 的距离从最小到最大的顺序排，其中，两单元格(r1, c1) 和 (r2, c2) 之间的距离是曼哈顿距离，|r1 - r2| + |c1 - c2|。（你可以按任何满足此条件的顺序返回答案。）
+     *
+     *
+     * @param R
+     * @param C
+     * @param r0
+     * @param c0
+     * @return
+     */
+    public int[][] allCellsDistOrder(int R, int C, int r0, int c0) {
+        int[][] ret = new int[R * C][];
+        for(int i = 0; i < R; i++){
+            for(int j = 0; j < C; j++){
+                ret[i * C + j] = new int[]{i,j};
+            }
+        }
+        Arrays.sort(ret, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return (Math.abs(o1[0] - r0) + Math.abs(o1[1] - c0)) - (Math.abs(o2[0] - r0) + Math.abs(o2[1] - c0));
+            }
+        });
+        return ret;
+    }
+
+    /**
+     * 134. 加油站
+     * 在一条环路上有 N 个加油站，其中第 i 个加油站有汽油 gas[i] 升。
+     *
+     * 你有一辆油箱容量无限的的汽车，从第 i 个加油站开往第 i+1 个加油站需要消耗汽油 cost[i] 升。你从其中的一个加油站出发，开始时油箱为空。
+     *
+     * 如果你可以绕环路行驶一周，则返回出发时加油站的编号，否则返回 -1。
+     *
+     * 说明: 
+     *
+     * 如果题目有解，该答案即为唯一答案。
+     * 输入数组均为非空数组，且长度相同。
+     * 输入数组中的元素均为非负数。
+     *
+     * @param gas
+     * @param cost
+     * @return
+     */
+    public int canCompleteCircuit(int[] gas, int[] cost) {
+        int n = gas.length;
+        int i = 0;
+        while(i < n){
+            int sumOfGas = 0, sumOfCost = 0;
+            int cnt = 0;
+            while(cnt < n){
+                int j = (i + cnt) % n;
+                sumOfGas += gas[j];
+                sumOfCost += cost[j];
+                if(sumOfCost > sumOfGas){
+                    break;
+                }
+                cnt++;
+            }
+            if(cnt == n){
+                return i;
+            }else{
+                i = i + cnt + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 283. 移动零
+     *
+     * 给定一个数组 nums，编写一个函数将所有 0 移动到数组的末尾，同时保持非零元素的相对顺序。
+     *
+     * @param nums
+     */
+    public void moveZeroes(int[] nums) {
+        if(nums == null){
+            return;
+        }
+        int n = nums.length,left = 0,right = 0;
+        while (right < n){
+            if(nums[right] != 0){
+                int temp = nums[left];
+                nums[left] = nums[right];
+                nums[right] = temp;
+                left++;
+            }
+            right++;
+        }
+    }
+
+    /**
+     * 242. 有效的字母异位词
+     *
+     * 给定两个字符串 s 和 t ，编写一个函数来判断 t 是否是 s 的字母异位词。
+     *
+     * @param s
+     * @param t
+     * @return
+     */
+    public boolean isAnagram(String s, String t) {
+        if(s.length() != t.length()){
+            return false;
+        }
+        char[] str1 = s.toCharArray();
+        char[] str2 = s.toCharArray();
+        Arrays.sort(str1);
+        Arrays.sort(str2);
+        return Arrays.equals(str1,str2);
+    }
+
+    /**
+     * 452. 用最少数量的箭引爆气球
+     *
+     * 在二维空间中有许多球形的气球。对于每个气球，提供的输入是水平方向上，气球直径的开始和结束坐标。由于它是水平的，所以纵坐标并不重要，因此只要知道开始和结束的横坐标就足够了。开始坐标总是小于结束坐标。
+     *
+     * 一支弓箭可以沿着 x 轴从不同点完全垂直地射出。在坐标 x 处射出一支箭，若有一个气球的直径的开始和结束坐标为 xstart，xend， 且满足  xstart ≤ x ≤ xend，则该气球会被引爆。可以射出的弓箭的数量没有限制。 弓箭一旦被射出之后，可以无限地前进。我们想找到使得所有气球全部被引爆，所需的弓箭的最小数量。
+     *
+     * 给你一个数组 points ，其中 points [i] = [xstart,xend] ，返回引爆所有气球所必须射出的最小弓箭数。
+     *
+     *
+     * @param points
+     * @return
+     */
+    public int findMinArrowShots(int[][] points) {
+        if(points.length == 0){
+            return 0;
+        }
+        Arrays.sort(points, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if(o1[1] > o2[1]){
+                    return 1;
+                }else if(o1[1] < o2[1]){
+                    return -1;
+                }else{
+                    return 0;
+                }
+            }
+        });
+        int pos = points[0][1];
+        int ans = 1;
+        for(int[] balloon : points){
+            if(balloon[0] > pos){
+                pos = balloon[1];
+                ans++;
+            }
+        }
+        return ans;
+    }
 }
