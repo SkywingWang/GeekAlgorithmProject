@@ -2124,4 +2124,267 @@ public class VariousAlgorithm {
         }
         return ans;
     }
+
+    /**
+     *
+     * @param A
+     * @param B
+     * @param C
+     * @param D
+     * @return
+     */
+    public int fourSumCount(int[] A, int[] B, int[] C, int[] D) {
+        Map<Integer,Integer> countAB = new HashMap<>();
+        for(int u : A){
+            for(int v : B){
+                countAB.put(u + v,countAB.getOrDefault(u + v,0) + 1);
+            }
+        }
+        int ans = 0;
+        for(int u : C){
+            for(int v : D){
+                if(countAB.containsKey(-u-v)){
+                    ans += countAB.get(-u-v);
+                }
+            }
+        }
+        return ans;
+    }
+
+
+    /**
+     * 976. 三角形的最大周长
+     * 给定由一些正数（代表长度）组成的数组 A，返回由其中三个长度组成的、面积不为零的三角形的最大周长。
+     *
+     * 如果不能形成任何面积不为零的三角形，返回 0。
+     * @param A
+     * @return
+     */
+    public int largestPerimeter(int[] A) {
+        if(A==null || A.length < 3){
+            return 0;
+        }
+        Arrays.sort(A);
+        int indexR = A.length - 1;
+        while (indexR > 1){
+            if(A[indexR] < A[indexR-1] + A[indexR-2]){
+                return A[indexR] + A[indexR-1] + A[indexR-2];
+            }
+            indexR --;
+        }
+        return 0;
+    }
+
+    /**
+     * 321. 拼接最大数
+     *
+     * 给定长度分别为 m 和 n 的两个数组，其元素由 0-9 构成，表示两个自然数各位上的数字。现在从这两个数组中选出 k (k <= m + n) 个数字拼接成一个新的数，要求从同一个数组中取出的数字保持其在原数组中的相对顺序。
+     *
+     * 求满足该条件的最大数。结果返回一个表示该最大数的长度为 k 的数组。
+     *
+     * 说明: 请尽可能地优化你算法的时间和空间复杂度。
+     *
+     * @param nums1
+     * @param nums2
+     * @param k
+     * @return
+     */
+    public int[] maxNumber(int[] nums1,int[] nums2,int k){
+        int m = nums1.length, n = nums2.length;
+        int[] maxSubsequence = new int[k];
+        int start = Math.max(0,k - n),end = Math.min(k,m);
+        for(int i = start; i <= end; i++){
+            int[] subsequence1 = maxSubsequenceMaxNumber(nums1,i);
+            int[] subsequence2 = maxSubsequenceMaxNumber(nums2,k-i);
+            int[] curMaxSubsequence = mergeMaxNumber(subsequence1,subsequence2);
+            if(compareMaxNumber(curMaxSubsequence,0,maxSubsequence,0) > 0){
+                System.arraycopy(curMaxSubsequence,0,maxSubsequence,0,k);
+            }
+        }
+        return maxSubsequence;
+    }
+
+    private int[] maxSubsequenceMaxNumber(int[] nums,int k){
+        int length = nums.length;
+        int[] stack = new int[k];
+        int top = -1;
+        int remain = length - k;
+        for(int i = 0; i < length; i++){
+            int num = nums[i];
+            while (top >= 0 && stack[top] < num && remain > 0){
+                top--;
+                remain--;
+            }
+            if(top < k - 1){
+                stack[++top] = num;
+            }else {
+                remain--;
+            }
+        }
+        return stack;
+    }
+    private int[] mergeMaxNumber(int[] subsequence1,int[] subsequence2){
+        int x = subsequence1.length, y = subsequence2.length;
+        if(x == 0){
+            return subsequence2;
+        }
+        if(y == 0){
+            return subsequence1;
+        }
+        int mergeLength = x + y;
+        int[] merged = new int[mergeLength];
+        int index1 = 0, index2 = 0;
+        for(int i = 0; i < mergeLength;i++){
+            if(compareMaxNumber(subsequence1,index1,subsequence2,index2) > 0){
+                merged[i] = subsequence1[index1++];
+            }else{
+                merged[i] = subsequence2[index2++];
+            }
+        }
+        return merged;
+    }
+
+    private int compareMaxNumber(int[] subsequence1,int index1,int[] subsequence2,int index2){
+        int x = subsequence1.length, y = subsequence2.length;
+        while(index1 < x && index2 < y){
+            int difference = subsequence1[index1] - subsequence2[index2];
+            if(difference != 0){
+                return difference;
+            }
+            index1++;
+            index2++;
+        }
+        return (x - index1) - (y - index2);
+    }
+
+    /**
+     * 621. 任务调度器
+     *
+     * 给你一个用字符数组 tasks 表示的 CPU 需要执行的任务列表。其中每个字母表示一种不同种类的任务。任务可以以任意顺序执行，并且每个任务都可以在 1 个单位时间内执行完。在任何一个单位时间，CPU 可以完成一个任务，或者处于待命状态。
+     *
+     * 然而，两个 相同种类 的任务之间必须有长度为整数 n 的冷却时间，因此至少有连续 n 个单位时间内 CPU 在执行不同的任务，或者在待命状态。
+     *
+     * 你需要计算完成所有任务所需要的 最短时间 。
+     *
+     *
+     * @param tasks
+     * @param n
+     * @return
+     */
+    public int leastInterval(char[] tasks, int n) {
+        Map<Character,Integer> freq = new HashMap<>();
+        for(char ch:tasks){
+            freq.put(ch,freq.getOrDefault(ch,0) + 1);
+        }
+        int m = freq.size();
+        List<Integer> nextValid = new ArrayList<>();
+        List<Integer> rest = new ArrayList<>();
+        Set<Map.Entry<Character,Integer>> entrySet = freq.entrySet();
+        for(Map.Entry<Character,Integer> entry : entrySet){
+            int value = entry.getValue();
+            nextValid.add(1);
+            rest.add(value);
+        }
+        int time = 0;
+        for(int i = 0; i < tasks.length; i++){
+            time++;
+            int minNextValid = Integer.MAX_VALUE;
+            for(int j = 0; j < m; j++){
+                if(rest.get(j) != 0){
+                    minNextValid = Math.min(minNextValid,nextValid.get(j));
+                }
+            }
+            time = Math.max(time,minNextValid);
+            int best = -1;
+            for(int j = 0; j < m; j++){
+                if(rest.get(j)!=0 && nextValid.get(j) <= time){
+                    if(best == -1 || rest.get(j) > rest.get(best)){
+                        best = j;
+                    }
+                }
+            }
+            nextValid.set(best,time + n + 1);
+            rest.set(best,rest.get(best) - 1);
+        }
+        return time;
+
+    }
+
+    /**
+     * 62. 不同路径
+     * 一个机器人位于一个 m x n 网格的左上角 （起始点在下图中标记为 “Start” ）。
+     *
+     * 机器人每次只能向下或者向右移动一步。机器人试图达到网格的右下角（在下图中标记为 “Finish” ）。
+     *
+     * 问总共有多少条不同的路径？
+     *
+     * @param m
+     * @param n
+     * @return
+     */
+    public int uniquePaths(int m, int n) {
+        int[][] f = new int[m][n];
+        for(int i = 0; i < m; i++){
+            f[i][0] = 1;
+        }
+        for(int j = 0; j < n; j++){
+            f[0][j] = 1;
+        }
+        for(int i = 1;i < m; i++){
+            for(int j = 1;j < n;j++){
+                f[i][j] = f[i - 1][j] + f[i][j-1];
+            }
+        }
+        return f[m-1][n-1];
+    }
+
+    /**
+     * 860. 柠檬水找零
+     * 在柠檬水摊上，每一杯柠檬水的售价为 5 美元。
+     *
+     * 顾客排队购买你的产品，（按账单 bills 支付的顺序）一次购买一杯。
+     *
+     * 每位顾客只买一杯柠檬水，然后向你付 5 美元、10 美元或 20 美元。你必须给每个顾客正确找零，也就是说净交易是每位顾客向你支付 5 美元。
+     *
+     * 注意，一开始你手头没有任何零钱。
+     *
+     * 如果你能给每位顾客正确找零，返回 true ，否则返回 false 。
+     *
+     * @param bills
+     * @return
+     */
+    public boolean lemonadeChange(int[] bills) {
+        if(bills == null || bills.length == 0){
+            return false;
+        }
+        int five = 0, ten = 0;
+        for(int i = 0; i < bills.length; i++){
+            if(bills[i] == 5){
+                five++;
+            }else if(bills[i] == 10){
+                if(five > 0){
+                    five--;
+                    ten++;
+                }else{
+                    return false;
+                }
+            }else if(bills[i] == 20){
+                if(ten > 0){
+                    ten--;
+                    if(five > 0){
+                        five--;
+                    }else{
+                        return false;
+                    }
+                }else{
+                    if(five > 2){
+                        five -= 3;
+                    }else {
+                        return false;
+                    }
+                }
+            }
+        }
+        return true;
+    }
 }

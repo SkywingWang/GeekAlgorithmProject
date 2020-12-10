@@ -3393,4 +3393,264 @@ public class ArrayAlgorithm {
         return ans.toArray(new int[ans.size()][]);
     }
 
+
+    /**
+     * 164. 最大间距
+     * 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
+     *
+     * 如果数组元素个数小于 2，则返回 0。
+     * @param nums
+     * @return
+     */
+    public int maximumGap(int[] nums) {
+        int n = nums.length;
+        if(n < 2){
+            return 0;
+        }
+        long exp = 1;
+        int[] buf = new int[n];
+        int maxVal = Arrays.stream(nums).max().getAsInt();
+        while (maxVal >= exp){
+            int [] cnt = new int[10];
+            for(int i = 0; i < n; i++){
+                int digit = (nums[i] / (int) exp) % 10;
+                cnt[digit]++;
+            }
+            for(int i = 1; i < 10; i++){
+                cnt[i] += cnt[i - 1];
+            }
+            for(int i = n - 1; i >= 0;i--){
+                int digit = (nums[i] / (int) exp) % 10;
+                buf[cnt[digit] - 1] = nums[i];
+                cnt[digit]--;
+            }
+            System.arraycopy(buf,0,nums,0,n);
+            exp *= 10;
+        }
+        int ret = 0;
+        for(int i = 1; i < n; i++){
+            ret = Math.max(ret,nums[i]-nums[i-1]);
+        }
+        return ret;
+    }
+
+    /**
+     * 493. 翻转对
+     *
+     * 给定一个数组 nums ，如果 i < j 且 nums[i] > 2*nums[j] 我们就将 (i, j) 称作一个重要翻转对。
+     *
+     * 你需要返回给定数组中的重要翻转对的数量。
+     *
+     * @param nums
+     * @return
+     */
+    public int reversePairs(int[] nums) {
+        if(nums.length == 0){
+            return 0;
+        }
+        return reversePairsRecursive(nums,0,nums.length - 1);
+    }
+
+    private int reversePairsRecursive(int[] nums,int left,int right){
+        if(left == right){
+            return 0;
+        }else{
+            int mid = (left + right) / 2;
+            int n1 = reversePairsRecursive(nums,left,mid);
+            int n2 = reversePairsRecursive(nums,mid + 1,right);
+            int ret = n1 + n2;
+            int i = left;
+            int j = mid + 1;
+            while (i <= mid){
+                while (j <= right && (long) nums[i] > 2 * (long) nums[j]){
+                    j++;
+                }
+                ret += j - mid - 1;
+                i++;
+            }
+            int[] sorted = new int[right - left + 1];
+            int p1 = left,p2 = mid + 1;
+            int p = 0;
+            while (p1 <= mid || p2 <= right){
+                if(p1 > mid){
+                    sorted[p++] = nums[p2++];
+                }else if(p2 > right){
+                    sorted[p++] = nums[p1++];
+                }else{
+                    if(nums[p1] < nums[p2]){
+                        sorted[p++] = nums[p1++];
+                    }else{
+                        sorted[p++] = nums[p2++];
+                    }
+                }
+            }
+            for(int k = 0;k < sorted.length; k++){
+                nums[left + k] = sorted[k];
+            }
+            return ret;
+        }
+    }
+
+    /**
+     * 34. 在排序数组中查找元素的第一个和最后一个位置
+     *
+     * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
+     *
+     * 如果数组中不存在目标值 target，返回 [-1, -1]。
+     *
+     * 进阶：
+     *
+     * 你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int[] searchRange(int[] nums, int target) {
+        int leftIdx = binarySearchSearchRange(nums,target,true);
+        int rightIdx = binarySearchSearchRange(nums,target,false) - 1;
+        if(leftIdx <= rightIdx && rightIdx < nums.length && nums[leftIdx] == target && nums[rightIdx] == target){
+            return new int[]{leftIdx,rightIdx};
+        }
+        return new int[]{-1,-1};
+    }
+
+    private int binarySearchSearchRange(int[] nums, int target,boolean lower){
+        int left = 0,right = nums.length - 1, ans = nums.length;
+        while (left <= right){
+            int mid  = (left + right) / 2;
+            if(nums[mid] > target || (lower && nums[mid] >= target)){
+                right = mid - 1;
+                ans = mid;
+            }else{
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 659. 分割数组为连续子序列
+     * 给你一个按升序排序的整数数组 num（可能包含重复数字），请你将它们分割成一个或多个子序列，其中每个子序列都由连续整数组成且长度至少为 3 。
+     *
+     * 如果可以完成上述分割，则返回 true ；否则，返回 false 。
+     *
+     * @param nums
+     * @return
+     */
+    public boolean isPossible(int[] nums) {
+        Map<Integer,PriorityQueue<Integer>> map = new HashMap<Integer,PriorityQueue<Integer>>();
+        for(int x : nums){
+            if(!map.containsKey(x)){
+                map.put(x,new PriorityQueue<>());
+            }
+            if(map.containsKey(x - 1)){
+                int prevLength = map.get(x - 1).poll();
+                if(map.get(x - 1).isEmpty()){
+                    map.remove(x - 1);
+                }
+                map.get(x).offer(prevLength + 1);
+            }else{
+                map.get(x).offer(1);
+            }
+
+        }
+        Set<Map.Entry<Integer,PriorityQueue<Integer>>> entrySet = map.entrySet();
+        for(Map.Entry<Integer,PriorityQueue<Integer>> entry: entrySet){
+            PriorityQueue<Integer> queue = entry.getValue();
+            if(queue.peek() < 3){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 861. 翻转矩阵后的得分
+     *
+     * 有一个二维矩阵 A 其中每个元素的值为 0 或 1 。
+     *
+     * 移动是指选择任一行或列，并转换该行或列中的每一个值：将所有 0 都更改为 1，将所有 1 都更改为 0。
+     *
+     * 在做出任意次数的移动后，将该矩阵的每一行都按照二进制数来解释，矩阵的得分就是这些数字的总和。
+     *
+     * 返回尽可能高的分数。
+     *
+     * @param A
+     * @return
+     */
+    public int matrixScore(int[][] A) {
+        int m = A.length, n = A[0].length;
+        int ret = m * (1 << (n-1));
+        for(int j = 1; j < n; j++){
+            int nOnes = 0;
+            for(int i = 0; i < m; i++){
+                if(A[i][0] == 1){
+                    nOnes += A[i][j];
+                }else{
+                    nOnes += (1-A[i][j]);
+                }
+            }
+            int k = Math.max(nOnes,m - nOnes);
+            ret += k * (1 << (n - j - 1));
+        }
+        return ret;
+    }
+
+    /**
+     * 842. 将数组拆分成斐波那契序列
+     * 给定一个数字字符串 S，比如 S = "123456579"，我们可以将它分成斐波那契式的序列 [123, 456, 579]。
+     *
+     * 形式上，斐波那契式序列是一个非负整数列表 F，且满足：
+     *
+     * 0 <= F[i] <= 2^31 - 1，（也就是说，每个整数都符合 32 位有符号整数类型）；
+     * F.length >= 3；
+     * 对于所有的0 <= i < F.length - 2，都有 F[i] + F[i+1] = F[i+2] 成立。
+     * 另外，请注意，将字符串拆分成小块时，每个块的数字一定不要以零开头，除非这个块是数字 0 本身。
+     *
+     * 返回从 S 拆分出来的任意一组斐波那契式的序列块，如果不能拆分则返回 []。
+     *
+     * @param S
+     * @return
+     */
+    public List<Integer> splitIntoFibonacci(String S) {
+        List<Integer> list = new ArrayList<>();
+        backtrackSplitIntoFibonacci(list,S,S.length(),0,0,0);
+        return list;
+    }
+
+    private boolean backtrackSplitIntoFibonacci(List<Integer> list, String S, int length, int index, int sum,int prev){
+        if(index == length){
+            return list.size() >= 3;
+        }
+        long currLong = 0;
+        for(int i = index; i < length; i++){
+            if(i > index && S.charAt(index) == '0'){
+                break;
+            }
+            currLong = currLong * 10 + S.charAt(i) - '0';
+            if(currLong > Integer.MAX_VALUE){
+                break;
+            }
+            int curr = (int) currLong;
+            if(list.size() >= 2){
+                if(curr < sum){
+                    continue;
+                }else if(curr > sum){
+                    break;
+                }
+            }
+            list.add(curr);
+            if(backtrackSplitIntoFibonacci(list,S,length,i+1,prev+curr,curr)){
+                return true;
+            }else{
+                list.remove(list.size() - 1);
+            }
+        }
+        return false;
+    }
 }
