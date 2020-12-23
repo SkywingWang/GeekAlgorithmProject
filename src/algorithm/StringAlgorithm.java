@@ -2056,4 +2056,174 @@ public class StringAlgorithm {
         }
         return sb.toString();
     }
+
+    /**
+     * 49. 字母异位词分组
+     *
+     * 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
+     *
+     * @param strs
+     * @return
+     */
+    public List<List<String>> groupAnagrams(String[] strs) {
+        Map<String, List<String>> map = new HashMap<String, List<String>>();
+        for (String str : strs) {
+            char[] array = str.toCharArray();
+            Arrays.sort(array);
+            String key = new String(array);
+            List<String> list = map.getOrDefault(key, new ArrayList<String>());
+            list.add(str);
+            map.put(key, list);
+        }
+        return new ArrayList<List<String>>(map.values());
+    }
+
+    /**
+     * 290. 单词规律
+     *
+     * 给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。
+     *
+     * 这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。
+     *
+     * @param pattern
+     * @param s
+     * @return
+     */
+    public boolean wordPattern(String pattern, String s) {
+        if(pattern == null || s == null || pattern.equals("") || s.equals("")){
+            return true;
+        }
+        char[]patternArray = pattern.toCharArray();
+        String[] sArray = s.split(" ");
+        if(patternArray.length != sArray.length){
+            return false;
+        }
+        Map<Character,String> charMap = new HashMap<>();
+        Set<String> sSet = new HashSet<>();
+        for(int i = 0;i < patternArray.length;i++){
+            if(charMap.containsKey(patternArray[i])){
+                if(!charMap.get(patternArray[i]).equals(sArray[i])){
+                    return false;
+                }
+            }else{
+                if(sSet.contains(sArray[i])){
+                    return false;
+                }
+                charMap.put(patternArray[i],sArray[i]);
+                sSet.add(sArray[i]);
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 389. 找不同
+     * 给定两个字符串 s 和 t，它们只包含小写字母。
+     *
+     * 字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。
+     *
+     * 请找出在 t 中被添加的字母。
+     * @param s
+     * @param t
+     * @return
+     */
+    public char findTheDifference(String s, String t) {
+        if(t == null || t.length() == 0){
+            return ' ';
+        }
+        if(s == null || s.length()==0){
+            return t.charAt(0);
+        }
+        Map<Character,Integer> sMap = new HashMap<>();
+        for(int i = 0;i < s.length();i++){
+            sMap.put(s.charAt(i),sMap.getOrDefault(s.charAt(i),0) + 1);
+        }
+        for(int i = 0;i < t.length();i++){
+            if(sMap.containsKey(t.charAt(i))){
+                int num = sMap.get(t.charAt(i));
+                if(num == 0){
+                    return t.charAt(i);
+                }else{
+                    num--;
+                    sMap.put(t.charAt(i),num);
+                }
+            }else{
+                return t.charAt(i);
+            }
+        }
+        return ' ';
+    }
+    public char findTheDifference_v2(String s, String t) {
+        int ret = 0;
+        for(int i = 0; i < s.length(); i++){
+            ret ^= s.charAt(i);
+        }
+        for(int i = 0; i < t.length(); i++){
+            ret ^= t.charAt(i);
+        }
+        return (char) ret;
+    }
+
+    /**
+     * 316. 去除重复字母
+     * 给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+     * @param s
+     * @return
+     */
+    public String removeDuplicateLetters(String s) {
+        boolean[] vis = new boolean[26];
+        int[] num = new int[26];
+        for(int i = 0; i < s.length(); i++){
+            num[s.charAt(i) - 'a']++;
+        }
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            if(!vis[ch - 'a']){
+                while (sb.length() > 0 && sb.charAt(sb.length() - 1) > ch){
+                    if(num[sb.charAt(sb.length() - 1) - 'a'] > 0){
+                        vis[sb.charAt(sb.length() - 1) - 'a'] = false;
+                        sb.deleteCharAt(sb.length() - 1);
+                    }else{
+                        break;
+                    }
+                }
+                vis[ch - 'a'] = true;
+                sb.append(ch);
+            }
+            num[ch - 'a'] -= 1;
+        }
+        return sb.toString();
+    }
+
+    /**
+     * 387. 字符串中的第一个唯一字符
+     * 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+     * @param s
+     * @return
+     */
+    public int firstUniqChar(String s) {
+        if(s == null || s.length() == 0){
+            return -1;
+        }
+        int []cArray = new int[26];
+        for(int i = 0; i < s.length();i++){
+            char c = s.charAt(i);
+            if(cArray[c - 'a'] > 0){
+                cArray[c - 'a'] = -1;
+            }else if(cArray[c - 'a'] == 0){
+                cArray[c - 'a'] = i + 1;
+            }
+        }
+        int result = Integer.MAX_VALUE;
+        for(int i = 0;i < cArray.length;i++){
+            if(cArray[i] >= 0 && cArray[i] < result){
+                result = cArray[i];
+            }
+        }
+        if(result == Integer.MAX_VALUE){
+            return -1;
+        }
+        return result - 1;
+    }
 }

@@ -2387,4 +2387,106 @@ public class VariousAlgorithm {
         }
         return true;
     }
+
+    /**
+     * 649. Dota2 参议院
+     *
+     * Dota2 的世界里有两个阵营：Radiant(天辉)和 Dire(夜魇)
+     *
+     * Dota2 参议院由来自两派的参议员组成。现在参议院希望对一个 Dota2 游戏里的改变作出决定。他们以一个基于轮为过程的投票进行。在每一轮中，每一位参议员都可以行使两项权利中的一项：
+     *
+     * 禁止一名参议员的权利：
+     *
+     * 参议员可以让另一位参议员在这一轮和随后的几轮中丧失所有的权利。
+     *
+     * 宣布胜利：
+     *
+     *           如果参议员发现有权利投票的参议员都是同一个阵营的，他可以宣布胜利并决定在游戏中的有关变化。
+     *
+     *  
+     *
+     * 给定一个字符串代表每个参议员的阵营。字母 “R” 和 “D” 分别代表了 Radiant（天辉）和 Dire（夜魇）。然后，如果有 n 个参议员，给定字符串的大小将是 n。
+     *
+     * 以轮为基础的过程从给定顺序的第一个参议员开始到最后一个参议员结束。这一过程将持续到投票结束。所有失去权利的参议员将在过程中被跳过。
+     *
+     * 假设每一位参议员都足够聪明，会为自己的政党做出最好的策略，你需要预测哪一方最终会宣布胜利并在 Dota2 游戏中决定改变。输出应该是 Radiant 或 Dire。
+     *
+     * @param senate
+     * @return
+     */
+    public String predictPartyVictory(String senate) {
+        int n = senate.length();
+        Queue<Integer> radiant = new LinkedList<Integer>();
+        Queue<Integer> dire = new LinkedList<Integer>();
+        for (int i = 0; i < n; ++i) {
+            if (senate.charAt(i) == 'R') {
+                radiant.offer(i);
+            } else {
+                dire.offer(i);
+            }
+        }
+        while (!radiant.isEmpty() && !dire.isEmpty()) {
+            int radiantIndex = radiant.poll(), direIndex = dire.poll();
+            if (radiantIndex < direIndex) {
+                radiant.offer(radiantIndex + n);
+            } else {
+                dire.offer(direIndex + n);
+            }
+        }
+        return !radiant.isEmpty() ? "Radiant" : "Dire";
+    }
+
+    /**
+     * 738. 单调递增的数字
+     * 给定一个非负整数 N，找出小于或等于 N 的最大的整数，同时这个整数需要满足其各个位数上的数字是单调递增。
+     *
+     * （当且仅当每个相邻位数上的数字 x 和 y 满足 x <= y 时，我们称这个整数是单调递增的。）
+     *
+     * @param N
+     * @return
+     */
+    public int monotoneIncreasingDigits(int N) {
+        char[] strN = Integer.toString(N).toCharArray();
+        int i = 1;
+        while (i < strN.length && strN[i - 1] <= strN[i]) {
+            i += 1;
+        }
+        if (i < strN.length) {
+            while (i > 0 && strN[i - 1] > strN[i]) {
+                strN[i - 1] -= 1;
+                i -= 1;
+            }
+            for (i += 1; i < strN.length; ++i) {
+                strN[i] = '9';
+            }
+        }
+        return Integer.parseInt(new String(strN));
+    }
+
+    /**
+     * 714. 买卖股票的最佳时机含手续费
+     * 给定一个整数数组 prices，其中第 i 个元素代表了第 i 天的股票价格 ；非负整数 fee 代表了交易股票的手续费用。
+     *
+     * 你可以无限次地完成交易，但是你每笔交易都需要付手续费。如果你已经购买了一个股票，在卖出它之前你就不能再继续购买股票了。
+     *
+     * 返回获得利润的最大值。
+     *
+     * 注意：这里的一笔交易指买入持有并卖出股票的整个过程，每笔交易你只需要为支付一次手续费。
+     *
+     * @param prices
+     * @param fee
+     * @return
+     */
+    public int maxProfit(int[] prices, int fee) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int n = prices.length;
+        int sell = 0,buy = -prices[0];
+        for(int i = 1;i < n;i++){
+            sell = Math.max(sell,buy + prices[i] - fee);
+            buy = Math.max(buy,sell - prices[i]);
+        }
+        return sell;
+    }
 }

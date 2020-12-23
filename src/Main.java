@@ -23,6 +23,8 @@ public class Main {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         System.out.println(sdf.format(new Date(timeStamp)));
         System.out.println(System.currentTimeMillis());
+        StringAlgorithm stringAlgorithm = new StringAlgorithm();
+        System.out.println(stringAlgorithm.firstUniqChar("leetcode"));
     }
 
     public static long getTodayStartTime(){
