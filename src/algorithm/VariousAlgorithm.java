@@ -2560,4 +2560,139 @@ public class VariousAlgorithm {
         }
         return count;
     }
+
+    /**
+     * 1046. 最后一块石头的重量
+     *
+     * 有一堆石头，每块石头的重量都是正整数。
+     *
+     * 每一回合，从中选出两块 最重的 石头，然后将它们一起粉碎。假设石头的重量分别为 x 和 y，且 x <= y。那么粉碎的可能结果如下：
+     *
+     * 如果 x == y，那么两块石头都会被完全粉碎；
+     * 如果 x != y，那么重量为 x 的石头将会完全粉碎，而重量为 y 的石头新重量为 y-x。
+     * 最后，最多只会剩下一块石头。返回此石头的重量。如果没有石头剩下，就返回 0。
+     *
+     * @param stones
+     * @return
+     */
+    public int lastStoneWeight(int[] stones) {
+        if(stones == null || stones.length == 0){
+            return 0;
+        }
+        PriorityQueue<Integer> pq = new PriorityQueue<>((a,b) -> b - a);
+        for(int stone : stones){
+            pq.offer(stone);
+        }
+        while (pq.size() > 1){
+            int a = pq.poll();
+            int b = pq.poll();
+            if( a > b){
+                pq.offer(a - b);
+            }
+        }
+        return pq.isEmpty() ? 0 :  pq.poll();
+    }
+
+    /**
+     * 605. 种花问题
+     *
+     * 假设你有一个很长的花坛，一部分地块种植了花，另一部分却没有。可是，花卉不能种植在相邻的地块上，它们会争夺水源，两者都会死去。
+     *
+     * 给定一个花坛（表示为一个数组包含0和1，其中0表示没种植花，1表示种植了花），和一个数 n 。能否在不打破种植规则的情况下种入 n 朵花？能则返回True，不能则返回False。
+     *
+     * @param flowerbed
+     * @param n
+     * @return
+     */
+    public boolean canPlaceFlowers(int[] flowerbed, int n) {
+        if(n == 0){
+            return true;
+        }
+        if(flowerbed == null || flowerbed.length == 0){
+            return false;
+        }
+        int count = 0;
+        int m = flowerbed.length;
+        int prev = -1;
+        for (int i = 0; i < m; i++) {
+            if (flowerbed[i] == 1) {
+                if (prev < 0) {
+                    count += i / 2;
+                } else {
+                    count += (i - prev - 2) / 2;
+                }
+                if (count >= n) {
+                    return true;
+                }
+                prev = i;
+            }
+        }
+        if (prev < 0) {
+            count += (m + 1) / 2;
+        } else {
+            count += (m - prev - 1) / 2;
+        }
+        return count >= n;
+    }
+
+    /**
+     * 239. 滑动窗口最大值
+     * 给你一个整数数组 nums，有一个大小为 k 的滑动窗口从数组的最左侧移动到数组的最右侧。你只可以看到在滑动窗口内的 k 个数字。滑动窗口每次只向右移动一位。
+     *
+     * 返回滑动窗口中的最大值。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public int[] maxSlidingWindow(int[] nums, int k) {
+        int n = nums.length;
+        PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            public int compare(int[] pair1, int[] pair2) {
+                return pair1[0] != pair2[0] ? pair2[0] - pair1[0] : pair2[1] - pair1[1];
+            }
+        });
+        for (int i = 0; i < k; ++i) {
+            pq.offer(new int[]{nums[i], i});
+        }
+        int[] ans = new int[n - k + 1];
+        ans[0] = pq.peek()[0];
+        for (int i = k; i < n; ++i) {
+            pq.offer(new int[]{nums[i], i});
+            while (pq.peek()[1] <= i - k) {
+                pq.poll();
+            }
+            ans[i - k + 1] = pq.peek()[0];
+        }
+        return ans;
+    }
+
+    /**
+     * 509. 斐波那契数
+     *
+     * 斐波那契数，通常用 F(n) 表示，形成的序列称为 斐波那契数列 。该数列由 0 和 1 开始，后面的每一项数字都是前面两项数字的和。也就是：
+     *
+     * F(0) = 0，F(1) = 1
+     * F(n) = F(n - 1) + F(n - 2)，其中 n > 1
+     * 给你 n ，请计算 F(n) 。
+     *
+     * @param n
+     * @return
+     */
+    public int fib(int n) {
+        if(n==0){
+            return 0;
+        }
+        if(n==1){
+            return 1;
+        }
+        int result = 1;
+        int prev = 0;
+        for(int i = 2; i <= n;i++){
+            int tmp = prev + result;
+            prev = result;
+            result = tmp;
+        }
+        return result;
+    }
 }

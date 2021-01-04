@@ -3774,4 +3774,103 @@ public class ArrayAlgorithm {
         return ret;
 
     }
+
+    /**
+     * 188. 买卖股票的最佳时机 IV
+     *
+     * 给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
+     *
+     * 设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
+     *
+     * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     *
+     * @param k
+     * @param prices
+     * @return
+     */
+    public int maxProfitIV(int k, int[] prices) {
+        if(prices == null || prices.length == 0){
+            return 0;
+        }
+        int n = prices.length;
+        k = Math.min(k,n / 2);
+        int[][] buy = new int[n][k + 1];
+        int[][] sell = new int[n][k + 1];
+
+        buy[0][0] = -prices[0];
+        sell[0][0] = 0;
+        for(int i = 1; i <= k; i++){
+            buy[0][i] = sell[0][i] = Integer.MIN_VALUE / 2;
+        }
+        for(int i = 1; i < n; i++){
+            buy[i][0] = Math.max(buy[i-1][0],sell[i-1][0] - prices[i]);
+            for(int j = 1; j <= k; j++){
+                buy[i][j] = Math.max(buy[i - 1][j],sell[i - 1][j] - prices[i]);
+                sell[i][j] = Math.max(sell[i - 1][j],buy[i-1][j-1] + prices[i]);
+            }
+        }
+        return Arrays.stream(sell[n-1]).max().getAsInt();
+    }
+
+    /**
+     * 330. 按要求补齐数组
+     *
+     * 给定一个已排序的正整数数组 nums，和一个正整数 n 。从 [1, n] 区间内选取任意个数字补充到 nums 中，使得 [1, n] 区间内的任何数字都可以用 nums 中某几个数字的和来表示。请输出满足上述要求的最少需要补充的数字个数。
+     *
+     * @param nums
+     * @param n
+     * @return
+     */
+    public int minPatches(int[] nums, int n) {
+        int patches = 0;
+        long x = 1;
+        int length = nums.length,index = 0;
+        while(x <= n){
+            if(index < length && nums[index] <= x){
+                x+=nums[index];
+                index++;
+            }else {
+                x*=2;
+                patches++;
+            }
+        }
+        return patches;
+    }
+
+    /**
+     * 435. 无重叠区间
+     *
+     * 给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。
+     *
+     * 注意:
+     *
+     * 可以认为区间的终点总是大于它的起点。
+     * 区间 [1,2] 和 [2,3] 的边界相互“接触”，但没有相互重叠。
+     *
+     * @param intervals
+     * @return
+     */
+    public int eraseOverlapIntervals(int[][] intervals) {
+        if(intervals == null || intervals.length == 0){
+            return 0;
+        }
+        Arrays.sort(intervals, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                return o1[0] - o2[0];
+            }
+        });
+
+        int n = intervals.length;
+        int[] f = new int[n];
+        Arrays.fill(f,1);
+        for(int i = 1; i < n; i++){
+            for(int j = 0; j < i; j++){
+                if(intervals[j][1] <= intervals[i][0]){
+                    f[i] = Math.max(f[i],f[j] + 1);
+                }
+            }
+        }
+        return n - Arrays.stream(f).max().getAsInt();
+    }
 }
