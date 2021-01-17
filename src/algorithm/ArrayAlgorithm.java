@@ -2,6 +2,7 @@ package algorithm;
 
 import data.MountainArray;
 import data.TreeNode;
+import data.UnionFindRemoveStone;
 
 import java.util.*;
 
@@ -3872,5 +3873,127 @@ public class ArrayAlgorithm {
             }
         }
         return n - Arrays.stream(f).max().getAsInt();
+    }
+
+    /**
+     * 228. 汇总区间
+     *
+     * 给定一个无重复元素的有序整数数组 nums 。
+     *
+     * 返回 恰好覆盖数组中所有数字 的 最小有序 区间范围列表。也就是说，nums 的每个元素都恰好被某个区间范围所覆盖，并且不存在属于某个范围但不属于 nums 的数字 x 。
+     *
+     * 列表中的每个区间范围 [a,b] 应该按如下格式输出：
+     *
+     * "a->b" ，如果 a != b
+     * "a" ，如果 a == b
+     *
+     * @param nums
+     * @return
+     */
+    public List<String> summaryRanges(int[] nums) {
+        List<String> result = new ArrayList<>();
+        if(nums == null || nums.length == 0){
+            return result;
+        }
+        int i = 0;
+        while (i < nums.length){
+            int low = i;
+            i++;
+            while (i < nums.length && nums[i] == nums[i - 1] + 1){
+                i++;
+            }
+            int high = i - 1;
+            StringBuffer temp = new StringBuffer(Integer.toString(nums[low]));
+            if(low < high){
+                temp.append("->");
+                temp.append(Integer.toString(nums[high]));
+            }
+            result.add(temp.toString());
+        }
+        return result;
+    }
+
+    /**
+     * 684. 冗余连接
+     *
+     * 在本问题中, 树指的是一个连通且无环的无向图。
+     *
+     * 输入一个图，该图由一个有着N个节点 (节点值不重复1, 2, ..., N) 的树及一条附加的边构成。附加的边的两个顶点包含在1到N中间，这条附加的边不属于树中已存在的边。
+     *
+     * 结果图是一个以边组成的二维数组。每一个边的元素是一对[u, v] ，满足 u < v，表示连接顶点u 和v的无向图的边。
+     *
+     * 返回一条可以删去的边，使得结果图是一个有着N个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 [u, v] 应满足相同的格式 u < v。
+     *
+     * @param edges
+     * @return
+     */
+    public int[] findRedundantConnection(int[][] edges) {
+        int nodesCount = edges.length;
+        int[] parent = new int[nodesCount + 1];
+        for(int i = 1; i <= nodesCount; i++){
+            parent[i] = i;
+        }
+        for(int i = 0; i < nodesCount;i++){
+            int[] edge = edges[i];
+            int node1 = edge[0], node2 = edge[1];
+            if(findFRC(parent,node1) != findFRC(parent,node2)){
+                unionFRC(parent,node1,node2);
+            }else{
+                return edge;
+            }
+        }
+        return new int[0];
+    }
+
+    private void unionFRC(int[] parent, int index1, int index2){
+        parent[findFRC(parent,index1)] = findFRC(parent,index2);
+    }
+
+    private int findFRC(int[] parent,int index){
+        if(parent[index] != index){
+            parent[index] = findFRC(parent,parent[index]);
+        }
+        return parent[index];
+    }
+
+    /**
+     * 1018. 可被 5 整除的二进制前缀
+     *
+     * 给定由若干 0 和 1 组成的数组 A。我们定义 N_i：从 A[0] 到 A[i] 的第 i 个子数组被解释为一个二进制数（从最高有效位到最低有效位）。
+     *
+     * 返回布尔值列表 answer，只有当 N_i 可以被 5 整除时，答案 answer[i] 为 true，否则为 false。
+     *
+     * @param A
+     * @return
+     */
+    public List<Boolean> prefixesDivBy5(int[] A) {
+        List<Boolean> list = new ArrayList<>();
+        int prefix = 0;
+        int length = A.length;
+        for(int i = 0; i < length;i++){
+            prefix = ((prefix<<1) + A[i]) % 5;
+            list.add(prefix == 0);
+        }
+        return list;
+    }
+
+    /**
+     * 947. 移除最多的同行或同列石头
+     *
+     * n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
+     *
+     * 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
+     *
+     * 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
+     *
+     * @param stones
+     * @return
+     */
+    public int removeStones(int[][] stones) {
+        UnionFindRemoveStone unionFindRemoveStone = new UnionFindRemoveStone();
+        for(int[] stone:stones){
+            unionFindRemoveStone.union(stone[0] + 10001,stone[1]);
+        }
+        return stones.length - unionFindRemoveStone.getCount();
     }
 }

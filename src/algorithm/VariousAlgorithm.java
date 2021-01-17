@@ -1,7 +1,6 @@
 package algorithm;
 
-import data.State;
-import data.TreeNode;
+import data.*;
 
 import java.util.*;
 
@@ -20,10 +19,10 @@ public class VariousAlgorithm {
 
     public int climbStairs(int n) {
         int[] climbStepCount = new int[n];
-        if (n == 1)
-            return 1;
-        if (n == 2)
-            return 2;
+        if (n == 1){
+            return 1;}
+        if (n == 2){
+            return 2;}
         climbStepCount[0] = 1;
         climbStepCount[1] = 2;
         for (int i = 2; i < n; i++) {
@@ -47,14 +46,14 @@ public class VariousAlgorithm {
      */
 
     public int mySqrt(int x) {
-        if (x < 0)
-            return 0;
-        if (x < 2)
-            return x;
+        if (x < 0){
+            return 0;}
+        if (x < 2){
+            return x;}
         for (long i = 1; i <= x / 2; i++) {
             long l = (i + 1) * (i + 1);
-            if (l > Integer.MAX_VALUE || l > x)
-                return (int) i;
+            if (l > Integer.MAX_VALUE || l > x){
+                return (int) i;}
         }
         return 0;
     }
@@ -66,8 +65,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int mySqrt2(int x) {
-        if (x < 0)
-            return 0;
+        if (x < 0){
+            return 0;}
         long left = 0;
         long right = x / 2 + 1;
         while (left < right) {
@@ -88,8 +87,8 @@ public class VariousAlgorithm {
      * 给你一个整数 n，请你帮忙计算并返回该整数「各位数字之积」与「各位数字之和」的差。
      */
     public int subtractProductAndSum(int n) {
-        if (n == 0)
-            return 0;
+        if (n == 0){
+            return 0;}
         int count = 0;
         int product = 1;
         while (n / 10 > 0) {
@@ -117,11 +116,11 @@ public class VariousAlgorithm {
     public int maxProfit(int[] prices) {
         int minPrice = Integer.MAX_VALUE;
         int spreadPrice = 0;
-        if (prices == null || prices.length == 0)
-            return 0;
+        if (prices == null || prices.length == 0){
+            return 0;}
         for (int i = 0; i < prices.length; i++) {
-            if (prices[i] < minPrice)
-                minPrice = prices[i];
+            if (prices[i] < minPrice){
+                minPrice = prices[i];}
             else if (prices[i] - minPrice > spreadPrice) {
                 spreadPrice = prices[i] - minPrice;
             }
@@ -145,8 +144,8 @@ public class VariousAlgorithm {
         boolean isBuy = false;
         int buyPrice = 0;
         int spreadPriceCount = 0;
-        if (prices == null || prices.length == 0)
-            return 0;
+        if (prices == null || prices.length == 0){
+            return 0;}
         for (int i = 0; i < prices.length - 1; i++) {
             if (isBuy) {
                 if (prices[i] > prices[i + 1]) {
@@ -175,8 +174,8 @@ public class VariousAlgorithm {
      * @return
      */
     public String convertToTitle(int n) {
-        if (n <= 0)
-            return null;
+        if (n <= 0){
+            return null;}
         StringBuffer resultStringBuffer = new StringBuffer();
         while (n > 0) {
             int remainder = n % 26;
@@ -199,8 +198,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int titleToNumber(String s) {
-        if (s == null || s.length() == 0)
-            return 0;
+        if (s == null || s.length() == 0){
+            return 0;}
         int result = 0;
         for (int i = 0; i < s.length(); i++) {
             int number = (int) (s.charAt(i) - 'A' + 1);
@@ -218,8 +217,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int trailingZeroes(int n) {
-        if (n < 5)
-            return 0;
+        if (n < 5){
+            return 0;}
         long i = 5;
         int count = 0;
         while (i <= n) {
@@ -234,7 +233,6 @@ public class VariousAlgorithm {
             }
             i += 5;
         }
-
         return count;
     }
 
@@ -317,18 +315,18 @@ public class VariousAlgorithm {
      * @return
      */
     public int countPrimes(int n) {
-        if (n < 2)
-            return 0;
+        if (n < 2){
+            return 0;}
         boolean[] isPrime = new boolean[n];
         Arrays.fill(isPrime, true);
         for (int i = 2; i * i <= n; i++) {
-            for (int j = 2 * i; j < n; j += i)
-                isPrime[j] = false;
+            for (int j = 2 * i; j < n; j += i){
+                isPrime[j] = false;}
         }
         int count = 0;
         for (int i = 2; i < n; i++) {
-            if (isPrime[i])
-                count++;
+            if (isPrime[i]){
+                count++;}
         }
         return count;
     }
@@ -351,10 +349,10 @@ public class VariousAlgorithm {
      * @return
      */
     public boolean canMeasureWater(int x, int y, int z) {
-        if (z > x + y)
-            return false;
-        if (z == 0 || z == x || z == y || z == x + y)
-            return true;
+        if (z > x + y){
+            return false;}
+        if (z == 0 || z == x || z == y || z == x + y){
+            return true;}
         State initState = new State(0, 0);
 
         //广度优先遍历使用队列
@@ -413,35 +411,35 @@ public class VariousAlgorithm {
         State nextState8 = new State(curX + curY, 0);
 
         // 没有满的时候，才需要加水
-        if (curX < x)
-            nextStates.add(nextState1);
+        if (curX < x){
+            nextStates.add(nextState1);}
 
-        if (curY < y)
-            nextStates.add(nextState2);
+        if (curY < y){
+            nextStates.add(nextState2);}
 
 
         // 有水的时候，才需要倒掉
-        if (curX > 0)
-            nextStates.add(nextState3);
+        if (curX > 0){
+            nextStates.add(nextState3);}
 
-        if (curY > 0)
-            nextStates.add(nextState4);
+        if (curY > 0){
+            nextStates.add(nextState4);}
 
 
         // 有剩余才倒
-        if (curX - (y - curY) > 0)
-            nextStates.add(nextState5);
+        if (curX - (y - curY) > 0){
+            nextStates.add(nextState5);}
 
-        if (curY - (x - curX) > 0)
-            nextStates.add(nextState7);
+        if (curY - (x - curX) > 0){
+            nextStates.add(nextState7);}
 
 
         // 倒过去倒不满才倒
-        if (curX + curY < y)
-            nextStates.add(nextState6);
+        if (curX + curY < y){
+            nextStates.add(nextState6);}
 
-        if (curX + curY < x)
-            nextStates.add(nextState8);
+        if (curX + curY < x){
+            nextStates.add(nextState8);}
 
         return nextStates;
     }
@@ -459,13 +457,13 @@ public class VariousAlgorithm {
      * @return
      */
     public int massage(int[] nums) {
-        if (nums == null || nums.length == 0)
-            return 0;
-        if (nums.length == 1)
-            return nums[0];
+        if (nums == null || nums.length == 0){
+            return 0;}
+        if (nums.length == 1){
+            return nums[0];}
 
-        if (nums.length == 2)
-            return Math.max(nums[0], nums[1]);
+        if (nums.length == 2){
+            return Math.max(nums[0], nums[1]);}
         int[] result = new int[nums.length];
         result[0] = nums[0];
         result[1] = Math.max(nums[0], nums[1]);
@@ -502,8 +500,8 @@ public class VariousAlgorithm {
                         int nc = c + dc[k];
                         int nv = 0;
 
-                        if (0 <= nr && nr < length && 0 <= nc && nc < length)
-                            nv = grid[nr][nc];
+                        if (0 <= nr && nr < length && 0 <= nc && nc < length){
+                            nv = grid[nr][nc];}
                         result += Math.max(grid[r][c] - nv, 0);
                     }
                 }
@@ -519,8 +517,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int numRookCaptures(char[][] board) {
-        if (board == null || board.length == 0)
-            return 0;
+        if (board == null || board.length == 0){
+            return 0;}
         // 先找到R
         int i = 0, j = 0, result = 0;
         boolean isFind = false;
@@ -543,8 +541,8 @@ public class VariousAlgorithm {
 
             if (board[i][k] == '.') {
 
-            } else if (board[i][k] == 'B')
-                break;
+            } else if (board[i][k] == 'B'){
+                break;}
             else if (board[i][k] == 'p') {
                 result++;
                 break;
@@ -555,8 +553,8 @@ public class VariousAlgorithm {
         while (k >= 0) {
             if (board[i][k] == '.') {
 
-            } else if (board[i][k] == 'B')
-                break;
+            } else if (board[i][k] == 'B'){
+                break;}
             if (board[i][k] == 'p') {
                 result++;
                 break;
@@ -567,8 +565,8 @@ public class VariousAlgorithm {
         while (k < board.length) {
             if (board[k][j] == '.') {
 
-            } else if (board[k][j] == 'B')
-                break;
+            } else if (board[k][j] == 'B'){
+                break;}
             if (board[k][j] == 'p') {
                 result++;
                 break;
@@ -579,8 +577,8 @@ public class VariousAlgorithm {
         while (k >= 0) {
             if (board[k][j] == '.') {
 
-            } else if (board[k][j] == 'B')
-                break;
+            } else if (board[k][j] == 'B'){
+                break;}
             if (board[k][j] == 'p') {
                 result++;
                 break;
@@ -630,8 +628,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int lastRemaining(int n, int m) {
-        if (m == 0)
-            return 0;
+        if (m == 0){
+            return 0;}
         ArrayList<Integer> list = new ArrayList<>(n);
         for (int i = 0; i < n; i++) {
             list.add(i);
@@ -666,8 +664,8 @@ public class VariousAlgorithm {
      * @return
      */
     public int movingCount(int m, int n, int k) {
-        if (m < 0 || n < 0)
-            return 0;
+        if (m < 0 || n < 0){
+            return 0;}
         boolean[][] visited = new boolean[m][n];
         int res = 0;
         Queue<int[]> queue = new LinkedList<int[]>();
@@ -675,8 +673,8 @@ public class VariousAlgorithm {
         while (queue.size() > 0) {
             int[] x = queue.poll();
             int i = x[0], j = x[1], si = x[2], sj = x[3];
-            if (i >= m || j >= n || k < sj + si || visited[i][j])
-                continue;
+            if (i >= m || j >= n || k < sj + si || visited[i][j]){
+                continue;}
             visited[i][j] = true;
             res++;
 
@@ -752,22 +750,22 @@ public class VariousAlgorithm {
     private int superEggDropDp(int K, int N) {
         if (!superMemo.containsKey(N * 100 + K)) {
             int ans;
-            if (N == 0)
-                ans = 0;
-            else if (K == 1)
-                ans = N;
+            if (N == 0){
+                ans = 0;}
+            else if (K == 1){
+                ans = N;}
             else {
                 int lo = 1, hi = N;
                 while (lo + 1 < hi) {
                     int x = (lo + hi) / 2;
                     int t1 = superEggDrop(K - 1, x - 1);
                     int t2 = superEggDrop(K, N - x);
-                    if (t1 < t2)
-                        lo = x;
-                    else if (t1 > t2)
-                        hi = x;
-                    else
-                        lo = hi = x;
+                    if (t1 < t2){
+                        lo = x;}
+                    else if (t1 > t2){
+                        hi = x;}
+                    else{
+                        lo = hi = x;}
                 }
                 ans = 1 + Math.min(Math.max(superEggDropDp(K - 1, lo - 1), superEggDropDp(K, N - lo)), Math.max(superEggDropDp(K - 1, hi - 1), superEggDropDp(K, N - hi)));
             }
@@ -860,10 +858,10 @@ public class VariousAlgorithm {
      * @return
      */
     public int waysToChange(int n) {
-        if (n <= 0)
-            return 0;
-        if (n < 5)
-            return 1;
+        if (n <= 0){
+            return 0;}
+        if (n < 5){
+            return 1;}
         int mod = 1000000007;
         int result = 0;
         for (int i = 0; i <= n / 25; i++) {
@@ -885,18 +883,18 @@ public class VariousAlgorithm {
      */
     public int reversePairs(int[] nums) {
         int length = nums.length;
-        if (length < 2)
-            return 0;
+        if (length < 2){
+            return 0;}
         int[] copy = new int[length];
-        for (int i = 0; i < length; i++)
-            copy[i] = nums[i];
+        for (int i = 0; i < length; i++){
+            copy[i] = nums[i];}
         int[] temp = new int[length];
         return reversePairs(copy, 0, length - 1, temp);
     }
 
     private int reversePairs(int[] nums, int left, int right, int[] temp) {
-        if (left == right)
-            return 0;
+        if (left == right){
+            return 0;}
         int mid = left + (right - left) / 2;
         int leftPairs = reversePairs(nums, left, mid, temp);
         int rightPairs = reversePairs(nums, mid + 1, right, temp);
@@ -976,10 +974,10 @@ public class VariousAlgorithm {
     }
 
     private int mincostTicketsDP(int i) {
-        if (i > 365)
-            return 0;
-        if (memo[i] != null)
-            return memo[i];
+        if (i > 365){
+            return 0;}
+        if (memo[i] != null){
+            return memo[i];}
         if (dayset.contains(i)) {
             memo[i] = Math.min(Math.min(mincostTicketsDP(i + 1) + costs[0], mincostTicketsDP(i + 7) + costs[1]), mincostTicketsDP(i + 30) + costs[2]);
         } else {
@@ -1002,8 +1000,8 @@ public class VariousAlgorithm {
     }
 
     public double quickMulRecursive(double x, long N) {
-        if (N == 0)
-            return 1.0;
+        if (N == 0){
+            return 1.0;}
         double y = quickMulRecursive(x, N / 2);
         return N % 2 == 0 ? y * y : y * y * x;
     }
@@ -1030,10 +1028,10 @@ public class VariousAlgorithm {
      * @return
      */
     public int sumNums(int n) {
-        if (n == 0)
-            return 0;
-        if (n == 1)
-            return 1;
+        if (n == 0){
+            return 0;}
+        if (n == 1){
+            return 1;}
         return sumNums(n - 1) + n;
 
     }
@@ -1076,10 +1074,10 @@ public class VariousAlgorithm {
      * @return
      */
     public boolean isPalindrome(int x) {
-        if(x == 0)
-            return true;
-        if(x < 0 || (x % 10 == 0))
-            return false;
+        if(x == 0){
+            return true;}
+        if(x < 0 || (x % 10 == 0)){
+            return false;}
         int revertedNumber = 0;
         while (x > revertedNumber){
             revertedNumber = revertedNumber * 10 + x % 10;
@@ -1101,10 +1099,10 @@ public class VariousAlgorithm {
      * @return
      */
     public int[] divingBoard(int shorter, int longer, int k) {
-        if(k == 0)
-            return new int[0];
-        if(shorter == longer)
-            return new int[]{shorter * k};
+        if(k == 0){
+            return new int[0];}
+        if(shorter == longer){
+            return new int[]{shorter * k};}
         int[] lengths = new int[k + 1];
         for(int i = 0;i<=k;i++){
             lengths[i] = shorter * (k - i) + longer * i;
@@ -1170,14 +1168,14 @@ public class VariousAlgorithm {
     boolean valid = true;
     public boolean canFinish(int numCourses, int[][] prerequisites) {
         edges = new ArrayList<List<Integer>>();
-        for(int i = 0; i < numCourses; i++)
-            edges.add(new ArrayList<Integer>());
+        for(int i = 0; i < numCourses; i++){
+            edges.add(new ArrayList<Integer>());}
         visited = new int[numCourses];
-        for(int[] info : prerequisites)
-            edges.get(info[1]).add(info[0]);
+        for(int[] info : prerequisites){
+            edges.get(info[1]).add(info[0]);}
         for(int i = 0; i < numCourses && valid; i++){
-            if(visited[i] == 0)
-                dfsCanFinish(i);
+            if(visited[i] == 0){
+                dfsCanFinish(i);}
         }
         return valid;
     }
@@ -1187,8 +1185,8 @@ public class VariousAlgorithm {
         for(int v:edges.get(u)){
             if(visited[v] == 0){
                 dfsCanFinish(v);
-                if(!valid)
-                    return;
+                if(!valid){
+                    return;}
             }else if(visited[v] == 1){
                 valid = false;
                 return;
@@ -1233,8 +1231,8 @@ public class VariousAlgorithm {
         return calculatePointsBoxs(boxes,dp,0,boxes.length - 1,0);
     }
     private int calculatePointsBoxs(int[] boxes,int [][][] dp,int l,int r,int k){
-        if(l > r) return 0;
-        if(dp[l][r][k] != 0) return dp[l][r][k];
+        if(l > r){ return 0;}
+        if(dp[l][r][k] != 0){ return dp[l][r][k];}
         while (r > l && boxes[r] == boxes[r - 1]){
             r--;
             k++;
@@ -1271,10 +1269,10 @@ public class VariousAlgorithm {
     int[] updateBoardDirY = {1,0,-1,0,1,-1,1,-1};
     public char[][] updateBoard(char[][] board,int[] click){
         int x = click[0], y = click[1];
-        if(board[x][y] == 'M')
-            board[x][y] = 'X';
-        else
-            boardDFS(board,x,y);
+        if(board[x][y] == 'M'){
+            board[x][y] = 'X';}
+        else{
+            boardDFS(board,x,y);}
         return board;
     }
 
@@ -1283,13 +1281,13 @@ public class VariousAlgorithm {
         for(int i = 0; i < 8; i++){
             int tx = x + updateBoardDirX[i];
             int ty = y + updateBoardDirY[i];
-            if(tx < 0 || tx >= board.length || ty < 0 || ty >= board[0].length)
-                continue;
-            if(board[tx][ty] == 'M')
-                cnt++;
+            if(tx < 0 || tx >= board.length || ty < 0 || ty >= board[0].length){
+                continue;}
+            if(board[tx][ty] == 'M'){
+                cnt++;}
         }
-        if(cnt > 0)
-            board[x][y] = (char)(cnt + '0');
+        if(cnt > 0){
+            board[x][y] = (char)(cnt + '0');}
         else{
             board[x][y] = 'B';
             for(int i = 0; i < 8; i++){
@@ -1315,15 +1313,15 @@ public class VariousAlgorithm {
     static final int ADD = 0, MULTIPLY = 1, SUBTRACT = 2, DIVIDE = 3;
     public boolean judgePoint24(int[] nums) {
         List<Double> list = new ArrayList<>();
-        for(int num : nums)
-            list.add((double) num);
+        for(int num : nums){
+            list.add((double) num);}
         return solveJudgePoint24(list);
     }
     public boolean solveJudgePoint24(List<Double> list){
-        if(list.size() == 0)
-            return false;
-        if(list.size() == 1)
-            return Math.abs(list.get(0) - TARGET ) < EPSILON;
+        if(list.size() == 0){
+            return false;}
+        if(list.size() == 1){
+            return Math.abs(list.get(0) - TARGET ) < EPSILON;}
         int size = list.size();
         for(int i = 0; i < size ; i++){
             for (int j = 0; j < size; j++) {
@@ -1426,8 +1424,8 @@ public class VariousAlgorithm {
      * @return
      */
     public boolean PredictTheWinner(int[] nums) {
-        if(nums == null)
-            return false;
+        if(nums == null){
+            return false;}
         int length = nums.length;
         int[][] dp = new int[length][length];
         for(int i = 0; i < length; i ++){
@@ -2648,6 +2646,7 @@ public class VariousAlgorithm {
     public int[] maxSlidingWindow(int[] nums, int k) {
         int n = nums.length;
         PriorityQueue<int[]> pq = new PriorityQueue<int[]>(new Comparator<int[]>() {
+            @Override
             public int compare(int[] pair1, int[] pair2) {
                 return pair1[0] != pair2[0] ? pair2[0] - pair1[0] : pair2[1] - pair1[1];
             }
@@ -2694,5 +2693,364 @@ public class VariousAlgorithm {
             result = tmp;
         }
         return result;
+    }
+
+    /**
+     * 399. 除法求值
+     *
+     * 给你一个变量对数组 equations 和一个实数值数组 values 作为已知条件，其中 equations[i] = [Ai, Bi] 和 values[i] 共同表示等式 Ai / Bi = values[i] 。每个 Ai 或 Bi 是一个表示单个变量的字符串。
+     *
+     * 另有一些以数组 queries 表示的问题，其中 queries[j] = [Cj, Dj] 表示第 j 个问题，请你根据已知条件找出 Cj / Dj = ? 的结果作为答案。
+     *
+     * 返回 所有问题的答案 。如果存在某个无法确定的答案，则用 -1.0 替代这个答案。
+     *
+     * 注意：输入总是有效的。你可以假设除法运算中不会出现除数为 0 的情况，且不存在任何矛盾的结果。
+     *
+     * @param equations
+     * @param values
+     * @param queries
+     * @return
+     */
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        int equationsSize = equations.size();
+        UnionFindSolution unionFind = new UnionFindSolution( 2 * equationsSize);
+        Map<String,Integer> hashMap = new HashMap<>(2 * equationsSize);
+        int id = 0;
+        for(int i = 0; i < equationsSize;i++){
+            List<String> equation = equations.get(i);
+            String var1 = equation.get(0);
+            String var2 = equation.get(1);
+            if(!hashMap.containsKey(var1)){
+                hashMap.put(var1,id);
+                id++;
+            }
+            if(!hashMap.containsKey(var2)){
+                hashMap.put(var2,id);
+                id++;
+            }
+            unionFind.union(hashMap.get(var1),hashMap.get(var2),values[i]);
+        }
+
+        int queriesSize = queries.size();
+        double[] res = new double[queriesSize];
+        for(int i = 0; i < queriesSize;i++){
+            String var1 = queries.get(i).get(0);
+            String var2 = queries.get(i).get(1);
+
+            Integer id1 = hashMap.get(var1);
+            Integer id2 = hashMap.get(var2);
+
+            if(id1 == null || id2 == null){
+                res[i] = -1.0d;
+            }else {
+                res[i] = unionFind.isConnected(id1,id2);
+            }
+        }
+        return res;
+    }
+
+
+    /**
+     * 547. 省份数量
+     *
+     * 有 n 个城市，其中一些彼此相连，另一些没有相连。如果城市 a 与城市 b 直接相连，且城市 b 与城市 c 直接相连，那么城市 a 与城市 c 间接相连。
+     *
+     * 省份 是一组直接或间接相连的城市，组内不含其他没有相连的城市。
+     *
+     * 给你一个 n x n 的矩阵 isConnected ，其中 isConnected[i][j] = 1 表示第 i 个城市和第 j 个城市直接相连，而 isConnected[i][j] = 0 表示二者不直接相连。
+     *
+     * 返回矩阵中 省份 的数量。
+     *
+     * @param isConnected
+     * @return
+     */
+    public int findCircleNum(int[][] isConnected) {
+        int provinces = isConnected.length;
+        boolean[] visited = new boolean[provinces];
+        int circles=0;
+        Queue<Integer> queue = new LinkedList<>();
+        for (int i = 0; i < provinces; i++) {
+            if (!visited[i]) {
+                queue.offer(i);
+                while (!queue.isEmpty()) {
+                    int j = queue.poll();
+                    visited[j] = true;
+                    for (int k = 0; k < provinces; k++) {
+                        if (isConnected[j][k] == 1 && !visited[k]) {
+                            queue.offer(k);
+                        }
+                    }
+                }
+                circles++;
+            }
+        }
+        return circles;
+
+    }
+
+    /**
+     * 123. 买卖股票的最佳时机 III
+     * 给定一个数组，它的第 i 个元素是一支给定的股票在第 i 天的价格。
+     *
+     * 设计一个算法来计算你所能获取的最大利润。你最多可以完成 两笔 交易。
+     *
+     * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
+     *
+     *
+     * @param prices
+     * @return
+     */
+    public int maxProfit_v3(int[] prices) {
+        int n = prices.length;
+        int buy1 = -prices[0],sell1=0;
+        int buy2 = -prices[0],sell2=0;
+        for(int i = 0; i < n; i++){
+            buy1 = Math.max(buy1,-prices[i]);
+            sell1 = Math.max(sell1,buy1 + prices[i]);
+            buy2 = Math.max(buy2,sell1 - prices[i]);
+            sell2 = Math.max(sell2,buy2 + prices[i]);
+
+        }
+        return sell2;
+    }
+
+    /**
+     * 1203. 项目管理
+     *
+     * 公司共有 n 个项目和  m 个小组，每个项目要不无人接手，要不就由 m 个小组之一负责。
+     *
+     * group[i] 表示第 i 个项目所属的小组，如果这个项目目前无人接手，那么 group[i] 就等于 -1。（项目和小组都是从零开始编号的）小组可能存在没有接手任何项目的情况。
+     *
+     * 请你帮忙按要求安排这些项目的进度，并返回排序后的项目列表：
+     *
+     * 同一小组的项目，排序后在列表中彼此相邻。
+     * 项目之间存在一定的依赖关系，我们用一个列表 beforeItems 来表示，其中 beforeItems[i] 表示在进行第 i 个项目前（位于第 i 个项目左侧）应该完成的所有项目。
+     * 如果存在多个解决方案，只需要返回其中任意一个即可。如果没有合适的解决方案，就请返回一个 空列表 。
+     *
+     * @param n
+     * @param m
+     * @param group
+     * @param beforeItems
+     * @return
+     */
+    public int[] sortItems(int n, int m, int[] group, List<List<Integer>> beforeItems) {
+        List<List<Integer>> groupItem = new ArrayList<>();
+        for(int i = 0; i < n + m; i++){
+            groupItem.add(new ArrayList<>());
+        }
+        List<List<Integer>> groupGraph = new ArrayList<>();
+        for(int i = 0; i < n + m; i++){
+            groupGraph.add(new ArrayList<>());
+        }
+        List<List<Integer>> itemGraph = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            itemGraph.add(new ArrayList<>());
+        }
+        int[] groupDegree = new int[n + m];
+        int[] itemDegree = new int[n];
+
+        List<Integer> id = new ArrayList<>();
+        for(int i = 0; i < n + m; i++){
+            id.add(i);
+        }
+        int leftId = m;
+        // 给未分配的 item 分配一个 groupId
+        for (int i = 0; i < n; ++i) {
+            if (group[i] == -1) {
+                group[i] = leftId;
+                leftId += 1;
+            }
+            groupItem.get(group[i]).add(i);
+        }
+        for(int i = 0; i < n; i++){
+            int curGroupId = group[i];
+            for (int item : beforeItems.get(i)) {
+                int beforeGroupId = group[item];
+                if (beforeGroupId == curGroupId) {
+                    itemDegree[i] += 1;
+                    itemGraph.get(item).add(i);
+                } else {
+                    groupDegree[curGroupId] += 1;
+                    groupGraph.get(beforeGroupId).add(curGroupId);
+                }
+            }
+        }
+
+        // 组间拓扑关系排序
+        List<Integer> groupTopSort = topSortSortItem(groupDegree, groupGraph, id);
+        if (groupTopSort.size() == 0) {
+            return new int[0];
+        }
+        int[] ans = new int[n];
+        int index = 0;
+        // 组内拓扑关系排序
+        for (int curGroupId : groupTopSort) {
+            int size = groupItem.get(curGroupId).size();
+            if (size == 0) {
+                continue;
+            }
+            List<Integer> res = topSortSortItem(itemDegree, itemGraph, groupItem.get(curGroupId));
+            if (res.size() == 0) {
+                return new int[0];
+            }
+            for (int item : res) {
+                ans[index++] = item;
+            }
+        }
+        return ans;
+    }
+
+    private List<Integer> topSortSortItem(int[] deg, List<List<Integer>> graph, List<Integer> items) {
+        Queue<Integer> queue = new LinkedList<>();
+        for(int item : items){
+            if(deg[item] == 0){
+                queue.offer(item);
+            }
+        }
+        List<Integer> res = new ArrayList<>();
+        while (!queue.isEmpty()){
+            int u = queue.poll();
+            res.add(u);
+            for(int v : graph.get(u)){
+                if(--deg[v]==0){
+                    queue.offer(v);
+                }
+            }
+        }
+        return res.size() == items.size() ? res : new ArrayList<>();
+    }
+
+    /**
+     * 803. 打砖块
+     *
+     * 有一个 m x n 的二元网格，其中 1 表示砖块，0 表示空白。砖块 稳定（不会掉落）的前提是：
+     *
+     * 一块砖直接连接到网格的顶部，或者
+     * 至少有一块相邻（4 个方向之一）砖块 稳定 不会掉落时
+     * 给你一个数组 hits ，这是需要依次消除砖块的位置。每当消除 hits[i] = (rowi, coli) 位置上的砖块时，对应位置的砖块（若存在）会消失，然后其他的砖块可能因为这一消除操作而掉落。一旦砖块掉落，它会立即从网格中消失（即，它不会落在其他稳定的砖块上）。
+     *
+     * 返回一个数组 result ，其中 result[i] 表示第 i 次消除操作对应掉落的砖块数目。
+     *
+     * 注意，消除可能指向是没有砖块的空白位置，如果发生这种情况，则没有砖块掉落。
+     *
+     * @param grid
+     * @param hits
+     * @return
+     */
+    private int colsHitBricks;
+    private int rowsHitBricks;
+    public static final int[][] DIRECTIONSHitBricks = {{0, 1}, {1, 0}, {-1, 0}, {0, -1}};
+
+    public int[] hitBricks(int[][] grid, int[][] hits) {
+        this.rowsHitBricks = grid.length;
+        this.colsHitBricks = grid[0].length;
+
+        int[][] copy = new int[rowsHitBricks][colsHitBricks];
+        for(int i = 0; i < rowsHitBricks; i++){
+            for(int j = 0; j < colsHitBricks;j++){
+                copy[i][j] = grid[i][j];
+            }
+        }
+
+        for(int[] hit : hits){
+            copy[hit[0]][hit[1]] = 0;
+        }
+
+        int size = rowsHitBricks * colsHitBricks;
+        UnionFindHitBricks unionFindHitBricks = new UnionFindHitBricks(size + 1);
+        for(int j = 0; j < colsHitBricks; j++){
+            if(copy[0][j] == 1){
+                unionFindHitBricks.union(j,size);
+            }
+        }
+        for(int i = 1; i < rowsHitBricks; i++){
+            for(int j = 0; j < colsHitBricks; j++){
+                if(copy[i][j] == 1){
+                    if (copy[i - 1][j] == 1) {
+                        unionFindHitBricks.union(getIndexHitBricks(i - 1, j), getIndexHitBricks(i, j));
+                    }
+                    // 如果左边也是砖块
+                    if (j > 0 && copy[i][j - 1] == 1) {
+                        unionFindHitBricks.union(getIndexHitBricks(i, j - 1), getIndexHitBricks(i, j));
+                    }
+                }
+            }
+        }
+        int hitsLen = hits.length;
+        int[] res = new int[hitsLen];
+        for (int i = hitsLen - 1; i >= 0; i--) {
+            int x = hits[i][0];
+            int y = hits[i][1];
+
+            // 注意：这里不能用 copy，语义上表示，如果原来在 grid 中，这一块是空白，这一步不会产生任何砖块掉落
+            // 逆向补回的时候，与屋顶相连的砖块数量也肯定不会增加
+            if (grid[x][y] == 0) {
+                continue;
+            }
+
+            // 补回之前与屋顶相连的砖块数
+            int origin = unionFindHitBricks.getSize(size);
+
+            // 注意：如果补回的这个结点在第 1 行，要告诉并查集它与屋顶相连（逻辑同第 2 步）
+            if (x == 0) {
+                unionFindHitBricks.union(y, size);
+            }
+
+            // 在 4 个方向上看一下，如果相邻的 4 个方向有砖块，合并它们
+            for (int[] direction : DIRECTIONSHitBricks) {
+                int newX = x + direction[0];
+                int newY = y + direction[1];
+
+                if (isAreaHitBricks(newX, newY) && copy[newX][newY] == 1) {
+                    unionFindHitBricks.union(getIndexHitBricks(x, y), getIndexHitBricks(newX, newY));
+                }
+            }
+
+            // 补回之后与屋顶相连的砖块数
+            int current = unionFindHitBricks.getSize(size);
+            // 减去的 1 是逆向补回的砖块（正向移除的砖块），与 0 比较大小，是因为存在一种情况，添加当前砖块，不会使得与屋顶连接的砖块数更多
+            res[i] = Math.max(0, current - origin - 1);
+
+            // 真正补上这个砖块
+            copy[x][y] = 1;
+        }
+        return res;
+
+    }
+
+    private int getIndexHitBricks(int x,int y){
+        return x * colsHitBricks + y;
+    }
+
+    private boolean isAreaHitBricks(int x,int y){
+        return x >= 0 && x < rowsHitBricks && y >= 0 && y < colsHitBricks;
+    }
+
+    /**
+     * 1232. 缀点成线
+     *
+     * 在一个 XY 坐标系中有一些点，我们用数组 coordinates 来分别记录它们的坐标，其中 coordinates[i] = [x, y] 表示横坐标为 x、纵坐标为 y 的点。
+     *
+     * 请你来判断，这些点是否在该坐标系中属于同一条直线上，是则返回 true，否则请返回 false。
+     *
+     *
+     * @param coordinates
+     * @return
+     */
+    public boolean checkStraightLine(int[][] coordinates) {
+        int deltaX = coordinates[0][0], deltaY = coordinates[0][1];
+        int n = coordinates.length;
+        for(int i = 0; i < n; i++){
+            coordinates[i][0] -= deltaX;
+            coordinates[i][1] -= deltaY;
+        }
+        int A = coordinates[1][1], B = -coordinates[1][0];
+        for(int i = 2; i < n;i++){
+            int x = coordinates[i][0], y = coordinates[i][1];
+            if(A * x + B * y != 0){
+                return false;
+            }
+        }
+        return true;
     }
 }

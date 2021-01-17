@@ -1,8 +1,6 @@
 package algorithm;
 
-import data.PalindromeNode;
-import data.TreeNode;
-import data.Trie;
+import data.*;
 
 import java.util.*;
 
@@ -2225,5 +2223,80 @@ public class StringAlgorithm {
             return -1;
         }
         return result - 1;
+    }
+
+    /**
+     * 830. 较大分组的位置
+     *
+     * 在一个由小写字母构成的字符串 s 中，包含由一些连续的相同字符所构成的分组。
+     *
+     * 例如，在字符串 s = "abbxxxxzyy" 中，就含有 "a", "bb", "xxxx", "z" 和 "yy" 这样的一些分组。
+     *
+     * 分组可以用区间 [start, end] 表示，其中 start 和 end 分别表示该分组的起始和终止位置的下标。上例中的 "xxxx" 分组用区间表示为 [3,6] 。
+     *
+     * 我们称所有包含大于或等于三个连续字符的分组为 较大分组 。
+     *
+     * 找到每一个 较大分组 的区间，按起始位置下标递增顺序排序后，返回结果。
+     *
+     * @param s
+     * @return
+     */
+    public List<List<Integer>> largeGroupPositions(String s) {
+        List<List<Integer>> ret = new ArrayList<>();
+        int n = s.length();
+        int num = 1;
+        for(int i = 0; i < n; i++){
+            if(i == n - 1|| s.charAt(i) != s.charAt(i + 1)){
+                if(num >= 3){
+                    ret.add(Arrays.asList(i-num + 1,i));
+                }
+                num = 1;
+            }else{
+                num++;
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * 1202. 交换字符串中的元素
+     * 给你一个字符串 s，以及该字符串中的一些「索引对」数组 pairs，其中 pairs[i] = [a, b] 表示字符串中的两个索引（编号从 0 开始）。
+     *
+     * 你可以 任意多次交换 在 pairs 中任意一对索引处的字符。
+     *
+     * 返回在经过若干次交换后，s 可以变成的按字典序最小的字符串。
+     *
+     * @param s
+     * @param pairs
+     * @return
+     */
+    public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
+        if(pairs == null || pairs.size() == 0){
+            return s;
+        }
+        int len = s.length();
+        UnionFindStrSwap unionFindStrSwap = new UnionFindStrSwap(len);
+        for(List<Integer> pair : pairs){
+            int index1 = pair.get(0);
+            int index2 = pair.get(1);
+            unionFindStrSwap.union(index1,index2);
+        }
+        char[] charArray = s.toCharArray();
+        Map<Integer,PriorityQueue<Character>> hashMap = new HashMap<>(len);
+        for(int i = 0; i < len;i++){
+            int root = unionFindStrSwap.find(i);
+            if(hashMap.containsKey(root)){
+                hashMap.get(root).offer(charArray[i]);
+            }else{
+                hashMap.computeIfAbsent(root,key -> new PriorityQueue<>()).offer(charArray[i]);
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
+        for(int i = 0; i < len; i++){
+            int root = unionFindStrSwap.find(i);
+            stringBuilder.append(hashMap.get(root).poll());
+        }
+        return stringBuilder.toString();
     }
 }
