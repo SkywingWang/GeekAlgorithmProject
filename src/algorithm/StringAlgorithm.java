@@ -2299,4 +2299,167 @@ public class StringAlgorithm {
         }
         return stringBuilder.toString();
     }
+
+    /**
+     * 839. 相似字符串组
+     *
+     * 如果交换字符串 X 中的两个不同位置的字母，使得它和字符串 Y 相等，那么称 X 和 Y 两个字符串相似。如果这两个字符串本身是相等的，那它们也是相似的。
+     *
+     * 例如，"tars" 和 "rats" 是相似的 (交换 0 与 2 的位置)； "rats" 和 "arts" 也是相似的，但是 "star" 不与 "tars"，"rats"，或 "arts" 相似。
+     *
+     * 总之，它们通过相似性形成了两个关联组：{"tars", "rats", "arts"} 和 {"star"}。注意，"tars" 和 "arts" 是在同一组中，即使它们并不相似。形式上，对每个组而言，要确定一个单词在组中，只需要这个词和该组中至少一个单词相似。
+     *
+     * 给你一个字符串列表 strs。列表中的每个字符串都是 strs 中其它所有字符串的一个字母异位词。请问 strs 中有多少个相似字符串组？
+     *
+     * @param strs
+     * @return
+     */
+    int[] fNG;
+    public int numSimilarGroups(String[] strs) {
+        int n = strs.length;
+        int m = strs[0].length();
+        fNG = new int[n];
+        for(int i = 0; i < n; i++){
+            fNG[i] = i;
+        }
+        for(int i =0; i < n; i++){
+            for(int j = i + 1; j < n; j++){
+                int fi = findNG(i), fj = findNG(j);
+                if(fi == fj){
+                    continue;
+                }
+                if(checkNG(strs[i],strs[j],m)){
+                    fNG[fi] = fj;
+                }
+            }
+        }
+        int ret = 0;
+        for(int i = 0; i < n; i++){
+            if(fNG[i] == i){
+                ret++;
+            }
+        }
+        return ret;
+    }
+    private int findNG(int x){
+        return fNG[x] == x ? x : (fNG[x] = findNG(fNG[x]));
+    }
+    private boolean checkNG(String a,String b,int len){
+        int num = 0;
+        for(int i = 0; i < len; i++){
+            if(a.charAt(i) != b.charAt(i)){
+                num++;
+                if(num > 2){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 424. 替换后的最长重复字符
+     *
+     * 给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。
+     *
+     * 注意：字符串长度 和 k 不会超过 104。
+     *
+     * @param s
+     * @param k
+     * @return
+     */
+    public int characterReplacement(String s, int k) {
+        if(s == null || "".equals(s)){
+            return 0;
+        }
+        int[] num = new int[26];
+        int n = s.length();
+        int maxn = 0;
+        int left = 0,right = 0;
+        while(right < n){
+            num[s.charAt(right) - 'A'] ++;
+            maxn = Math.max(maxn,num[s.charAt(right) - 'A']);
+            if(right - left + 1 - maxn > k){
+                num[s.charAt(left) - 'A']--;
+                left++;
+            }
+            right++;
+        }
+        return right - left;
+    }
+
+    /**
+     * 1208. 尽可能使字符串相等
+     *
+     * 给你两个长度相同的字符串，s 和 t。
+     *
+     * 将 s 中的第 i 个字符变到 t 中的第 i 个字符需要 |s[i] - t[i]| 的开销（开销可能为 0），也就是两个字符的 ASCII 码值的差的绝对值。
+     *
+     * 用于变更字符串的最大预算是 maxCost。在转化字符串时，总开销应当小于等于该预算，这也意味着字符串的转化可能是不完全的。
+     *
+     * 如果你可以将 s 的子字符串转化为它在 t 中对应的子字符串，则返回可以转化的最大长度。
+     *
+     * 如果 s 中没有子字符串可以转化成 t 中对应的子字符串，则返回 0。
+     *
+     * @param s
+     * @param t
+     * @param maxCost
+     * @return
+     */
+    public int equalSubstring(String s, String t, int maxCost) {
+        int n = s.length();
+        int[] accDiff = new int[n + 1];
+        for(int i = 0; i < n; i++){
+            accDiff[i + 1] = accDiff[i] + Math.abs(s.charAt(i) - t.charAt(i));
+        }
+        int maxLength = 0;
+        for(int i = 1 ; i <= n;i++){
+            int start = binarySearchES(accDiff,i,accDiff[i] - maxCost);
+            maxLength = Math.max(maxLength,i - start);
+        }
+        return maxLength;
+    }
+
+    private int binarySearchES(int[] accDiff,int endIndex,int target){
+        int low = 0,high = endIndex;
+        while (low < high){
+            int mid = (high - low)/2 + low;
+            if(accDiff[mid] < target){
+                low = mid + 1;
+            }else{
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+    /**
+     * 1423. 可获得的最大点数
+     *
+     * 几张卡牌 排成一行，每张卡牌都有一个对应的点数。点数由整数数组 cardPoints 给出。
+     *
+     * 每次行动，你可以从行的开头或者末尾拿一张卡牌，最终你必须正好拿 k 张卡牌。
+     *
+     * 你的点数就是你拿到手中的所有卡牌的点数之和。
+     *
+     * 给你一个整数数组 cardPoints 和整数 k，请你返回可以获得的最大点数。
+     *
+     * @param cardPoints
+     * @param k
+     * @return
+     */
+    public int maxScore(int[] cardPoints, int k) {
+        int n = cardPoints.length;
+        int windowSize = n - k;
+        int sum = 0;
+        for(int i = 0; i < windowSize; i++){
+            sum += cardPoints[i];
+        }
+        int minSum = sum;
+        for(int i = windowSize; i < n; i++){
+            sum += cardPoints[i] - cardPoints[i - windowSize];
+            minSum = Math.min(minSum,sum);
+        }
+        return Arrays.stream(cardPoints).sum() - minSum;
+    }
 }

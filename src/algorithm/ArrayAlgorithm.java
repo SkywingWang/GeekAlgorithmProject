@@ -3996,4 +3996,129 @@ public class ArrayAlgorithm {
         }
         return stones.length - unionFindRemoveStone.getCount();
     }
+
+    /***
+     * 674. 最长连续递增序列
+     *
+     * 给定一个未经排序的整数数组，找到最长且 连续递增的子序列，并返回该序列的长度。
+     *
+     * 连续递增的子序列 可以由两个下标 l 和 r（l < r）确定，如果对于每个 l <= i < r，都有 nums[i] < nums[i + 1] ，那么子序列 [nums[l], nums[l + 1], ..., nums[r - 1], nums[r]] 就是连续递增子序列。
+     *
+     * @param nums
+     * @return
+     */
+    public int findLengthOfLCIS(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        int res = 1;
+        int lastIndex = 0;
+        for(int i = 1; i < nums.length;i++){
+            if(nums[i] <= nums[i - 1]){
+                res = Math.max(res,i - lastIndex);
+                lastIndex = i;
+
+            }else if(i == nums.length - 1){
+                res = Math.max(res,i + 1 - lastIndex);
+            }
+        }
+        return res;
+    }
+
+    /**
+     * 724. 寻找数组的中心索引
+     *
+     * 给定一个整数类型的数组 nums，请编写一个能够返回数组 “中心索引” 的方法。
+     *
+     * 我们是这样定义数组 中心索引 的：数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和。
+     *
+     * 如果数组不存在中心索引，那么我们应该返回 -1。如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个。
+     *
+     * @param nums
+     * @return
+     */
+    public int pivotIndex(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return -1;
+        }
+        int left = 0;
+        int right = 0;
+        for(int num : nums){
+            right += num;
+        }
+        for(int i = 0; i < nums.length; i++){
+            if(i > 0){
+                left += nums[i - 1];
+            }
+            right -= nums[i];
+            if(left == right){
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 643. 子数组最大平均数 I
+     *
+     * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public double findMaxAverage(int[] nums, int k) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        int sum = 0;
+        int n = nums.length;
+        for(int i = 0; i < k; i++){
+            sum += nums[i];
+        }
+        int maxSum = sum;
+        for(int i = k; i < n; i++){
+            sum = sum - nums[i - k] + nums[i];
+            maxSum = Math.max(maxSum,sum);
+        }
+        return 1.0 * maxSum / k;
+    }
+
+    /**
+     * 665. 非递减数列
+     *
+     * 给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
+     *
+     * 我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 <= i <= n-2)，总满足 nums[i] <= nums[i + 1]。
+     *
+     *
+     * @param nums
+     * @return
+     */
+    public boolean checkPossibility(int[] nums) {
+        int n = nums.length;
+        for(int i = 0; i < n - 1;i++){
+            int x = nums[i], y = nums[i + 1];
+            if(x > y){
+                nums[i] = y;
+                if(isSortedCP(nums)){
+                    return true;
+                }
+                nums[i] = x;
+                nums[i + 1] = x;
+                return isSortedCP(nums);
+            }
+        }
+        return true;
+    }
+
+    private boolean isSortedCP(int[] nums){
+        int n = nums.length;
+        for(int i = 1; i < n; i++){
+            if(nums[i-1] > nums[i]){
+                return false;
+            }
+        }
+        return true;
+    }
 }

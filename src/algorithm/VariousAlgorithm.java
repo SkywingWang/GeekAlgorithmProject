@@ -1,5 +1,6 @@
 package algorithm;
 
+import com.sun.javafx.geom.Edge;
 import data.*;
 
 import java.util.*;
@@ -3052,5 +3053,595 @@ public class VariousAlgorithm {
             }
         }
         return true;
+    }
+
+    /**
+     * 721. 账户合并
+     *
+     * 给定一个列表 accounts，每个元素 accounts[i] 是一个字符串列表，其中第一个元素 accounts[i][0] 是 名称 (name)，其余元素是 emails 表示该账户的邮箱地址。
+     *
+     * 现在，我们想合并这些账户。如果两个账户都有一些共同的邮箱地址，则两个账户必定属于同一个人。请注意，即使两个账户具有相同的名称，它们也可能属于不同的人，因为人们可能具有相同的名称。一个人最初可以拥有任意数量的账户，但其所有账户都具有相同的名称。
+     *
+     * 合并账户后，按以下格式返回账户：每个账户的第一个元素是名称，其余元素是按顺序排列的邮箱地址。账户本身可以以任意顺序返回。
+     *
+     * @param accounts
+     * @return
+     */
+    public List<List<String>> accountsMerge(List<List<String>> accounts) {
+        Map<String,Integer> emailToIndex = new HashMap<>();
+        Map<String,String> emailToName = new HashMap<>();
+        int emailsCount = 0;
+        for(List<String> account:accounts){
+            String name = account.get(0);
+            int size = account.size();
+            for(int i = 1; i < size; i++){
+                String email = account.get(i);
+                if(!emailToIndex.containsKey(email)){
+                    emailToIndex.put(email,emailsCount++);
+                    emailToName.put(email,name);
+                }
+            }
+        }
+        UnionFindAccountMerge unionFindAccountMerge = new UnionFindAccountMerge(emailsCount);
+        for(List<String> account : accounts){
+            String firstEmail = account.get(1);
+            int firstIndex = emailToIndex.get(firstEmail);
+            int size = account.size();
+            for(int i = 2; i < size; i++){
+                String nextEmail = account.get(i);
+                int nextIndex = emailToIndex.get(nextEmail);
+                unionFindAccountMerge.union(firstIndex,nextIndex);
+            }
+        }
+        Map<Integer,List<String>> indexToEmails = new HashMap<>();
+        for (String email : emailToIndex.keySet()) {
+            int index = unionFindAccountMerge.find(emailToIndex.get(email));
+            List<String> account = indexToEmails.getOrDefault(index, new ArrayList<String>());
+            account.add(email);
+            indexToEmails.put(index, account);
+        }
+        List<List<String>> merged = new ArrayList<List<String>>();
+        for (List<String> emails : indexToEmails.values()) {
+            Collections.sort(emails);
+            String name = emailToName.get(emails.get(0));
+            List<String> account = new ArrayList<String>();
+            account.add(name);
+            account.addAll(emails);
+            merged.add(account);
+        }
+        return merged;
+    }
+
+    /**
+     * 1584. 连接所有点的最小费用
+     *
+     * 给你一个points 数组，表示 2D 平面上的一些点，其中 points[i] = [xi, yi] 。
+     *
+     * 连接点 [xi, yi] 和点 [xj, yj] 的费用为它们之间的 曼哈顿距离 ：|xi - xj| + |yi - yj| ，其中 |val| 表示 val 的绝对值。
+     *
+     * 请你返回将所有点连接的最小总费用。只有任意两点之间 有且仅有 一条简单路径时，才认为所有点都已连接。
+     *
+     * @param points
+     * @return
+     */
+    public int minCostConnectPoints(int[][] points) {
+        int n = points.length;
+        DisjointSetUnionMCCP dsu = new DisjointSetUnionMCCP(n);
+        List<EdgeMCCP> edgeMCCPS = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            for(int j = i + 1; j < n;j++){
+                edgeMCCPS.add(new EdgeMCCP(distMCCP(points,i,j),i,j));
+            }
+        }
+        Collections.sort(edgeMCCPS, new Comparator<EdgeMCCP>() {
+            @Override
+            public int compare(EdgeMCCP o1, EdgeMCCP o2) {
+                return o1.len - o2.len;
+            }
+        });
+        int ret = 0, num = 1;
+        for(EdgeMCCP edgeMCCP:edgeMCCPS){
+            int len = edgeMCCP.len, x = edgeMCCP.x,y=edgeMCCP.y;
+            if(dsu.unionSet(x,y)){
+                ret += len;
+                num++;
+                if(num == n){
+                    break;
+                }
+            }
+        }
+        return ret;
+    }
+    private int distMCCP(int[][] points,int x, int y){
+        return Math.abs(points[x][0] - points[y][0]) + Math.abs(points[x][1] - points[y][1]);
+    }
+    private class DisjointSetUnionMCCP{
+        int[] f;
+        int[] rank;
+        int n;
+
+        public DisjointSetUnionMCCP(int n){
+            this.n = n;
+            this.rank = new int[n];
+            Arrays.fill(this.rank, 1);
+            this.f = new int[n];
+            for(int i = 0; i < n; i++){
+                this.f[i] = i;
+            }
+        }
+
+        public int find(int x){
+            return f[x] == x ? x : (f[x] = find(f[x]));
+        }
+
+        public boolean unionSet(int x,int y){
+            int fx = find(x),fy = find(y);
+            if(fx == fy){
+                return false;
+            }
+            if(rank[fx] < rank[fy]){
+                int temp = fx;
+                fx = fy;
+                fy = temp;
+            }
+            rank[fx] += rank[fy];
+            f[fy] = fx;
+            return true;
+        }
+    }
+    private class EdgeMCCP{
+        int len,x,y;
+        public EdgeMCCP(int len,int x,int y){
+            this.len = len;
+            this.x = x;
+            this.y = y;
+        }
+    }
+
+    /**
+     * 628. 三个数的最大乘积
+     *
+     * 给定一个整型数组，在数组中找出由三个数组成的最大乘积，并输出这个乘积。
+     *
+     * @param nums
+     * @return
+     */
+    public int maximumProduct(int[] nums) {
+        Arrays.sort(nums);
+        int n = nums.length;
+        return Math.max(nums[0] * nums[1] * nums[n-1],nums[n-3] * nums[n - 2] * nums[n-1]);
+    }
+
+    /**
+     * 989. 数组形式的整数加法
+     *
+     * 对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。
+     *
+     * 给定非负整数 X 的数组形式 A，返回整数 X+K 的数组形式。
+     *
+     * @param A
+     * @param K
+     * @return
+     */
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        List<Integer> res = new ArrayList<>();
+        int n = A.length;
+        for(int i = n - 1; i >= 0;i--){
+            int sum = A[i] + K % 10;
+            K /= 10;
+            if(sum >= 10){
+                K++;
+                sum -= 10;
+            }
+            res.add(sum);
+        }
+        for(; K > 0; K /= 10){
+            res.add(K % 10);
+        }
+        Collections.reverse(res);
+        return res;
+    }
+
+    /**
+     * 1319. 连通网络的操作次数
+     *
+     * 用以太网线缆将 n 台计算机连接成一个网络，计算机的编号从 0 到 n-1。线缆用 connections 表示，其中 connections[i] = [a, b] 连接了计算机 a 和 b。
+     *
+     * 网络中的任何一台计算机都可以通过网络直接或者间接访问同一个网络中其他任意一台计算机。
+     *
+     * 给你这个计算机网络的初始布线 connections，你可以拔开任意两台直连计算机之间的线缆，并用它连接一对未直连的计算机。请你计算并返回使所有计算机都连通所需的最少操作次数。如果不可能，则返回 -1 。 
+     *
+     * @param n
+     * @param connections
+     * @return
+     */
+
+    List<Integer>[] edgesMC;
+    boolean[] usedMC;
+    public int makeConnected(int n, int[][] connections) {
+        if(connections.length < n - 1){
+            return -1;
+        }
+        edgesMC = new List[n];
+        for(int i = 0; i < n; i++){
+            edgesMC[i] = new ArrayList<>();
+        }
+        for(int[] conn:connections){
+            edgesMC[conn[0]].add(conn[1]);
+            edgesMC[conn[1]].add(conn[0]);
+        }
+        usedMC = new boolean[n];
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            if(!usedMC[i]){
+                dfsMC(i);
+                ans++;
+            }
+        }
+        return ans - 1;
+    }
+    private void dfsMC(int u){
+        usedMC[u] = true;
+        for(int v : edgesMC[u]){
+            if(!usedMC[v]){
+                dfsMC(v);
+            }
+        }
+    }
+
+    /**
+     * 959. 由斜杠划分区域
+     *
+     * 在由 1 x 1 方格组成的 N x N 网格 grid 中，每个 1 x 1 方块由 /、\ 或空格构成。这些字符会将方块划分为一些共边的区域。
+     *
+     * （请注意，反斜杠字符是转义的，因此 \ 用 "\\" 表示。）。
+     *
+     * 返回区域的数目。
+     *
+     * @param grid
+     * @return
+     */
+    public int regionsBySlashes(String[] grid) {
+        int N = grid.length;
+        int size = 4 * N * N;
+        UnionFindRBS unionFindRBS = new UnionFindRBS(size);
+        for(int i = 0; i < N;i++){
+            char[] row = grid[i].toCharArray();
+            for(int j = 0; j < N; j++){
+                int index = 4 * (i * N + j);
+                char c = row[j];
+                if(c == '/'){
+                    unionFindRBS.union(index,index + 3);
+                    unionFindRBS.union(index + 1,index + 2);
+                }else if(c == '\\'){
+                    unionFindRBS.union(index,index + 1);
+                    unionFindRBS.union(index + 2,index + 3);
+                }else{
+                    unionFindRBS.union(index,index + 1);
+                    unionFindRBS.union(index + 1,index + 2);
+                    unionFindRBS.union(index + 2,index + 3);
+                }
+                // 单元格间合并
+                // 向右合并：1（当前）、3（右一列）
+                if (j + 1 < N) {
+                    unionFindRBS.union(index + 1, 4 * (i * N + j + 1) + 3);
+                }
+                // 向下合并：2（当前）、0（下一行）
+                if (i + 1 < N) {
+                    unionFindRBS.union(index + 2, 4 * ((i + 1) * N + j));
+                }
+            }
+        }
+        return unionFindRBS.getCount();
+    }
+
+    private class UnionFindRBS{
+        private int[] parent;
+
+        private int count;
+
+        public int getCount(){
+            return count;
+        }
+
+        public UnionFindRBS(int n){
+            this.count = n;
+            this.parent = new int[n];
+            for(int i = 0; i < n; i++){
+                parent[i] = i;
+            }
+        }
+
+        public int find(int x){
+            while (x != parent[x]){
+                parent[x] = parent[parent[x]];
+                x = parent[x];
+            }
+            return x;
+        }
+
+        public void union(int x, int y){
+            int rootX = find(x);
+            int rootY = find(y);
+            if(rootX == rootY){
+                return;
+            }
+            parent[rootX] = rootY;
+            count--;
+        }
+    }
+
+    /**
+     * 1128. 等价多米诺骨牌对的数量
+     *
+     * 给你一个由一些多米诺骨牌组成的列表 dominoes。
+     *
+     * 如果其中某一张多米诺骨牌可以通过旋转 0 度或 180 度得到另一张多米诺骨牌，我们就认为这两张牌是等价的。
+     *
+     * 形式上，dominoes[i] = [a, b] 和 dominoes[j] = [c, d] 等价的前提是 a==c 且 b==d，或是 a==d 且 b==c。
+     *
+     * 在 0 <= i < j < dominoes.length 的前提下，找出满足 dominoes[i] 和 dominoes[j] 等价的骨牌对 (i, j) 的数量。
+     *
+     * @param dominoes
+     * @return
+     */
+    public int numEquivDominoPairs(int[][] dominoes) {
+        int[] num = new int[100];
+        int ret = 0;
+        for(int[] domino : dominoes){
+            int val = domino[0] < domino[1] ? domino[0] * 10 + domino[1] :domino[1] * 10 + domino[0];
+            ret += num[val];
+            num[val]++;
+        }
+        return ret;
+    }
+
+    /**
+     * 1631. 最小体力消耗路径
+     *
+     * 你准备参加一场远足活动。给你一个二维 rows x columns 的地图 heights ，其中 heights[row][col] 表示格子 (row, col) 的高度。一开始你在最左上角的格子 (0, 0) ，且你希望去最右下角的格子 (rows-1, columns-1) （注意下标从 0 开始编号）。你每次可以往 上，下，左，右 四个方向之一移动，你想要找到耗费 体力 最小的一条路径。
+     *
+     * 一条路径耗费的 体力值 是路径上相邻格子之间 高度差绝对值 的 最大值 决定的。
+     *
+     * 请你返回从左上角走到右下角的最小 体力消耗值 。
+     *
+     * @param heights
+     * @return
+     */
+    int[][] dirMEP = {{-1,0},{1,0},{0,-1},{0,1}};
+    public int minimumEffortPath(int[][] heights) {
+        int m = heights.length;
+        int n = heights[0].length;
+        int left = 0, right = 999999, ans = 0;
+        while (left <= right){
+            int mid = (left + right) / 2;
+            Queue<int[]> queue = new LinkedList<>();
+            queue.offer(new int[]{0,0});
+            boolean[] seen = new boolean[m * n];
+            seen[0] = true;
+            while (!queue.isEmpty()){
+                int[] cell = queue.poll();
+                int x = cell[0], y = cell[1];
+                for (int i = 0; i < 4; ++i) {
+                    int nx = x + dirMEP[i][0];
+                    int ny = y + dirMEP[i][1];
+                    if (nx >= 0 && nx < m && ny >= 0 && ny < n && !seen[nx * n + ny] && Math.abs(heights[x][y] - heights[nx][ny]) <= mid) {
+                        queue.offer(new int[]{nx, ny});
+                        seen[nx * n + ny] = true;
+                    }
+                }
+            }
+            if(seen[m * n - 1]){
+                ans = mid;
+                right = mid - 1;
+            }else {
+                left = mid + 1;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 778. 水位上升的泳池中游泳
+     *
+     * 在一个 N x N 的坐标方格 grid 中，每一个方格的值 grid[i][j] 表示在位置 (i,j) 的平台高度。
+     *
+     * 现在开始下雨了。当时间为 t 时，此时雨水导致水池中任意位置的水位为 t 。你可以从一个平台游向四周相邻的任意一个平台，但是前提是此时水位必须同时淹没这两个平台。假定你可以瞬间移动无限距离，也就是默认在方格内部游动是不耗时的。当然，在你游泳的时候你必须待在坐标方格里面。
+     *
+     * 你从坐标方格的左上平台 (0，0) 出发。最少耗时多久你才能到达坐标方格的右下平台 (N-1, N-1)？
+     *
+     *  
+     *
+     * @param grid
+     * @return
+     */
+    private int NSW;
+    private static final int [][] DIRECTIONSSW = {{0,1},{0,-1},{1,0},{-1,0}};
+    public int swimInWater(int[][] grid) {
+        this.NSW = grid.length;
+
+        int left = 0;
+        int right = NSW * NSW - 1;
+        while (left < right) {
+            // left + right 不会溢出
+            int mid = (left + right) / 2;
+            boolean[][] visited = new boolean[NSW][NSW];
+            if (grid[0][0] <= mid && dfsSW(grid, 0, 0, visited, mid)) {
+                // mid 可以，尝试 mid 小一点是不是也可以呢？下一轮搜索的区间 [left, mid]
+                right = mid;
+            } else {
+                left = mid + 1;
+            }
+        }
+        return left;
+    }
+
+    private boolean dfsSW(int[][] grid,int x,int y,boolean[][] visited,int threshold){
+        visited[x][y] = true;
+        for(int[] direction:DIRECTIONSSW){
+            int newX = x + direction[0];
+            int newY = y + direction[1];
+            if (inAreaSW(newX, newY) && !visited[newX][newY] && grid[newX][newY] <= threshold) {
+                if (newX == NSW - 1 && newY == NSW - 1) {
+                    return true;
+                }
+
+                if (dfsSW(grid, newX, newY, visited, threshold)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean inAreaSW(int x,int y){
+        return x >= 0 && x < NSW && y >= 0 && y < NSW;
+    }
+
+    /**
+     * 888. 公平的糖果棒交换
+     *
+     * 爱丽丝和鲍勃有不同大小的糖果棒：A[i] 是爱丽丝拥有的第 i 根糖果棒的大小，B[j] 是鲍勃拥有的第 j 根糖果棒的大小。
+     *
+     * 因为他们是朋友，所以他们想交换一根糖果棒，这样交换后，他们都有相同的糖果总量。（一个人拥有的糖果总量是他们拥有的糖果棒大小的总和。）
+     *
+     * 返回一个整数数组 ans，其中 ans[0] 是爱丽丝必须交换的糖果棒的大小，ans[1] 是 Bob 必须交换的糖果棒的大小。
+     *
+     * 如果有多个答案，你可以返回其中任何一个。保证答案存在。
+     *
+     * @param A
+     * @param B
+     * @return
+     */
+    public int[] fairCandySwap(int[] A, int[] B) {
+        int sumA = Arrays.stream(A).sum();
+        int sumB = Arrays.stream(B).sum();
+        int delta = (sumA - sumB) /2;
+        Set<Integer> rec = new HashSet<>();
+        for(int num : A){
+            rec.add(num);
+        }
+        int[] ans = new int[2];
+        for(int y : B){
+            int x = y + delta;
+            if(rec.contains(x)){
+                ans[0] = x;
+                ans[1] = y;
+                break;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 480. 滑动窗口中位数
+     * 中位数是有序序列最中间的那个数。如果序列的长度是偶数，则没有最中间的数；此时中位数是最中间的两个数的平均数。
+     * 例如：[2,3,4]，中位数是 3 [2,3]，中位数是 (2 + 3) / 2 = 2.5 给你一个数组 nums，有一个长度为 k 的窗口从最左端滑动到最右端。
+     * 窗口中有 k 个数，每次窗口向右移动 1 位。你的任务是找出每次窗口移动后得到的新窗口中元素的中位数，并输出由它们组成的数组。
+     *
+     * @param nums
+     * @param k
+     * @return
+     */
+    public double[] medianSlidingWindow(int[] nums, int k) {
+        DualHeapMSW dh = new DualHeapMSW(k);
+        for (int i = 0; i < k; ++i) {
+            dh.insert(nums[i]);
+        }
+        double[] ans = new double[nums.length - k + 1];
+        ans[0] = dh.getMedian();
+        for (int i = k; i < nums.length; ++i) {
+            dh.insert(nums[i]);
+            dh.erase(nums[i - k]);
+            ans[i - k + 1] = dh.getMedian();
+        }
+        return ans;
+    }
+
+    private class DualHeapMSW{
+        private PriorityQueue<Integer> small;
+        private PriorityQueue<Integer> large;
+        private Map<Integer,Integer> delayed;
+        private int k;
+        private int smallSize,largeSize;
+
+        public DualHeapMSW(int k){
+            this.small = new PriorityQueue<>(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o2.compareTo(o1);
+                }
+            });
+            this.large = new PriorityQueue<>(new Comparator<Integer>() {
+                @Override
+                public int compare(Integer o1, Integer o2) {
+                    return o1.compareTo(o2);
+                }
+            });
+            this.delayed = new HashMap<>();
+            this.k = k;
+            this.smallSize = 0;
+            this.largeSize = 0;
+        }
+
+        public double getMedian(){
+            return (k & 1) == 1 ? small.peek() : ((double) small.peek() + large.peek()) / 2;
+        }
+
+        public void insert(int num){
+            if (small.isEmpty() || num <= small.peek()){
+                small.offer(num);
+                smallSize++;
+            }else{
+                large.offer(num);
+                largeSize++;
+            }
+            makeBalance();
+        }
+
+        public void erase(int num) {
+            delayed.put(num, delayed.getOrDefault(num, 0) + 1);
+            if (num <= small.peek()) {
+                --smallSize;
+                if (num == small.peek()) {
+                    prune(small);
+                }
+            } else {
+                --largeSize;
+                if (num == large.peek()) {
+                    prune(large);
+                }
+            }
+            makeBalance();
+        }
+
+        private void makeBalance(){
+            if(smallSize > largeSize + 1){
+                large.offer(small.poll());
+                smallSize--;
+                largeSize++;
+                prune(small);
+            }else if(smallSize < largeSize){
+                small.offer(large.poll());
+                smallSize++;
+                largeSize--;
+                prune(large);
+            }
+        }
+
+        private void prune(PriorityQueue<Integer> heap){
+            while (!heap.isEmpty()){
+                int num = heap.peek();
+                if(delayed.containsKey(num)){
+                    delayed.put(num,delayed.get(num) - 1);
+                    if(delayed.get(num) == 0){
+                        delayed.remove(num);
+                    }
+                    heap.poll();
+                }else {
+                    break;
+                }
+            }
+        }
     }
 }
