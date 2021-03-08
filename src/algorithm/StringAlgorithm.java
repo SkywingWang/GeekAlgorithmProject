@@ -426,8 +426,8 @@ public class StringAlgorithm {
      * @return
      */
     public int findTheLongestSubstring(String s) {
-        if (s == null || s.length() == 0)
-            return 0;
+        if (s == null || s.length() == 0){
+            return 0;}
         int n = s.length();
         int[] pos = new int[1 << 5];
         Arrays.fill(pos, -1);
@@ -2461,5 +2461,142 @@ public class StringAlgorithm {
             minSum = Math.min(minSum,sum);
         }
         return Arrays.stream(cardPoints).sum() - minSum;
+    }
+
+    /**
+     * 395. 至少有 K 个重复字符的最长子串
+     *
+     * 给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
+     *
+     * @param s
+     * @param k
+     * @return
+     */
+    public int longestSubstring(String s, int k) {
+        int n = s.length();
+        return dfsLS(s,0,n-1,k);
+    }
+
+    private int dfsLS(String s,int l,int r,int k){
+        int[] cnt = new int[26];
+        for(int i = l; i <= r; i++){
+            cnt[s.charAt(i) - 'a']++;
+        }
+        char split = 0;
+        for(int i = 0; i < 26; i++){
+            if(cnt[i] > 0 && cnt[i] < k){
+                split = (char)(i + 'a');
+                break;
+            }
+        }
+        if(split == 0){
+            return r - l + 1;
+        }
+        int i = l;
+        int ret = 0;
+        while (i <= r){
+            while (i <= r && s.charAt(i) == split){
+                i++;
+            }
+            if(i > r){
+                break;
+            }
+            int start = i;
+            while (i <= r && s.charAt(i) != split){
+                i++;
+            }
+            int length = dfsLS(s,start,i-1,k);
+            ret = Math.max(ret,length);
+        }
+        return ret;
+    }
+
+
+    /**
+     * 131. 分割回文串
+     *
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
+     *
+     * 回文串 是正着读和反着读都一样的字符串。
+     *
+     * @param s
+     * @return
+     */
+    int[][] fPartition;
+    List<List<String>> retPartition = new ArrayList<>();
+    List<String> ansPartition = new ArrayList<>();
+    int nPartition;
+    public List<List<String>> partition(String s) {
+        nPartition = s.length();
+        fPartition = new int[nPartition][nPartition];
+        dfsPartition(s,0);
+        return retPartition;
+    }
+
+    private void dfsPartition(String s,int i){
+        if(i==nPartition){
+            retPartition.add(new ArrayList<>(ansPartition));
+            return;
+        }
+        for(int j = i; j < nPartition;j++){
+            if(isPalindromePartition(s,i,j) == 1){
+                ansPartition.add(s.substring(i,j+1));
+                dfsPartition(s,j+1);
+                ansPartition.remove(ansPartition.size() - 1);
+            }
+        }
+    }
+    private int isPalindromePartition(String s,int i,int j){
+        if(fPartition[i][j] !=0){
+            return fPartition[i][j];
+        }
+        if(i >= j){
+            fPartition[i][j] = 1;
+        }else if(s.charAt(i) == s.charAt(j)){
+            fPartition[i][j] = isPalindromePartition(s,i + 1,j - 1);
+        }else{
+            fPartition[i][j] = -1;
+        }
+        return fPartition[i][j];
+    }
+
+    /**
+     * 132. 分割回文串 II
+     *
+     * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是回文。
+     *
+     * 返回符合要求的 最少分割次数 。
+     *
+     * @param s
+     * @return
+     */
+    public int minCut(String s) {
+        if(s == null || s.length() == 0){
+            return 0;
+        }
+        int n = s.length();
+        boolean[][] g = new  boolean[n][n];
+        for(int i = 0; i < n; i++){
+            Arrays.fill(g[i],true);
+        }
+        for(int i = n - 1; i>= 0; i--){
+            for(int j = i + 1; j < n;j++){
+                g[i][j] = s.charAt(i) == s.charAt(j) && g[i + 1][j - 1];
+            }
+        }
+        int[] f = new int[n];
+        Arrays.fill(f,Integer.MAX_VALUE);
+        for(int i = 0; i < n; i++){
+            if(g[0][i]){
+                f[i] = 0;
+            }else{
+                for(int j = 0; j < i;j++){
+                    if(g[j + 1][i]){
+                        f[i] = Math.min(f[i],f[j] + 1);
+                    }
+                }
+            }
+        }
+        return f[n - 1];
     }
 }

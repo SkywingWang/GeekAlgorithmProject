@@ -3644,4 +3644,337 @@ public class VariousAlgorithm {
             }
         }
     }
+
+    /**
+     * 567. 字符串的排列
+     *
+     * 给定两个字符串 s1 和 s2，写一个函数来判断 s2 是否包含 s1 的排列。
+     *
+     * 换句话说，第一个字符串的排列之一是第二个字符串的子串。
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    public boolean checkInclusion(String s1, String s2) {
+        char[] pattern = s1.toCharArray();
+        char[] text = s2.toCharArray();
+
+        int pLen = s1.length();
+        int tLen = s2.length();
+
+        int[] pFreq = new int[26];
+        int[] winFreq = new int[26];
+
+        for (int i = 0; i < pLen; i++) {
+            pFreq[pattern[i] - 'a']++;
+        }
+
+        int pCount = 0;
+        for (int i = 0; i < 26; i++) {
+            if (pFreq[i] > 0){
+                pCount++;
+            }
+        }
+
+        int left = 0;
+        int right = 0;
+        // 当滑动窗口中的某个字符个数与 s1 中对应相等的时候才计数
+        int winCount = 0;
+        while (right < tLen){
+            if (pFreq[text[right] - 'a'] > 0 ) {
+                winFreq[text[right] - 'a']++;
+                if (winFreq[text[right] - 'a'] == pFreq[text[right] - 'a']){
+                    winCount++;
+                }
+            }
+            right++;
+
+            while (pCount == winCount){
+                if (right - left == pLen){
+                    return true;
+                }
+                if (pFreq[text[left] - 'a'] > 0 ) {
+                    winFreq[text[left] - 'a']--;
+                    if (winFreq[text[left] - 'a'] < pFreq[text[left] - 'a']){
+                        winCount--;
+                    }
+                }
+                left++;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 119. 杨辉三角 II
+     * @param rowIndex
+     * @return
+     */
+    public List<Integer> getRow(int rowIndex) {
+        List<Integer> row = new ArrayList<>();
+        row.add(1);
+        for(int i = 1; i <= rowIndex;i++){
+            row.add((int) ((long) row.get(i - 1) * (rowIndex - i + 1) / i));
+        }
+        return row;
+    }
+
+
+    /**
+     * 765. 情侣牵手
+     *
+     * N 对情侣坐在连续排列的 2N 个座位上，想要牵到对方的手。 计算最少交换座位的次数，以便每对情侣可以并肩坐在一起。 一次交换可选择任意两人，让他们站起来交换座位。
+     *
+     * 人和座位用 0 到 2N-1 的整数表示，情侣们按顺序编号，第一对是 (0, 1)，第二对是 (2, 3)，以此类推，最后一对是 (2N-2, 2N-1)。
+     *
+     * 这些情侣的初始座位  row[i] 是由最初始坐在第 i 个座位上的人决定的。
+     *
+     * @param row
+     * @return
+     */
+    public int minSwapsCouples(int[] row) {
+        int n = row.length;
+        int tot = n / 2;
+        int[]f = new int[tot];
+        for(int i = 0; i < tot; i++){
+            f[i] = i;
+        }
+        for(int i = 0; i < n; i += 2){
+            int l = row[i] / 2;
+            int r = row[i + 1] / 2;
+            addMSC(f,l,r);
+        }
+
+        Map<Integer, Integer> map = new HashMap<Integer, Integer>();
+        for (int i = 0; i < tot; i++) {
+            int fx = getfMSC(f, i);
+            map.put(fx, map.getOrDefault(fx, 0) + 1);
+        }
+
+        int ret = 0;
+        for (Map.Entry<Integer, Integer> entry : map.entrySet()) {
+            ret += entry.getValue() - 1;
+        }
+        return ret;
+    }
+
+    private int getfMSC(int[] f,int x){
+        if(f[x]==x){
+            return x;
+        }
+        int newf = getfMSC(f,f[x]);
+        f[x] = newf;
+        return newf;
+    }
+
+    private void addMSC(int[] f,int x,int y){
+        int fx = getfMSC(f,x);
+        int fy = getfMSC(f,y);
+        f[fx] = fy;
+    }
+
+    /**
+     * 1052. 爱生气的书店老板
+     *
+     * 今天，书店老板有一家店打算试营业 customers.length 分钟。每分钟都有一些顾客（customers[i]）会进入书店，所有这些顾客都会在那一分钟结束后离开。
+     *
+     * 在某些时候，书店老板会生气。 如果书店老板在第 i 分钟生气，那么 grumpy[i] = 1，否则 grumpy[i] = 0。 当书店老板生气时，那一分钟的顾客就会不满意，不生气则他们是满意的。
+     *
+     * 书店老板知道一个秘密技巧，能抑制自己的情绪，可以让自己连续 X 分钟不生气，但却只能使用一次。
+     *
+     * 请你返回这一天营业下来，最多有多少客户能够感到满意的数量。
+     *
+     * @param customers
+     * @param grumpy
+     * @param X
+     * @return
+     */
+    public int maxSatisfied(int[] customers, int[] grumpy, int X) {
+        int total = 0;
+        int n = customers.length;
+        for(int i = 0; i < n; i++){
+            if(grumpy[i] == 0){
+                total += customers[i];
+            }
+        }
+        int increase = 0;
+        for(int i = 0; i < X; i++){
+            increase += customers[i] * grumpy[i];
+        }
+        int maxIncrease = increase;
+        for(int i = X; i < n;i++){
+            increase = increase - customers[i - X] * grumpy[i - X] + customers[i] * grumpy[i];
+            maxIncrease = Math.max(maxIncrease,increase);
+        }
+        return total + maxIncrease;
+    }
+
+    /**
+     * 832. 翻转图像
+     *
+     * 给定一个二进制矩阵 A，我们想先水平翻转图像，然后反转图像并返回结果。
+     * 水平翻转图片就是将图片的每一行都进行翻转，即逆序。例如，水平翻转 [1, 1, 0] 的结果是 [0, 1, 1]。
+     * 反转图片的意思是图片中的 0 全部被 1 替换， 1 全部被 0 替换。例如，反转 [0, 1, 1] 的结果是 [1, 0, 0]。
+
+     * @param A
+     * @return
+     */
+    public int[][] flipAndInvertImage(int[][] A) {
+        if(A == null){
+            return null;
+        }
+        for(int i = 0;i < A.length;i++){
+            int end = A[i].length - 1,start = 0;
+            while (start < end){
+                int tmp = A[i][start] == 1? 0:1;
+                A[i][start] = A[i][end] == 1? 0:1;
+                A[i][end] = tmp;
+                start ++;
+                end --;
+            }
+            if(start == end){
+                A[i][start] = A[i][start] == 1? 0:1;
+            }
+        }
+        return A;
+    }
+
+    /**
+     * 867. 转置矩阵
+     *
+     * 给你一个二维整数数组 matrix， 返回 matrix 的 转置矩阵 。
+     *
+     * 矩阵的 转置 是指将矩阵的主对角线翻转，交换矩阵的行索引与列索引。
+     *
+     * @param matrix
+     * @return
+     */
+    public int[][] transpose(int[][] matrix) {
+        if(matrix == null){
+            return null;
+        }
+        int[][] transposed = new int[matrix[0].length][matrix.length];
+        for(int i = 0; i < matrix.length;i++){
+            for(int j = 0; j < matrix[i].length;j++){
+                transposed[j][i] = matrix[i][j];
+            }
+        }
+        return transposed;
+    }
+
+    /**
+     * 1178. 猜字谜
+     * 外国友人仿照中国字谜设计了一个英文版猜字谜小游戏，请你来猜猜看吧。
+     * 字谜的迷面 puzzle 按字符串形式给出，如果一个单词 word 符合下面两个条件，那么它就可以算作谜底：
+     * 单词 word 中包含谜面 puzzle 的第一个字母。
+     * 单词 word 中的每一个字母都可以在谜面 puzzle 中找到。
+     * 例如，如果字谜的谜面是 "abcdefg"，那么可以作为谜底的单词有 "faced", "cabbage", 和 "baggage"；而 "beefed"（不含字母 "a"）以及 "based"（其中的 "s" 没有出现在谜面中）。
+     * 返回一个答案数组 answer，数组中的每个元素 answer[i] 是在给出的单词列表 words 中可以作为字谜迷面 puzzles[i] 所对应的谜底的单词数目。
+     *
+     * @param words
+     * @param puzzles
+     * @return
+     */
+    public List<Integer> findNumOfValidWords(String[] words, String[] puzzles) {
+        Map<Integer,Integer> frequency = new HashMap<>();
+        for(String word:words){
+            int mask = 0;
+            for(int i = 0; i < word.length(); i++){
+                char ch = word.charAt(i);
+                mask |= (1 << (ch - 'a'));
+            }
+            if(Integer.bitCount(mask) <= 7){
+                frequency.put(mask,frequency.getOrDefault(mask,0) + 1);
+            }
+        }
+        List<Integer> ans = new ArrayList<>();
+        for(String puzzle:puzzles){
+            int total = 0;
+            int mask = 0;
+            for(int i = 1; i < 7; i++){
+                mask |= (1 << (puzzle.charAt(i) - 'a'));
+            }
+            int subset = mask;
+            do{
+                int s = subset | (1 << (puzzle.charAt(0) - 'a'));
+                if(frequency.containsKey(s)){
+                    total += frequency.get(s);
+                }
+                subset = (subset - 1) & mask;
+            }while (subset != mask);
+            ans.add(total);
+        }
+        return ans;
+    }
+
+    /**
+     * 354. 俄罗斯套娃信封问题
+     *
+     * 给你一个二维整数数组 envelopes ，其中 envelopes[i] = [wi, hi] ，表示第 i 个信封的宽度和高度。
+     *
+     * 当另一个信封的宽度和高度都比这个信封大的时候，这个信封就可以放进另一个信封里，如同俄罗斯套娃一样。
+     *
+     * 请计算 最多能有多少个 信封能组成一组“俄罗斯套娃”信封（即可以把一个信封放到另一个信封里面）。
+     *
+     * 注意：不允许旋转信封。
+     *
+     * @param envelopes
+     * @return
+     */
+    public int maxEnvelopes(int[][] envelopes) {
+        if(envelopes == null || envelopes.length == 0){
+            return 0;
+        }
+        int n = envelopes.length;
+        Arrays.sort(envelopes, new Comparator<int[]>() {
+            @Override
+            public int compare(int[] o1, int[] o2) {
+                if(o1[0] != o2[0]){
+                    return o1[0] - o2[0];
+                }else{
+                    return o2[1] - o1[1];
+                }
+            }
+        });
+        int[] f = new int[n];
+        Arrays.fill(f,1);
+        int ans = 1;
+        for(int i = 1; i < n;i++){
+            for(int j = 0;j<i;j++){
+                if(envelopes[j][1] < envelopes[i][1]){
+                    f[i] = Math.max(f[i],f[j] + 1);
+                }
+            }
+            ans = Math.max(ans,f[i]);
+        }
+        return ans;
+    }
+
+
+    /**
+     * 503. 下一个更大元素 II
+     *
+     * 给定一个循环数组（最后一个元素的下一个元素是数组的第一个元素），输出每个元素的下一个更大元素。
+     * 数字 x 的下一个更大的元素是按数组遍历顺序，这个数字之后的第一个比它更大的数，这意味着你应该循环地搜索它的下一个更大的数。如果不存在，则输出 -1。
+     *
+     * @param nums
+     * @return
+     */
+    public int[] nextGreaterElements(int[] nums) {
+        if(nums == null){
+            return null;
+        }
+        int n = nums.length;
+        int[] ret = new int[n];
+        Arrays.fill(ret,-1);
+        Deque<Integer> stack = new LinkedList<>();
+        for(int i = 0; i < n * 2 - 1; i++){
+            while (!stack.isEmpty() && nums[stack.peek()] < nums[i % n]){
+                ret[stack.pop()] = nums[i % n];
+            }
+            stack.push(i % n);
+        }
+        return ret;
+    }
 }

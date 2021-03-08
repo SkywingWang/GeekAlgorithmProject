@@ -4121,4 +4121,426 @@ public class ArrayAlgorithm {
         }
         return true;
     }
+
+    /**
+     * 978. 最长湍流子数组
+     *
+     * 当 A 的子数组 A[i], A[i+1], ..., A[j] 满足下列条件时，我们称其为湍流子数组：
+     *
+     * 若 i <= k < j，当 k 为奇数时， A[k] > A[k+1]，且当 k 为偶数时，A[k] < A[k+1]；
+     * 或 若 i <= k < j，当 k 为偶数时，A[k] > A[k+1] ，且当 k 为奇数时， A[k] < A[k+1]。
+     * 也就是说，如果比较符号在子数组中的每个相邻元素对之间翻转，则该子数组是湍流子数组。
+     *
+     * 返回 A 的最大湍流子数组的长度。
+     *
+     * @param arr
+     * @return
+     */
+    public int maxTurbulenceSize(int[] arr) {
+        int n = arr.length;
+        int ret = 1;
+        int left = 0,right = 0;
+        while(right < n - 1){
+            if(left == right){
+                if(arr[left] == arr[left + 1]){
+                    left++;
+                }
+                right++;
+            }else{
+                if (arr[right - 1] < arr[right] && arr[right] > arr[right + 1]) {
+                    right++;
+                } else if (arr[right - 1] > arr[right] && arr[right] < arr[right + 1]) {
+                    right++;
+                } else {
+                    left = right;
+                }
+            }
+            ret = Math.max(ret, right - left + 1);
+        }
+        return ret;
+    }
+
+    /**
+     * 992. K 个不同整数的子数组
+     *
+     * 给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
+     *
+     * （例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
+     *
+     * 返回 A 中好子数组的数目。
+     *
+     * @param A
+     * @param K
+     * @return
+     */
+    public int subarraysWithKDistinct(int[] A, int K) {
+        return atMostKDistinct(A,K) - atMostKDistinct(A,K - 1);
+    }
+
+    private int atMostKDistinct(int[] A,int k){
+        int len = A.length;
+        int[] freq = new int[len + 1];
+        int left = 0,right = 0;
+        int count = 0,res = 0;
+        while(right < len){
+            if(freq[A[right]] == 0){
+                count++;
+            }
+            freq[A[right]]++;
+            right++;
+            while (count > k){
+                freq[A[left]]--;
+                if(freq[A[left]] == 0){
+                    count--;
+                }
+                left++;
+            }
+            res += right - left;
+
+        }
+        return res;
+    }
+
+    /**
+     * 448. 找到所有数组中消失的数字
+     *
+     * 给定一个范围在  1 ≤ a[i] ≤ n ( n = 数组大小 ) 的 整型数组，数组中的元素一些出现了两次，
+     * 另一些只出现一次。
+     * 找到所有在 [1, n] 范围之间没有出现在数组中的数字。
+     * 您能在不使用额外空间且时间复杂度为O(n)的情况下完成这个任务吗? 你可以假定返回的数组不算在额外空间内。
+     *
+     * @param nums
+     * @return
+     */
+    public List<Integer> findDisappearedNumbers(int[] nums) {
+        if(nums == null){
+            return null;
+        }
+        int n = nums.length;
+        for(int num : nums){
+            int x = (num - 1) % n;
+            nums[x] += n;
+        }
+        List<Integer> ret = new ArrayList<>();
+        for(int i = 0; i < n; i++){
+            if(nums[i] <= n){
+                ret.add(i + 1);
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * 485. 最大连续1的个数
+     *
+     *
+     * 给定一个二进制数组， 计算其中最大连续1的个数。
+     *
+     * @param nums
+     * @return
+     */
+    public int findMaxConsecutiveOnes(int[] nums) {
+        int maxCount = 0, count = 0;
+        int n = nums.length;
+        for(int i = 0; i < n;i++){
+            if (nums[i] == 1) {
+                count++;
+            } else {
+                maxCount = Math.max(maxCount, count);
+                count = 0;
+            }
+
+        }
+        maxCount = Math.max(maxCount,count);
+        return maxCount;
+    }
+
+    /**
+     * 561. 数组拆分 I
+     *
+     * 给定长度为 2n 的整数数组 nums ，你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), ..., (an, bn) ，使得从 1 到 n 的 min(ai, bi) 总和最大。
+     *
+     * 返回该 最大总和 。
+     *
+     *
+     * @param nums
+     * @return
+     */
+    public int arrayPairSum(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        Arrays.sort(nums);
+        int result = 0;
+        for(int i = 0; i < nums.length; i+=2){
+            result += nums[i];
+        }
+        return result;
+    }
+
+    /**
+     * 566. 重塑矩阵
+     *
+     * 在MATLAB中，有一个非常有用的函数 reshape，它可以将一个矩阵重塑为另一个大小不同的新矩阵，但保留其原始数据。
+     *
+     * 给出一个由二维数组表示的矩阵，以及两个正整数r和c，分别表示想要的重构的矩阵的行数和列数。
+     *
+     * 重构后的矩阵需要将原始矩阵的所有元素以相同的行遍历顺序填充。
+     *
+     * 如果具有给定参数的reshape操作是可行且合理的，则输出新的重塑矩阵；否则，输出原始矩阵。
+     *
+     * @param nums
+     * @param r
+     * @param c
+     * @return
+     */
+    public int[][] matrixReshape(int[][] nums, int r, int c) {
+        if(nums == null){
+            return nums;
+        }
+        int m = nums.length;
+        int n = nums[0].length;
+        if(m * n != r * c){
+            return nums;
+        }
+        int[][] ans = new int[r][c];
+        for(int x = 0; x < m * n; x++){
+            ans[x / c][x % c] = nums[x / n][x % n];
+        }
+        return ans;
+    }
+
+    /**
+     * 995. K 连续位的最小翻转次数
+     *
+     * 在仅包含 0 和 1 的数组 A 中，一次 K 位翻转包括选择一个长度为 K 的（连续）子数组，同时将子数组中的每个 0 更改为 1，而每个 1 更改为 0。
+     *
+     * 返回所需的 K 位翻转的最小次数，以便数组没有值为 0 的元素。如果不可能，返回 -1。
+     *
+     * @param A
+     * @param K
+     * @return
+     */
+    public int minKBitFlips(int[] A, int K) {
+        int n = A.length;
+        int ans = 0, revCnt = 0;
+        for(int i = 0; i < n; i++){
+            if(i >= K && A[i - K] > 1){
+                revCnt ^= 1;
+                A[i - K] -= 2;
+            }
+            if(A[i] == revCnt){
+                if(i + K > n){
+                    return -1;
+                }
+                ++ans;
+                revCnt ^= 1;
+                A[i] += 2;
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 1004. 最大连续1的个数 III
+     *
+     * 给定一个由若干 0 和 1 组成的数组 A，我们最多可以将 K 个值从 0 变成 1 。
+     *
+     * 返回仅包含 1 的最长（连续）子数组的长度。
+     *
+     * @param A
+     * @param K
+     * @return
+     */
+    public int longestOnes(int[] A, int K) {
+        int n = A.length;
+        int[] P = new int[n + 1];
+        for(int i = 1; i <= n;i++){
+            P[i]=P[i - 1] + (1 - A[i - 1]);
+        }
+        int ans = 0;
+        for(int right = 0; right < n; right++){
+            int left = binarySearchLO(P,P[right + 1] - K);
+            ans = Math.max(ans,right - left + 1);
+        }
+        return ans;
+    }
+
+    private int binarySearchLO(int[] P,int target){
+        int low = 0,high = P.length - 1;
+        while (low < high){
+            int mid = (high - low) / 2 + low;
+            if(P[mid] < target){
+                low = mid + 1;
+            }else{
+                high = mid;
+            }
+        }
+        return low;
+    }
+
+    /**
+     * 697. 数组的度
+     *
+     * 给定一个非空且只包含非负数的整数数组 nums，数组的度的定义是指数组里任一元素出现频数的最大值。
+     *
+     * 你的任务是在 nums 中找到与 nums 拥有相同大小的度的最短连续子数组，返回其长度。
+     *
+     * @param nums
+     * @return
+     */
+    public int findShortestSubArray(int[] nums) {
+        if(nums == null){
+            return 0;
+        }
+        Map<Integer,int[]> map = new HashMap<>();
+        int n = nums.length;
+        for(int i = 0; i < n; i++){
+            if(map.containsKey(nums[i])){
+                map.get(nums[i])[0]++;
+                map.get(nums[i])[2] = i;
+            }else{
+                map.put(nums[i],new int[]{1,i,i});
+            }
+        }
+        int maxNum = 0,minLen = 0;
+        for(Map.Entry<Integer,int[]> entry : map.entrySet()){
+            int[] arr = entry.getValue();
+            if(maxNum < arr[0]){
+                maxNum = arr[0];
+                minLen = arr[2] - arr[1] + 1;
+            }else if(maxNum == arr[0]){
+                if(minLen > arr[2] - arr[1] + 1){
+                    minLen = arr[2] - arr[1] + 1;
+                }
+            }
+        }
+        return minLen;
+    }
+
+    /**
+     * 1438. 绝对差不超过限制的最长连续子数组
+     *
+     * 给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
+     *
+     * 如果不存在满足条件的子数组，则返回 0 。
+     *
+     * @param nums
+     * @param limit
+     * @return
+     */
+    public int longestSubarray(int[] nums, int limit) {
+        Deque<Integer> queMax = new LinkedList<>();
+        Deque<Integer> queMin = new LinkedList<>();
+        int n = nums.length;
+        int left = 0, right = 0;
+        int ret = 0;
+        while(right < n){
+            while (!queMax.isEmpty() && queMax.peekLast() < nums[right]){
+                queMax.pollLast();
+            }
+            while (!queMin.isEmpty() && queMin.peekLast() > nums[right]){
+                queMin.pollLast();
+            }
+            queMax.offerLast(nums[right]);
+            queMin.offerLast(nums[right]);
+            while (!queMax.isEmpty() && !queMin.isEmpty() && queMax.peekFirst() - queMin.peekFirst() > limit){
+                if(nums[left] == queMin.peekFirst()){
+                    queMin.pollFirst();
+                }
+                if(nums[left] == queMax.peekFirst()){
+                    queMax.pollFirst();
+                }
+                left++;
+            }
+            ret = Math.max(ret,right - left + 1);
+            right++;
+        }
+        return ret;
+    }
+
+    /**
+     * 766. 托普利茨矩阵
+     *
+     * 给你一个 m x n 的矩阵 matrix 。如果这个矩阵是托普利茨矩阵，返回 true ；否则，返回 false 。
+     *
+     * 如果矩阵上每一条由左上到右下的对角线上的元素都相同，那么这个矩阵是 托普利茨矩阵 。
+     *
+     *
+     * @param matrix
+     * @return
+     */
+    public boolean isToeplitzMatrix(int[][] matrix) {
+        if(matrix == null){
+            return false;
+        }
+        int m = matrix.length,n = matrix[0].length;
+        for(int i = 1; i < m; i++){
+            for(int j = 1; j < n; j++){
+                if(matrix[i][j] != matrix[i-1][j-1]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 896. 单调数列
+     *
+     * 如果数组是单调递增或单调递减的，那么它是单调的。
+     *
+     * 如果对于所有 i <= j，A[i] <= A[j]，那么数组 A 是单调递增的。 如果对于所有 i <= j，A[i]> = A[j]，那么数组 A 是单调递减的。
+     *
+     * 当给定的数组 A 是单调数组时返回 true，否则返回 false。
+     *
+     * @param A
+     * @return
+     */
+    public boolean isMonotonic(int[] A) {
+        if(A == null){
+            return false;
+        }
+        if(A.length < 2){
+            return true;
+        }
+        boolean result = true;
+        int upOrDown = 0;
+        for(int i = 1; i < A.length;i++){
+            if(upOrDown == 0){
+                if(A[i] > A[i-1]){
+                    upOrDown = 1;
+                }else if(A[i] < A[i-1]){
+                    upOrDown = 2;
+                }
+            }else{
+                if(upOrDown == 1 && A[i] < A[i-1]){
+                    return false;
+                }else if(upOrDown == 2 && A[i] > A[i-1]){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 338. 比特位计数
+     *
+     * 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。
+     *
+     * @param num
+     * @return
+     */
+    public int[] countBits(int num) {
+        int[] bits = new int[num + 1];
+        int hightBit = 0;
+        for(int i = 1; i <= num;i++){
+            if((i & (i - 1)) == 0){
+                hightBit = i;
+            }
+            bits[i] = bits[i - hightBit] + 1;
+        }
+        return bits;
+    }
 }
