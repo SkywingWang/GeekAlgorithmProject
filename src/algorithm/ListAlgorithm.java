@@ -943,5 +943,134 @@ public class ListAlgorithm {
         return smallHead.next;
     }
 
+    /**
+     * 92. 反转链表 II
+     *
+     * 给你单链表的头节点 head 和两个整数 left 和 right ，其中 left <= right 。请你反转从位置 left 到位置 right 的链表节点，返回 反转后的链表 。
+     *
+     *
+     * @param head
+     * @param left
+     * @param right
+     * @return
+     */
+    public ListNode reverseBetween(ListNode head, int left, int right) {
+        if(head == null){
+            return null;
+        }
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+        ListNode pre = dummyNode;
+        for(int i = 0; i < left - 1; i++){
+            pre = pre.next;
+        }
 
+        ListNode rightNode = pre;
+        for(int i = 0; i < right - left + 1;i++){
+            rightNode = rightNode.next;
+        }
+        ListNode leftNode = pre.next;
+        ListNode curr = rightNode.next;
+        pre.next = null;
+        rightNode.next = null;
+        reverseLinkedListRB(leftNode);
+
+        pre.next = rightNode;
+        leftNode.next = curr;
+        return dummyNode.next;
+    }
+
+    private void reverseLinkedListRB(ListNode head){
+        ListNode pre = null;
+        ListNode cur = head;
+        while (cur != null){
+            ListNode next = cur.next;
+            cur.next = pre;
+            pre = cur;
+            cur = next;
+        }
+    }
+
+    public ListNode reverseBetween_v2(ListNode head, int left, int right){
+        if(head == null){
+            return null;
+        }
+        ListNode dummyNode = new ListNode(-1);
+        dummyNode.next = head;
+        ListNode pre = dummyNode;
+        for(int i = 0; i < left - 1; i++){
+            pre = pre.next;
+        }
+        ListNode cur = pre.next;
+        ListNode next;
+        for(int i = 0; i < right - left; i++){
+            next = cur.next;
+            cur.next = next.next;
+            next.next = pre.next;
+            pre.next = next;
+        }
+        return dummyNode.next;
+    }
+
+    /**
+     * 82. 删除排序链表中的重复元素 II
+     *
+     * 存在一个按升序排列的链表，给你这个链表的头节点 head ，请你删除链表中所有存在数字重复情况的节点，只保留原始链表中 没有重复出现 的数字。
+     *
+     * 返回同样按升序排列的结果链表。
+     *
+     * @param head
+     * @return
+     */
+    public ListNode deleteDuplicates_V2(ListNode head) {
+        if (head == null) {
+            return head;
+        }
+        ListNode index = head;
+        ListNode cur = index;
+        while (cur.next != null && cur.next.next != null) {
+            if (cur.next.val == cur.next.next.val) {
+                int x = cur.next.val;
+                while (cur.next != null && cur.next.val == x) {
+                    cur.next = cur.next.next;
+                }
+            } else {
+                cur = cur.next;
+            }
+        }
+
+        return index;
+    }
+
+    /**
+     * 61. 旋转链表
+     *
+     * 给你一个链表的头节点 head ，旋转链表，将链表每个节点向右移动 k 个位置。
+     *
+     * @param head
+     * @param k
+     * @return
+     */
+    public ListNode rotateRight(ListNode head, int k) {
+        if(head == null || k == 0 || head.next == null){
+            return head;
+        }
+        int n = 1;
+        ListNode iter = head;
+        while (iter.next != null){
+            iter = iter.next;
+            n++;
+        }
+        int add = n - k % n;
+        if(add == n){
+            return head;
+        }
+        iter.next = head;
+        while (add-- > 0){
+            iter = iter.next;
+        }
+        ListNode ret = iter.next;
+        iter.next = null;
+        return ret;
+    }
 }
