@@ -4266,4 +4266,255 @@ public class VariousAlgorithm {
         }
         return false;
     }
+
+    /**
+     * 1006. 笨阶乘
+     *
+     * 通常，正整数 n 的阶乘是所有小于或等于 n 的正整数的乘积。例如，factorial(10) = 10 * 9 * 8 * 7 * 6 * 5 * 4 * 3 * 2 * 1。
+     *
+     * 相反，我们设计了一个笨阶乘 clumsy：在整数的递减序列中，我们以一个固定顺序的操作符序列来依次替换原有的乘法操作符：乘法(*)，除法(/)，加法(+)和减法(-)。
+     *
+     * 例如，clumsy(10) = 10 * 9 / 8 + 7 - 6 * 5 / 4 + 3 - 2 * 1。然而，这些运算仍然使用通常的算术运算顺序：我们在任何加、减步骤之前执行所有的乘法和除法步骤，并且按从左到右处理乘法和除法步骤。
+     *
+     * 另外，我们使用的除法是地板除法（floor division），所以 10 * 9 / 8 等于 11。这保证结果是一个整数。
+     *
+     * 实现上面定义的笨函数：给定一个整数 N，它返回 N 的笨阶乘。
+     *
+     * @param N
+     * @return
+     */
+    public int clumsy(int N) {
+        Deque<Integer> stack = new LinkedList<>();
+        stack.push(N);
+        N--;
+        int index = 0;
+        while (N > 0){
+            if(index % 4 == 0){
+                stack.push(stack.pop() * N);
+            }else if(index % 4 == 1){
+                stack.push(stack.pop() / N);
+            }else if(index % 4 == 2){
+                stack.push(N);
+            }else{
+                stack.push(-N);
+            }
+            index++;
+            N--;
+        }
+        int sum = 0;
+        while (!stack.isEmpty()){
+            sum += stack.pop();
+        }
+        return sum;
+    }
+
+    /**
+     * 面试题 17.21. 直方图的水量
+     *
+     * 给定一个直方图(也称柱状图)，假设有人从上面源源不断地倒水，最后直方图能存多少水量?直方图的宽度为 1。
+     *
+     * @param height
+     * @return
+     */
+    public int trap(int[] height) {
+        int n = height.length;
+        if(n == 0){
+            return 0;
+        }
+        int[] leftMax = new int[n];
+        leftMax[0] = height[0];
+        for(int i = 1; i < n; i++){
+            leftMax[i] = Math.max(leftMax[i - 1],height[i]);
+        }
+        int[] rightMax = new int[n];
+        rightMax[n - 1] = height[n-1];
+        for(int i = n - 2; i>= 0;i--){
+            rightMax[i] = Math.max(rightMax[i + 1],height[i]);
+        }
+        int ans = 0;
+        for(int i = 0; i < n; i++){
+            ans += Math.min(leftMax[i],rightMax[i]) - height[i];
+        }
+        return ans;
+    }
+
+    /**
+     * 781. 森林中的兔子
+     *
+     * 森林中，每个兔子都有颜色。其中一些兔子（可能是全部）告诉你还有多少其他的兔子和自己有相同的颜色。我们将这些回答放在 answers 数组里。
+     * 返回森林中兔子的最少数量。
+     *
+     * @param answers
+     * @return
+     */
+    public int numRabbits(int[] answers) {
+        if(answers == null){
+            return 0;
+        }
+        Map<Integer, Integer> count = new HashMap<Integer, Integer>();
+        for (int y : answers) {
+            count.put(y, count.getOrDefault(y, 0) + 1);
+        }
+        int ans = 0;
+        for (Map.Entry<Integer, Integer> entry : count.entrySet()) {
+            int y = entry.getKey(), x = entry.getValue();
+            ans += (x + y) / (y + 1) * (y + 1);
+        }
+        return ans;
+    }
+
+
+    /**
+     * 263. 丑数
+     *
+     * 给你一个整数 n ，请你判断 n 是否为 丑数 。如果是，返回 true ；否则，返回 false 。
+     *
+     * 丑数 就是只包含质因数 2、3 和/或 5 的正整数。
+     *
+     * @param n
+     * @return
+     */
+    public boolean isUgly(int n) {
+        if(n <= 0){
+            return false;
+        }
+        int[] factory = {2,3,5};
+        for(int fact : factory){
+            while (n % fact == 0){
+                n /= fact;
+            }
+        }
+        return n == 1;
+    }
+
+    /**
+     * 264. 丑数 II
+     *
+     *
+     给你一个整数 n ，请你找出并返回第 n 个 丑数 。
+
+     丑数 就是只包含质因数 2、3 和/或 5 的正整数。
+     *
+     * @param n
+     * @return
+     */
+    public int nthUglyNumber(int n) {
+        int[] factors = {2,3,5};
+        Set<Long> seen = new HashSet<>();
+        PriorityQueue<Long> heap = new PriorityQueue<>();
+        seen.add(1L);
+        heap.offer(1L);
+        int ugly = 0;
+        for(int i = 0; i < n; i++){
+            long curr = heap.poll();
+            ugly = (int)curr;
+            for(int factor: factors){
+                long next = curr * factor;
+                if(seen.add(next)){
+                    heap.offer(next);
+                }
+            }
+
+        }
+        return ugly;
+    }
+
+    /**
+     * 213. 打家劫舍 II
+     *
+     * 你是一个专业的小偷，计划偷窃沿街的房屋，每间房内都藏有一定的现金。这个地方所有的房屋都 围成一圈 ，这意味着第一个房屋和最后一个房屋是紧挨着的。同时，相邻的房屋装有相互连通的防盗系统，如果两间相邻的房屋在同一晚上被小偷闯入，系统会自动报警 。
+     *
+     * 给定一个代表每个房屋存放金额的非负整数数组，计算你 在不触动警报装置的情况下 ，能够偷窃到的最高金额。
+     *
+     * @param nums
+     * @return
+     */
+    public int rob(int[] nums) {
+        int length = nums.length;
+        if(length == 1){
+            return nums[0];
+        }else if(length == 2){
+            return Math.max(nums[0],nums[1]);
+        }
+        return Math.max(robRangeR(nums,0,length - 2),robRangeR(nums,1,length - 1));
+    }
+
+    private int robRangeR(int[] nums,int start,int end){
+        int first = nums[start],second = Math.max(nums[start],nums[start + 1]);
+        for(int i = start + 2; i <= end; i++){
+            int temp = second;
+            second = Math.max(first + nums[i],second);
+            first = temp;
+        }
+        return second;
+    }
+
+    /**
+     * 363. 矩形区域不超过 K 的最大数值和
+     *
+     * 给你一个 m x n 的矩阵 matrix 和一个整数 k ，找出并返回矩阵内部矩形区域的不超过 k 的最大数值和。
+     *
+     * 题目数据保证总会存在一个数值和不超过 k 的矩形区域。
+     *
+     * @param matrix
+     * @param k
+     * @return
+     */
+    public int maxSumSubmatrix(int[][] matrix, int k) {
+        int ans = Integer.MIN_VALUE;
+        int m = matrix.length,n = matrix[0].length;
+        for(int i = 0; i < m; i++){
+            int[] sum = new int[n];
+            for(int j = i; j < m;j++){
+                for(int c = 0; c < n;c++){
+                    sum[c] += matrix[j][c];
+                }
+                TreeSet<Integer> sumSet = new TreeSet<>();
+                sumSet.add(0);
+                int s = 0;
+                for(int v : sum){
+                    s += v;
+                    Integer ceil = sumSet.ceiling(s - k);
+                    if(ceil != null){
+                        ans = Math.max(ans,s-ceil);
+                    }
+                    sumSet.add(s);
+                }
+            }
+        }
+        return ans;
+    }
+
+    /**
+     * 1011. 在 D 天内送达包裹的能力
+     *
+     * 传送带上的包裹必须在 D 天内从一个港口运送到另一个港口。
+     *
+     * 传送带上的第 i 个包裹的重量为 weights[i]。每一天，我们都会按给出重量的顺序往传送带上装载包裹。我们装载的重量不会超过船的最大运载重量。
+     *
+     * 返回能在 D 天内将传送带上的所有包裹送达的船的最低运载能力。
+     *
+     * @param weights
+     * @param D
+     * @return
+     */
+    public int shipWithinDays(int[] weights, int D) {
+        int left = Arrays.stream(weights).max().getAsInt(),right = Arrays.stream(weights).sum();
+        while (left < right){
+            int mid = (left + right)/2;
+            int need = 1,cur = 0;
+            for(int weight : weights){
+                if(cur + weight > mid){
+                    need++;
+                    cur = 0;
+                }
+                cur += weight;
+            }
+            if(need <= D){
+                right = mid;
+            }else{left = mid + 1;}
+        }
+        return left;
+    }
+
 }

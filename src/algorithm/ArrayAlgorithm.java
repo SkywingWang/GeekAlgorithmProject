@@ -27,8 +27,9 @@ public class ArrayAlgorithm {
      * 你可以假设除了整数 0 之外，这个整数不会以零开头。
      */
     public int[] plusOne(int[] digits) {
-        if (digits == null)
+        if (digits == null) {
             return digits;
+        }
         int i = digits.length - 1;
         boolean isCarry = false;
         while (i > 0) {
@@ -91,8 +92,9 @@ public class ArrayAlgorithm {
      * 合并两个有序数组
      */
     public void merge(int[] nums1, int m, int[] nums2, int n) {
-        if (nums1 == null || nums2 == null || nums2.length == 0)
+        if (nums1 == null || nums2 == null || nums2.length == 0) {
             return;
+        }
         int i = m, j = n;
         while (i > 0 && j > 0) {
             if (nums1[i - 1] > nums2[j - 1]) {
@@ -115,8 +117,9 @@ public class ArrayAlgorithm {
     }
 
     public void merge1(int[] nums1, int m, int[] nums2, int n) {
-        if (nums1 == null || nums2 == null || nums2.length == 0)
+        if (nums1 == null || nums2 == null || nums2.length == 0) {
             return;
+        }
         int tmp = 0;
         for (int i = 0; i < m; i++) {
             if (nums1[i] > nums2[0]) {
@@ -132,8 +135,9 @@ public class ArrayAlgorithm {
                         break;
                     }
                 }
-                if (!isChange)
+                if (!isChange) {
                     nums2[n - 1] = tmp;
+                }
             }
         }
         for (int i = 0; i < n; i++) {
@@ -148,10 +152,12 @@ public class ArrayAlgorithm {
      * 删除数组重复元素
      */
     public int removeDuplicates(int[] nums) {
-        if (nums == null)
+        if (nums == null) {
             return 0;
-        if (nums.length < 2)
+        }
+        if (nums.length < 2) {
             return nums.length;
+        }
         int k = 0;
         for (int i = 1; i < nums.length; i++) {
             if (nums[i] != nums[k]) {
@@ -170,8 +176,9 @@ public class ArrayAlgorithm {
      * 数组右移N步
      */
     public void rotate(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k == 0)
+        if (nums == null || nums.length == 0 || k == 0) {
             return;
+        }
         k = k % nums.length;
         reverse(nums, 0, nums.length - 1);
         reverse(nums, 0, k - 1);
@@ -180,8 +187,9 @@ public class ArrayAlgorithm {
     }
 
     private void reverse(int[] nums, int left, int right) {
-        while (left < right)
+        while (left < right) {
             swap(nums, left++, right--);
+        }
 
     }
 
@@ -192,8 +200,9 @@ public class ArrayAlgorithm {
     }
 
     public void rotateMy(int[] nums, int k) {
-        if (nums == null || nums.length == 0 || k == 0)
+        if (nums == null || nums.length == 0 || k == 0) {
             return;
+        }
         k = k % nums.length;
         for (int i = 0; i < nums.length / 2; i++) {
             swap(nums, i, nums.length - 1 - i);
@@ -222,22 +231,25 @@ public class ArrayAlgorithm {
         int k = 0;
         while (left < right) {
             k = (left + right + 1) / 2;
-            if (nums[k] < target)
+            if (nums[k] < target) {
                 left = k;
-            else if (nums[k] > target)
+            } else if (nums[k] > target) {
                 right = k - 1;
-            else
+            } else {
                 return k;
+            }
         }
         if (target <= nums[k]) {
-            if (k == 0)
+            if (k == 0) {
                 return 0;
-            else if (target > nums[k - 1])
+            } else if (target > nums[k - 1]) {
                 return k;
-            else
+            } else {
                 return k - 1;
-        } else
+            }
+        } else {
             return k + 1;
+        }
     }
 
 
@@ -253,8 +265,9 @@ public class ArrayAlgorithm {
      */
     public int[] twoSum(int[] nums, int target) {
         int[] result = new int[2];
-        if (nums == null || nums.length < 2)
+        if (nums == null || nums.length < 2) {
             return result;
+        }
         for (int i = 0; i < nums.length - 1; i++) {
             for (int j = i + 1; j < nums.length; j++) {
                 if (nums[i] + nums[j] == target) {
@@ -789,8 +802,9 @@ public class ArrayAlgorithm {
      * @param matrix
      */
     public void rotate(int[][] matrix) {
-        if (matrix == null || matrix.length == 0){
-            return;}
+        if (matrix == null || matrix.length == 0) {
+            return;
+        }
         int n = matrix.length;
         for (int i = 0; i < n - 1; i++) {
             for (int j = i + 1; j < n; j++) {
@@ -3221,11 +3235,11 @@ public class ArrayAlgorithm {
             int i = left;
             int l = mid + 1;
             int r = mid + 1;
-            while (i <= mid){
-                while (l <= right && sum[l] - sum[i] < lower){
+            while (i <= mid) {
+                while (l <= right && sum[l] - sum[i] < lower) {
                     l++;
                 }
-                while (r <= right && sum[r] - sum[i] <= upper){
+                while (r <= right && sum[r] - sum[i] <= upper) {
                     r++;
                 }
                 ret += r - l;
@@ -3256,34 +3270,33 @@ public class ArrayAlgorithm {
     }
 
     /**
-     *
      * @param nums
      */
     public void nextPermutation(int[] nums) {
         int i = nums.length - 2;
-        while (i >= 0 && nums[i] >= nums[i + 1]){
+        while (i >= 0 && nums[i] >= nums[i + 1]) {
             i--;
         }
-        if(i >= 0){
+        if (i >= 0) {
             int j = nums.length - 1;
-            while (j >= 0 && nums[i] >= nums[j]){
+            while (j >= 0 && nums[i] >= nums[j]) {
                 j--;
             }
-            swapNextPermutation(nums,i,j);
+            swapNextPermutation(nums, i, j);
         }
-        reverseNextPermutation(nums,i + 1);
+        reverseNextPermutation(nums, i + 1);
     }
 
-    private void swapNextPermutation(int[] nums,int i, int j){
+    private void swapNextPermutation(int[] nums, int i, int j) {
         int temp = nums[i];
         nums[i] = nums[j];
         nums[j] = temp;
     }
 
-    private void reverseNextPermutation(int[] nums,int start){
+    private void reverseNextPermutation(int[] nums, int start) {
         int left = start, right = nums.length - 1;
-        while (left < right){
-            swapNextPermutation(nums,left,right);
+        while (left < right) {
+            swapNextPermutation(nums, left, right);
             left++;
             right--;
         }
@@ -3291,33 +3304,32 @@ public class ArrayAlgorithm {
 
     /**
      * 922. 按奇偶排序数组 II
-     *
+     * <p>
      * 给定一个非负整数数组 A， A 中一半整数是奇数，一半整数是偶数。
-     *
+     * <p>
      * 对数组进行排序，以便当 A[i] 为奇数时，i 也是奇数；当 A[i] 为偶数时， i 也是偶数。
-     *
+     * <p>
      * 你可以返回任何满足上述条件的数组作为答案。
-     *
      *
      * @param A
      * @return
      */
     public int[] sortArrayByParityII(int[] A) {
-        if(A == null || A.length < 2){
+        if (A == null || A.length < 2) {
             return A;
         }
         int i = 0, j = 1;
-        while (i < A.length && j < A.length){
-            if(A[i] % 2 != 0){
-                while (j < A.length){
-                    if(A[j] % 2 == 0){
+        while (i < A.length && j < A.length) {
+            if (A[i] % 2 != 0) {
+                while (j < A.length) {
+                    if (A[j] % 2 == 0) {
                         int temp = A[j];
                         A[j] = A[i];
                         A[i] = temp;
                         j += 2;
                         break;
                     }
-                    j+=2;
+                    j += 2;
                 }
             }
             i += 2;
@@ -3328,7 +3340,7 @@ public class ArrayAlgorithm {
     /**
      * 1122. 数组的相对排序
      * 给你两个数组，arr1 和 arr2，
-     *
+     * <p>
      * arr2 中的元素各不相同
      * arr2 中的每个元素都出现在 arr1 中
      * 对 arr1 中的元素进行排序，使 arr1 中项的相对顺序和 arr2 中的相对顺序相同。未在 arr2 中出现过的元素需要按照升序放在 arr1 的末尾。
@@ -3339,24 +3351,24 @@ public class ArrayAlgorithm {
      */
     public int[] relativeSortArray(int[] arr1, int[] arr2) {
         int upper = 0;
-        for(int x : arr1){
-            upper = Math.max(upper,x);
+        for (int x : arr1) {
+            upper = Math.max(upper, x);
         }
         int[] frequency = new int[upper + 1];
-        for(int x : arr1){
-            frequency[x] ++;
+        for (int x : arr1) {
+            frequency[x]++;
         }
         int[] ans = new int[arr1.length];
         int index = 0;
-        for(int x : arr2){
-            for(int i = 0; i < frequency[x]; i++){
+        for (int x : arr2) {
+            for (int i = 0; i < frequency[x]; i++) {
                 ans[index++] = x;
 
             }
             frequency[x] = 0;
         }
-        for(int x = 0; x <= upper; x++){
-            for(int i = 0; i < frequency[x]; i++){
+        for (int x = 0; x <= upper; x++) {
+            for (int i = 0; i < frequency[x]; i++) {
                 ans[index++] = x;
 
             }
@@ -3366,12 +3378,11 @@ public class ArrayAlgorithm {
 
     /**
      * 406. 根据身高重建队列
-     *
+     * <p>
      * 假设有打乱顺序的一群人站成一个队列。 每个人由一个整数对(h, k)表示，其中h是这个人的身高，k是排在这个人前面且身高大于或等于h的人数。 编写一个算法来重建这个队列。
-     *
+     * <p>
      * 注意：
      * 总人数少于1100人。
-     *
      *
      * @param people
      * @return
@@ -3380,16 +3391,16 @@ public class ArrayAlgorithm {
         Arrays.sort(people, new Comparator<int[]>() {
             @Override
             public int compare(int[] o1, int[] o2) {
-                if(o1[0] != o2[0]){
+                if (o1[0] != o2[0]) {
                     return o2[0] - o1[0];
-                }else{
+                } else {
                     return o1[1] - o2[1];
                 }
             }
         });
         List<int[]> ans = new ArrayList<>();
-        for(int[] person : people){
-            ans.add(person[1],person);
+        for (int[] person : people) {
+            ans.add(person[1], person);
         }
         return ans.toArray(new int[ans.size()][]);
     }
@@ -3398,94 +3409,95 @@ public class ArrayAlgorithm {
     /**
      * 164. 最大间距
      * 给定一个无序的数组，找出数组在排序之后，相邻元素之间最大的差值。
-     *
+     * <p>
      * 如果数组元素个数小于 2，则返回 0。
+     *
      * @param nums
      * @return
      */
     public int maximumGap(int[] nums) {
         int n = nums.length;
-        if(n < 2){
+        if (n < 2) {
             return 0;
         }
         long exp = 1;
         int[] buf = new int[n];
         int maxVal = Arrays.stream(nums).max().getAsInt();
-        while (maxVal >= exp){
-            int [] cnt = new int[10];
-            for(int i = 0; i < n; i++){
+        while (maxVal >= exp) {
+            int[] cnt = new int[10];
+            for (int i = 0; i < n; i++) {
                 int digit = (nums[i] / (int) exp) % 10;
                 cnt[digit]++;
             }
-            for(int i = 1; i < 10; i++){
+            for (int i = 1; i < 10; i++) {
                 cnt[i] += cnt[i - 1];
             }
-            for(int i = n - 1; i >= 0;i--){
+            for (int i = n - 1; i >= 0; i--) {
                 int digit = (nums[i] / (int) exp) % 10;
                 buf[cnt[digit] - 1] = nums[i];
                 cnt[digit]--;
             }
-            System.arraycopy(buf,0,nums,0,n);
+            System.arraycopy(buf, 0, nums, 0, n);
             exp *= 10;
         }
         int ret = 0;
-        for(int i = 1; i < n; i++){
-            ret = Math.max(ret,nums[i]-nums[i-1]);
+        for (int i = 1; i < n; i++) {
+            ret = Math.max(ret, nums[i] - nums[i - 1]);
         }
         return ret;
     }
 
     /**
      * 493. 翻转对
-     *
+     * <p>
      * 给定一个数组 nums ，如果 i < j 且 nums[i] > 2*nums[j] 我们就将 (i, j) 称作一个重要翻转对。
-     *
+     * <p>
      * 你需要返回给定数组中的重要翻转对的数量。
      *
      * @param nums
      * @return
      */
     public int reversePairs(int[] nums) {
-        if(nums.length == 0){
+        if (nums.length == 0) {
             return 0;
         }
-        return reversePairsRecursive(nums,0,nums.length - 1);
+        return reversePairsRecursive(nums, 0, nums.length - 1);
     }
 
-    private int reversePairsRecursive(int[] nums,int left,int right){
-        if(left == right){
+    private int reversePairsRecursive(int[] nums, int left, int right) {
+        if (left == right) {
             return 0;
-        }else{
+        } else {
             int mid = (left + right) / 2;
-            int n1 = reversePairsRecursive(nums,left,mid);
-            int n2 = reversePairsRecursive(nums,mid + 1,right);
+            int n1 = reversePairsRecursive(nums, left, mid);
+            int n2 = reversePairsRecursive(nums, mid + 1, right);
             int ret = n1 + n2;
             int i = left;
             int j = mid + 1;
-            while (i <= mid){
-                while (j <= right && (long) nums[i] > 2 * (long) nums[j]){
+            while (i <= mid) {
+                while (j <= right && (long) nums[i] > 2 * (long) nums[j]) {
                     j++;
                 }
                 ret += j - mid - 1;
                 i++;
             }
             int[] sorted = new int[right - left + 1];
-            int p1 = left,p2 = mid + 1;
+            int p1 = left, p2 = mid + 1;
             int p = 0;
-            while (p1 <= mid || p2 <= right){
-                if(p1 > mid){
+            while (p1 <= mid || p2 <= right) {
+                if (p1 > mid) {
                     sorted[p++] = nums[p2++];
-                }else if(p2 > right){
+                } else if (p2 > right) {
                     sorted[p++] = nums[p1++];
-                }else{
-                    if(nums[p1] < nums[p2]){
+                } else {
+                    if (nums[p1] < nums[p2]) {
                         sorted[p++] = nums[p1++];
-                    }else{
+                    } else {
                         sorted[p++] = nums[p2++];
                     }
                 }
             }
-            for(int k = 0;k < sorted.length; k++){
+            for (int k = 0; k < sorted.length; k++) {
                 nums[left + k] = sorted[k];
             }
             return ret;
@@ -3494,15 +3506,15 @@ public class ArrayAlgorithm {
 
     /**
      * 34. 在排序数组中查找元素的第一个和最后一个位置
-     *
+     * <p>
      * 给定一个按照升序排列的整数数组 nums，和一个目标值 target。找出给定目标值在数组中的开始位置和结束位置。
-     *
+     * <p>
      * 如果数组中不存在目标值 target，返回 [-1, -1]。
-     *
+     * <p>
      * 进阶：
-     *
+     * <p>
      * 你可以设计并实现时间复杂度为 O(log n) 的算法解决此问题吗？
-     *
+     * <p>
      * 来源：力扣（LeetCode）
      * 链接：https://leetcode-cn.com/problems/find-first-and-last-position-of-element-in-sorted-array
      * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
@@ -3512,22 +3524,22 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[] searchRange(int[] nums, int target) {
-        int leftIdx = binarySearchSearchRange(nums,target,true);
-        int rightIdx = binarySearchSearchRange(nums,target,false) - 1;
-        if(leftIdx <= rightIdx && rightIdx < nums.length && nums[leftIdx] == target && nums[rightIdx] == target){
-            return new int[]{leftIdx,rightIdx};
+        int leftIdx = binarySearchSearchRange(nums, target, true);
+        int rightIdx = binarySearchSearchRange(nums, target, false) - 1;
+        if (leftIdx <= rightIdx && rightIdx < nums.length && nums[leftIdx] == target && nums[rightIdx] == target) {
+            return new int[]{leftIdx, rightIdx};
         }
-        return new int[]{-1,-1};
+        return new int[]{-1, -1};
     }
 
-    private int binarySearchSearchRange(int[] nums, int target,boolean lower){
-        int left = 0,right = nums.length - 1, ans = nums.length;
-        while (left <= right){
-            int mid  = (left + right) / 2;
-            if(nums[mid] > target || (lower && nums[mid] >= target)){
+    private int binarySearchSearchRange(int[] nums, int target, boolean lower) {
+        int left = 0, right = nums.length - 1, ans = nums.length;
+        while (left <= right) {
+            int mid = (left + right) / 2;
+            if (nums[mid] > target || (lower && nums[mid] >= target)) {
                 right = mid - 1;
                 ans = mid;
-            }else{
+            } else {
                 left = mid + 1;
             }
         }
@@ -3537,33 +3549,33 @@ public class ArrayAlgorithm {
     /**
      * 659. 分割数组为连续子序列
      * 给你一个按升序排序的整数数组 num（可能包含重复数字），请你将它们分割成一个或多个子序列，其中每个子序列都由连续整数组成且长度至少为 3 。
-     *
+     * <p>
      * 如果可以完成上述分割，则返回 true ；否则，返回 false 。
      *
      * @param nums
      * @return
      */
     public boolean isPossible(int[] nums) {
-        Map<Integer,PriorityQueue<Integer>> map = new HashMap<Integer,PriorityQueue<Integer>>();
-        for(int x : nums){
-            if(!map.containsKey(x)){
-                map.put(x,new PriorityQueue<>());
+        Map<Integer, PriorityQueue<Integer>> map = new HashMap<Integer, PriorityQueue<Integer>>();
+        for (int x : nums) {
+            if (!map.containsKey(x)) {
+                map.put(x, new PriorityQueue<>());
             }
-            if(map.containsKey(x - 1)){
+            if (map.containsKey(x - 1)) {
                 int prevLength = map.get(x - 1).poll();
-                if(map.get(x - 1).isEmpty()){
+                if (map.get(x - 1).isEmpty()) {
                     map.remove(x - 1);
                 }
                 map.get(x).offer(prevLength + 1);
-            }else{
+            } else {
                 map.get(x).offer(1);
             }
 
         }
-        Set<Map.Entry<Integer,PriorityQueue<Integer>>> entrySet = map.entrySet();
-        for(Map.Entry<Integer,PriorityQueue<Integer>> entry: entrySet){
+        Set<Map.Entry<Integer, PriorityQueue<Integer>>> entrySet = map.entrySet();
+        for (Map.Entry<Integer, PriorityQueue<Integer>> entry : entrySet) {
             PriorityQueue<Integer> queue = entry.getValue();
-            if(queue.peek() < 3){
+            if (queue.peek() < 3) {
                 return false;
             }
         }
@@ -3572,13 +3584,13 @@ public class ArrayAlgorithm {
 
     /**
      * 861. 翻转矩阵后的得分
-     *
+     * <p>
      * 有一个二维矩阵 A 其中每个元素的值为 0 或 1 。
-     *
+     * <p>
      * 移动是指选择任一行或列，并转换该行或列中的每一个值：将所有 0 都更改为 1，将所有 1 都更改为 0。
-     *
+     * <p>
      * 在做出任意次数的移动后，将该矩阵的每一行都按照二进制数来解释，矩阵的得分就是这些数字的总和。
-     *
+     * <p>
      * 返回尽可能高的分数。
      *
      * @param A
@@ -3586,17 +3598,17 @@ public class ArrayAlgorithm {
      */
     public int matrixScore(int[][] A) {
         int m = A.length, n = A[0].length;
-        int ret = m * (1 << (n-1));
-        for(int j = 1; j < n; j++){
+        int ret = m * (1 << (n - 1));
+        for (int j = 1; j < n; j++) {
             int nOnes = 0;
-            for(int i = 0; i < m; i++){
-                if(A[i][0] == 1){
+            for (int i = 0; i < m; i++) {
+                if (A[i][0] == 1) {
                     nOnes += A[i][j];
-                }else{
-                    nOnes += (1-A[i][j]);
+                } else {
+                    nOnes += (1 - A[i][j]);
                 }
             }
-            int k = Math.max(nOnes,m - nOnes);
+            int k = Math.max(nOnes, m - nOnes);
             ret += k * (1 << (n - j - 1));
         }
         return ret;
@@ -3605,14 +3617,14 @@ public class ArrayAlgorithm {
     /**
      * 842. 将数组拆分成斐波那契序列
      * 给定一个数字字符串 S，比如 S = "123456579"，我们可以将它分成斐波那契式的序列 [123, 456, 579]。
-     *
+     * <p>
      * 形式上，斐波那契式序列是一个非负整数列表 F，且满足：
-     *
+     * <p>
      * 0 <= F[i] <= 2^31 - 1，（也就是说，每个整数都符合 32 位有符号整数类型）；
      * F.length >= 3；
      * 对于所有的0 <= i < F.length - 2，都有 F[i] + F[i+1] = F[i+2] 成立。
      * 另外，请注意，将字符串拆分成小块时，每个块的数字一定不要以零开头，除非这个块是数字 0 本身。
-     *
+     * <p>
      * 返回从 S 拆分出来的任意一组斐波那契式的序列块，如果不能拆分则返回 []。
      *
      * @param S
@@ -3620,35 +3632,35 @@ public class ArrayAlgorithm {
      */
     public List<Integer> splitIntoFibonacci(String S) {
         List<Integer> list = new ArrayList<>();
-        backtrackSplitIntoFibonacci(list,S,S.length(),0,0,0);
+        backtrackSplitIntoFibonacci(list, S, S.length(), 0, 0, 0);
         return list;
     }
 
-    private boolean backtrackSplitIntoFibonacci(List<Integer> list, String S, int length, int index, int sum,int prev){
-        if(index == length){
+    private boolean backtrackSplitIntoFibonacci(List<Integer> list, String S, int length, int index, int sum, int prev) {
+        if (index == length) {
             return list.size() >= 3;
         }
         long currLong = 0;
-        for(int i = index; i < length; i++){
-            if(i > index && S.charAt(index) == '0'){
+        for (int i = index; i < length; i++) {
+            if (i > index && S.charAt(index) == '0') {
                 break;
             }
             currLong = currLong * 10 + S.charAt(i) - '0';
-            if(currLong > Integer.MAX_VALUE){
+            if (currLong > Integer.MAX_VALUE) {
                 break;
             }
             int curr = (int) currLong;
-            if(list.size() >= 2){
-                if(curr < sum){
+            if (list.size() >= 2) {
+                if (curr < sum) {
                     continue;
-                }else if(curr > sum){
+                } else if (curr > sum) {
                     break;
                 }
             }
             list.add(curr);
-            if(backtrackSplitIntoFibonacci(list,S,length,i+1,prev+curr,curr)){
+            if (backtrackSplitIntoFibonacci(list, S, length, i + 1, prev + curr, curr)) {
                 return true;
-            }else{
+            } else {
                 list.remove(list.size() - 1);
             }
         }
@@ -3656,23 +3668,22 @@ public class ArrayAlgorithm {
     }
 
     /**
-     *
      * 376. 摆动序列
      * 如果连续数字之间的差严格地在正数和负数之间交替，则数字序列称为摆动序列。第一个差（如果存在的话）可能是正数或负数。少于两个元素的序列也是摆动序列。
-     *
+     * <p>
      * 例如， [1,7,4,9,2,5] 是一个摆动序列，因为差值 (6,-3,5,-7,3) 是正负交替出现的。相反, [1,4,7,2,5] 和 [1,7,4,5,5] 不是摆动序列，第一个序列是因为它的前两个差值都是正数，第二个序列是因为它的最后一个差值为零。
-     *
+     * <p>
      * 给定一个整数序列，返回作为摆动序列的最长子序列的长度。 通过从原始序列中删除一些（也可以不删除）元素来获得子序列，剩下的元素保持其原始顺序。
      *
      * @param nums
      * @return
      */
     public int wiggleMaxLength(int[] nums) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return 0;
         }
         int n = nums.length;
-        if(n < 2){
+        if (n < 2) {
             return n;
         }
         int up = 1, down = 1;
@@ -3689,18 +3700,19 @@ public class ArrayAlgorithm {
     /**
      * 217. 存在重复元素
      * 给定一个整数数组，判断是否存在重复元素。
-     *
+     * <p>
      * 如果任意一值在数组中出现至少两次，函数返回 true 。如果数组中每个元素都不相同，则返回 false 。
+     *
      * @param nums
      * @return
      */
     public boolean containsDuplicate(int[] nums) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return false;
         }
         Set<Integer> numsSet = new HashSet<>();
-        for(int num:nums){
-            if(numsSet.contains(num)){
+        for (int num : nums) {
+            if (numsSet.contains(num)) {
                 return true;
             }
             numsSet.add(num);
@@ -3711,23 +3723,22 @@ public class ArrayAlgorithm {
     /**
      * 746. 使用最小花费爬楼梯
      * 数组的每个索引作为一个阶梯，第 i个阶梯对应着一个非负数的体力花费值 cost[i](索引从0开始)。
-     *
+     * <p>
      * 每当你爬上一个阶梯你都要花费对应的体力花费值，然后你可以选择继续爬一个阶梯或者爬两个阶梯。
-     *
+     * <p>
      * 您需要找到达到楼层顶部的最低花费。在开始时，你可以选择从索引为 0 或 1 的元素作为初始阶梯。
-     *
      *
      * @param cost
      * @return
      */
     public int minCostClimbingStairs(int[] cost) {
-        if(cost == null || cost.length == 0){
+        if (cost == null || cost.length == 0) {
             return 0;
         }
         int n = cost.length;
         int prev = 0, curr = 0;
-        for(int i = 2; i <= n; i++){
-            int next = Math.min(curr + cost[i - 1],prev + cost[i-2]);
+        for (int i = 2; i <= n; i++) {
+            int next = Math.min(curr + cost[i - 1], prev + cost[i - 2]);
             prev = curr;
             curr = next;
         }
@@ -3736,7 +3747,7 @@ public class ArrayAlgorithm {
 
     /**
      * 85. 最大矩形
-     *
+     * <p>
      * 给定一个仅包含 0 和 1 、大小为 rows x cols 的二维二进制矩阵，找出只包含 1 的最大矩形，并返回其面积。
      *
      * @param matrix
@@ -3744,32 +3755,32 @@ public class ArrayAlgorithm {
      */
     public int maximalRectangle(char[][] matrix) {
         int m = matrix.length;
-        if(m==0){
+        if (m == 0) {
             return 0;
         }
         int n = matrix[0].length;
         int[][] left = new int[m][n];
 
-        for(int i = 0; i < m;i++){
-            for(int j = 0; j < n;j++){
-                if(matrix[i][j] == '1'){
-                    left[i][j] = ( j == 0 ? 0 : left[i][j-1]) + 1;
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '1') {
+                    left[i][j] = (j == 0 ? 0 : left[i][j - 1]) + 1;
                 }
             }
         }
         int ret = 0;
-        for(int i = 0; i < m; i++){
-            for(int j = 0; j < n;j++){
-                if(matrix[i][j] == '0'){
+        for (int i = 0; i < m; i++) {
+            for (int j = 0; j < n; j++) {
+                if (matrix[i][j] == '0') {
                     continue;
                 }
                 int width = left[i][j];
                 int area = width;
-                for(int k = i - 1; k >= 0; k--){
-                    width = Math.min(width,left[k][j]);
+                for (int k = i - 1; k >= 0; k--) {
+                    width = Math.min(width, left[k][j]);
                     area = Math.max(area, (i - k + 1) * width);
                 }
-                ret = Math.max(ret,area);
+                ret = Math.max(ret, area);
             }
         }
         return ret;
@@ -3778,11 +3789,11 @@ public class ArrayAlgorithm {
 
     /**
      * 188. 买卖股票的最佳时机 IV
-     *
+     * <p>
      * 给定一个整数数组 prices ，它的第 i 个元素 prices[i] 是一支给定的股票在第 i 天的价格。
-     *
+     * <p>
      * 设计一个算法来计算你所能获取的最大利润。你最多可以完成 k 笔交易。
-     *
+     * <p>
      * 注意：你不能同时参与多笔交易（你必须在再次购买前出售掉之前的股票）。
      *
      * @param k
@@ -3790,32 +3801,32 @@ public class ArrayAlgorithm {
      * @return
      */
     public int maxProfitIV(int k, int[] prices) {
-        if(prices == null || prices.length == 0){
+        if (prices == null || prices.length == 0) {
             return 0;
         }
         int n = prices.length;
-        k = Math.min(k,n / 2);
+        k = Math.min(k, n / 2);
         int[][] buy = new int[n][k + 1];
         int[][] sell = new int[n][k + 1];
 
         buy[0][0] = -prices[0];
         sell[0][0] = 0;
-        for(int i = 1; i <= k; i++){
+        for (int i = 1; i <= k; i++) {
             buy[0][i] = sell[0][i] = Integer.MIN_VALUE / 2;
         }
-        for(int i = 1; i < n; i++){
-            buy[i][0] = Math.max(buy[i-1][0],sell[i-1][0] - prices[i]);
-            for(int j = 1; j <= k; j++){
-                buy[i][j] = Math.max(buy[i - 1][j],sell[i - 1][j] - prices[i]);
-                sell[i][j] = Math.max(sell[i - 1][j],buy[i-1][j-1] + prices[i]);
+        for (int i = 1; i < n; i++) {
+            buy[i][0] = Math.max(buy[i - 1][0], sell[i - 1][0] - prices[i]);
+            for (int j = 1; j <= k; j++) {
+                buy[i][j] = Math.max(buy[i - 1][j], sell[i - 1][j] - prices[i]);
+                sell[i][j] = Math.max(sell[i - 1][j], buy[i - 1][j - 1] + prices[i]);
             }
         }
-        return Arrays.stream(sell[n-1]).max().getAsInt();
+        return Arrays.stream(sell[n - 1]).max().getAsInt();
     }
 
     /**
      * 330. 按要求补齐数组
-     *
+     * <p>
      * 给定一个已排序的正整数数组 nums，和一个正整数 n 。从 [1, n] 区间内选取任意个数字补充到 nums 中，使得 [1, n] 区间内的任何数字都可以用 nums 中某几个数字的和来表示。请输出满足上述要求的最少需要补充的数字个数。
      *
      * @param nums
@@ -3825,13 +3836,13 @@ public class ArrayAlgorithm {
     public int minPatches(int[] nums, int n) {
         int patches = 0;
         long x = 1;
-        int length = nums.length,index = 0;
-        while(x <= n){
-            if(index < length && nums[index] <= x){
-                x+=nums[index];
+        int length = nums.length, index = 0;
+        while (x <= n) {
+            if (index < length && nums[index] <= x) {
+                x += nums[index];
                 index++;
-            }else {
-                x*=2;
+            } else {
+                x *= 2;
                 patches++;
             }
         }
@@ -3840,11 +3851,11 @@ public class ArrayAlgorithm {
 
     /**
      * 435. 无重叠区间
-     *
+     * <p>
      * 给定一个区间的集合，找到需要移除区间的最小数量，使剩余区间互不重叠。
-     *
+     * <p>
      * 注意:
-     *
+     * <p>
      * 可以认为区间的终点总是大于它的起点。
      * 区间 [1,2] 和 [2,3] 的边界相互“接触”，但没有相互重叠。
      *
@@ -3852,7 +3863,7 @@ public class ArrayAlgorithm {
      * @return
      */
     public int eraseOverlapIntervals(int[][] intervals) {
-        if(intervals == null || intervals.length == 0){
+        if (intervals == null || intervals.length == 0) {
             return 0;
         }
         Arrays.sort(intervals, new Comparator<int[]>() {
@@ -3864,11 +3875,11 @@ public class ArrayAlgorithm {
 
         int n = intervals.length;
         int[] f = new int[n];
-        Arrays.fill(f,1);
-        for(int i = 1; i < n; i++){
-            for(int j = 0; j < i; j++){
-                if(intervals[j][1] <= intervals[i][0]){
-                    f[i] = Math.max(f[i],f[j] + 1);
+        Arrays.fill(f, 1);
+        for (int i = 1; i < n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (intervals[j][1] <= intervals[i][0]) {
+                    f[i] = Math.max(f[i], f[j] + 1);
                 }
             }
         }
@@ -3877,13 +3888,13 @@ public class ArrayAlgorithm {
 
     /**
      * 228. 汇总区间
-     *
+     * <p>
      * 给定一个无重复元素的有序整数数组 nums 。
-     *
+     * <p>
      * 返回 恰好覆盖数组中所有数字 的 最小有序 区间范围列表。也就是说，nums 的每个元素都恰好被某个区间范围所覆盖，并且不存在属于某个范围但不属于 nums 的数字 x 。
-     *
+     * <p>
      * 列表中的每个区间范围 [a,b] 应该按如下格式输出：
-     *
+     * <p>
      * "a->b" ，如果 a != b
      * "a" ，如果 a == b
      *
@@ -3892,19 +3903,19 @@ public class ArrayAlgorithm {
      */
     public List<String> summaryRanges(int[] nums) {
         List<String> result = new ArrayList<>();
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return result;
         }
         int i = 0;
-        while (i < nums.length){
+        while (i < nums.length) {
             int low = i;
             i++;
-            while (i < nums.length && nums[i] == nums[i - 1] + 1){
+            while (i < nums.length && nums[i] == nums[i - 1] + 1) {
                 i++;
             }
             int high = i - 1;
             StringBuffer temp = new StringBuffer(Integer.toString(nums[low]));
-            if(low < high){
+            if (low < high) {
                 temp.append("->");
                 temp.append(Integer.toString(nums[high]));
             }
@@ -3915,13 +3926,13 @@ public class ArrayAlgorithm {
 
     /**
      * 684. 冗余连接
-     *
+     * <p>
      * 在本问题中, 树指的是一个连通且无环的无向图。
-     *
+     * <p>
      * 输入一个图，该图由一个有着N个节点 (节点值不重复1, 2, ..., N) 的树及一条附加的边构成。附加的边的两个顶点包含在1到N中间，这条附加的边不属于树中已存在的边。
-     *
+     * <p>
      * 结果图是一个以边组成的二维数组。每一个边的元素是一对[u, v] ，满足 u < v，表示连接顶点u 和v的无向图的边。
-     *
+     * <p>
      * 返回一条可以删去的边，使得结果图是一个有着N个节点的树。如果有多个答案，则返回二维数组中最后出现的边。答案边 [u, v] 应满足相同的格式 u < v。
      *
      * @param edges
@@ -3930,37 +3941,37 @@ public class ArrayAlgorithm {
     public int[] findRedundantConnection(int[][] edges) {
         int nodesCount = edges.length;
         int[] parent = new int[nodesCount + 1];
-        for(int i = 1; i <= nodesCount; i++){
+        for (int i = 1; i <= nodesCount; i++) {
             parent[i] = i;
         }
-        for(int i = 0; i < nodesCount;i++){
+        for (int i = 0; i < nodesCount; i++) {
             int[] edge = edges[i];
             int node1 = edge[0], node2 = edge[1];
-            if(findFRC(parent,node1) != findFRC(parent,node2)){
-                unionFRC(parent,node1,node2);
-            }else{
+            if (findFRC(parent, node1) != findFRC(parent, node2)) {
+                unionFRC(parent, node1, node2);
+            } else {
                 return edge;
             }
         }
         return new int[0];
     }
 
-    private void unionFRC(int[] parent, int index1, int index2){
-        parent[findFRC(parent,index1)] = findFRC(parent,index2);
+    private void unionFRC(int[] parent, int index1, int index2) {
+        parent[findFRC(parent, index1)] = findFRC(parent, index2);
     }
 
-    private int findFRC(int[] parent,int index){
-        if(parent[index] != index){
-            parent[index] = findFRC(parent,parent[index]);
+    private int findFRC(int[] parent, int index) {
+        if (parent[index] != index) {
+            parent[index] = findFRC(parent, parent[index]);
         }
         return parent[index];
     }
 
     /**
      * 1018. 可被 5 整除的二进制前缀
-     *
+     * <p>
      * 给定由若干 0 和 1 组成的数组 A。我们定义 N_i：从 A[0] 到 A[i] 的第 i 个子数组被解释为一个二进制数（从最高有效位到最低有效位）。
-     *
+     * <p>
      * 返回布尔值列表 answer，只有当 N_i 可以被 5 整除时，答案 answer[i] 为 true，否则为 false。
      *
      * @param A
@@ -3970,8 +3981,8 @@ public class ArrayAlgorithm {
         List<Boolean> list = new ArrayList<>();
         int prefix = 0;
         int length = A.length;
-        for(int i = 0; i < length;i++){
-            prefix = ((prefix<<1) + A[i]) % 5;
+        for (int i = 0; i < length; i++) {
+            prefix = ((prefix << 1) + A[i]) % 5;
             list.add(prefix == 0);
         }
         return list;
@@ -3979,11 +3990,11 @@ public class ArrayAlgorithm {
 
     /**
      * 947. 移除最多的同行或同列石头
-     *
+     * <p>
      * n 块石头放置在二维平面中的一些整数坐标点上。每个坐标点上最多只能有一块石头。
-     *
+     * <p>
      * 如果一块石头的 同行或者同列 上有其他石头存在，那么就可以移除这块石头。
-     *
+     * <p>
      * 给你一个长度为 n 的数组 stones ，其中 stones[i] = [xi, yi] 表示第 i 块石头的位置，返回 可以移除的石子 的最大数量。
      *
      * @param stones
@@ -3991,8 +4002,8 @@ public class ArrayAlgorithm {
      */
     public int removeStones(int[][] stones) {
         UnionFindRemoveStone unionFindRemoveStone = new UnionFindRemoveStone();
-        for(int[] stone:stones){
-            unionFindRemoveStone.union(stone[0] + 10001,stone[1]);
+        for (int[] stone : stones) {
+            unionFindRemoveStone.union(stone[0] + 10001, stone[1]);
         }
         return stones.length - unionFindRemoveStone.getCount();
     }
@@ -4008,18 +4019,18 @@ public class ArrayAlgorithm {
      * @return
      */
     public int findLengthOfLCIS(int[] nums) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return 0;
         }
         int res = 1;
         int lastIndex = 0;
-        for(int i = 1; i < nums.length;i++){
-            if(nums[i] <= nums[i - 1]){
-                res = Math.max(res,i - lastIndex);
+        for (int i = 1; i < nums.length; i++) {
+            if (nums[i] <= nums[i - 1]) {
+                res = Math.max(res, i - lastIndex);
                 lastIndex = i;
 
-            }else if(i == nums.length - 1){
-                res = Math.max(res,i + 1 - lastIndex);
+            } else if (i == nums.length - 1) {
+                res = Math.max(res, i + 1 - lastIndex);
             }
         }
         return res;
@@ -4027,31 +4038,31 @@ public class ArrayAlgorithm {
 
     /**
      * 724. 寻找数组的中心索引
-     *
+     * <p>
      * 给定一个整数类型的数组 nums，请编写一个能够返回数组 “中心索引” 的方法。
-     *
+     * <p>
      * 我们是这样定义数组 中心索引 的：数组中心索引的左侧所有元素相加的和等于右侧所有元素相加的和。
-     *
+     * <p>
      * 如果数组不存在中心索引，那么我们应该返回 -1。如果数组有多个中心索引，那么我们应该返回最靠近左边的那一个。
      *
      * @param nums
      * @return
      */
     public int pivotIndex(int[] nums) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return -1;
         }
         int left = 0;
         int right = 0;
-        for(int num : nums){
+        for (int num : nums) {
             right += num;
         }
-        for(int i = 0; i < nums.length; i++){
-            if(i > 0){
+        for (int i = 0; i < nums.length; i++) {
+            if (i > 0) {
                 left += nums[i - 1];
             }
             right -= nums[i];
-            if(left == right){
+            if (left == right) {
                 return i;
             }
         }
@@ -4060,7 +4071,7 @@ public class ArrayAlgorithm {
 
     /**
      * 643. 子数组最大平均数 I
-     *
+     * <p>
      * 给定 n 个整数，找出平均数最大且长度为 k 的连续子数组，并输出该最大平均数。
      *
      * @param nums
@@ -4068,40 +4079,39 @@ public class ArrayAlgorithm {
      * @return
      */
     public double findMaxAverage(int[] nums, int k) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return 0;
         }
         int sum = 0;
         int n = nums.length;
-        for(int i = 0; i < k; i++){
+        for (int i = 0; i < k; i++) {
             sum += nums[i];
         }
         int maxSum = sum;
-        for(int i = k; i < n; i++){
+        for (int i = k; i < n; i++) {
             sum = sum - nums[i - k] + nums[i];
-            maxSum = Math.max(maxSum,sum);
+            maxSum = Math.max(maxSum, sum);
         }
         return 1.0 * maxSum / k;
     }
 
     /**
      * 665. 非递减数列
-     *
+     * <p>
      * 给你一个长度为 n 的整数数组，请你判断在 最多 改变 1 个元素的情况下，该数组能否变成一个非递减数列。
-     *
+     * <p>
      * 我们是这样定义一个非递减数列的： 对于数组中所有的 i (0 <= i <= n-2)，总满足 nums[i] <= nums[i + 1]。
-     *
      *
      * @param nums
      * @return
      */
     public boolean checkPossibility(int[] nums) {
         int n = nums.length;
-        for(int i = 0; i < n - 1;i++){
+        for (int i = 0; i < n - 1; i++) {
             int x = nums[i], y = nums[i + 1];
-            if(x > y){
+            if (x > y) {
                 nums[i] = y;
-                if(isSortedCP(nums)){
+                if (isSortedCP(nums)) {
                     return true;
                 }
                 nums[i] = x;
@@ -4112,10 +4122,10 @@ public class ArrayAlgorithm {
         return true;
     }
 
-    private boolean isSortedCP(int[] nums){
+    private boolean isSortedCP(int[] nums) {
         int n = nums.length;
-        for(int i = 1; i < n; i++){
-            if(nums[i-1] > nums[i]){
+        for (int i = 1; i < n; i++) {
+            if (nums[i - 1] > nums[i]) {
                 return false;
             }
         }
@@ -4124,13 +4134,13 @@ public class ArrayAlgorithm {
 
     /**
      * 978. 最长湍流子数组
-     *
+     * <p>
      * 当 A 的子数组 A[i], A[i+1], ..., A[j] 满足下列条件时，我们称其为湍流子数组：
-     *
+     * <p>
      * 若 i <= k < j，当 k 为奇数时， A[k] > A[k+1]，且当 k 为偶数时，A[k] < A[k+1]；
      * 或 若 i <= k < j，当 k 为偶数时，A[k] > A[k+1] ，且当 k 为奇数时， A[k] < A[k+1]。
      * 也就是说，如果比较符号在子数组中的每个相邻元素对之间翻转，则该子数组是湍流子数组。
-     *
+     * <p>
      * 返回 A 的最大湍流子数组的长度。
      *
      * @param arr
@@ -4139,14 +4149,14 @@ public class ArrayAlgorithm {
     public int maxTurbulenceSize(int[] arr) {
         int n = arr.length;
         int ret = 1;
-        int left = 0,right = 0;
-        while(right < n - 1){
-            if(left == right){
-                if(arr[left] == arr[left + 1]){
+        int left = 0, right = 0;
+        while (right < n - 1) {
+            if (left == right) {
+                if (arr[left] == arr[left + 1]) {
                     left++;
                 }
                 right++;
-            }else{
+            } else {
                 if (arr[right - 1] < arr[right] && arr[right] > arr[right + 1]) {
                     right++;
                 } else if (arr[right - 1] > arr[right] && arr[right] < arr[right + 1]) {
@@ -4162,11 +4172,11 @@ public class ArrayAlgorithm {
 
     /**
      * 992. K 个不同整数的子数组
-     *
+     * <p>
      * 给定一个正整数数组 A，如果 A 的某个子数组中不同整数的个数恰好为 K，则称 A 的这个连续、不一定独立的子数组为好子数组。
-     *
+     * <p>
      * （例如，[1,2,3,1,2] 中有 3 个不同的整数：1，2，以及 3。）
-     *
+     * <p>
      * 返回 A 中好子数组的数目。
      *
      * @param A
@@ -4174,23 +4184,23 @@ public class ArrayAlgorithm {
      * @return
      */
     public int subarraysWithKDistinct(int[] A, int K) {
-        return atMostKDistinct(A,K) - atMostKDistinct(A,K - 1);
+        return atMostKDistinct(A, K) - atMostKDistinct(A, K - 1);
     }
 
-    private int atMostKDistinct(int[] A,int k){
+    private int atMostKDistinct(int[] A, int k) {
         int len = A.length;
         int[] freq = new int[len + 1];
-        int left = 0,right = 0;
-        int count = 0,res = 0;
-        while(right < len){
-            if(freq[A[right]] == 0){
+        int left = 0, right = 0;
+        int count = 0, res = 0;
+        while (right < len) {
+            if (freq[A[right]] == 0) {
                 count++;
             }
             freq[A[right]]++;
             right++;
-            while (count > k){
+            while (count > k) {
                 freq[A[left]]--;
-                if(freq[A[left]] == 0){
+                if (freq[A[left]] == 0) {
                     count--;
                 }
                 left++;
@@ -4203,7 +4213,7 @@ public class ArrayAlgorithm {
 
     /**
      * 448. 找到所有数组中消失的数字
-     *
+     * <p>
      * 给定一个范围在  1 ≤ a[i] ≤ n ( n = 数组大小 ) 的 整型数组，数组中的元素一些出现了两次，
      * 另一些只出现一次。
      * 找到所有在 [1, n] 范围之间没有出现在数组中的数字。
@@ -4213,17 +4223,17 @@ public class ArrayAlgorithm {
      * @return
      */
     public List<Integer> findDisappearedNumbers(int[] nums) {
-        if(nums == null){
+        if (nums == null) {
             return null;
         }
         int n = nums.length;
-        for(int num : nums){
+        for (int num : nums) {
             int x = (num - 1) % n;
             nums[x] += n;
         }
         List<Integer> ret = new ArrayList<>();
-        for(int i = 0; i < n; i++){
-            if(nums[i] <= n){
+        for (int i = 0; i < n; i++) {
+            if (nums[i] <= n) {
                 ret.add(i + 1);
             }
         }
@@ -4232,8 +4242,8 @@ public class ArrayAlgorithm {
 
     /**
      * 485. 最大连续1的个数
-     *
-     *
+     * <p>
+     * <p>
      * 给定一个二进制数组， 计算其中最大连续1的个数。
      *
      * @param nums
@@ -4242,7 +4252,7 @@ public class ArrayAlgorithm {
     public int findMaxConsecutiveOnes(int[] nums) {
         int maxCount = 0, count = 0;
         int n = nums.length;
-        for(int i = 0; i < n;i++){
+        for (int i = 0; i < n; i++) {
             if (nums[i] == 1) {
                 count++;
             } else {
@@ -4251,28 +4261,27 @@ public class ArrayAlgorithm {
             }
 
         }
-        maxCount = Math.max(maxCount,count);
+        maxCount = Math.max(maxCount, count);
         return maxCount;
     }
 
     /**
      * 561. 数组拆分 I
-     *
+     * <p>
      * 给定长度为 2n 的整数数组 nums ，你的任务是将这些数分成 n 对, 例如 (a1, b1), (a2, b2), ..., (an, bn) ，使得从 1 到 n 的 min(ai, bi) 总和最大。
-     *
+     * <p>
      * 返回该 最大总和 。
-     *
      *
      * @param nums
      * @return
      */
     public int arrayPairSum(int[] nums) {
-        if(nums == null || nums.length == 0){
+        if (nums == null || nums.length == 0) {
             return 0;
         }
         Arrays.sort(nums);
         int result = 0;
-        for(int i = 0; i < nums.length; i+=2){
+        for (int i = 0; i < nums.length; i += 2) {
             result += nums[i];
         }
         return result;
@@ -4280,13 +4289,13 @@ public class ArrayAlgorithm {
 
     /**
      * 566. 重塑矩阵
-     *
+     * <p>
      * 在MATLAB中，有一个非常有用的函数 reshape，它可以将一个矩阵重塑为另一个大小不同的新矩阵，但保留其原始数据。
-     *
+     * <p>
      * 给出一个由二维数组表示的矩阵，以及两个正整数r和c，分别表示想要的重构的矩阵的行数和列数。
-     *
+     * <p>
      * 重构后的矩阵需要将原始矩阵的所有元素以相同的行遍历顺序填充。
-     *
+     * <p>
      * 如果具有给定参数的reshape操作是可行且合理的，则输出新的重塑矩阵；否则，输出原始矩阵。
      *
      * @param nums
@@ -4295,16 +4304,16 @@ public class ArrayAlgorithm {
      * @return
      */
     public int[][] matrixReshape(int[][] nums, int r, int c) {
-        if(nums == null){
+        if (nums == null) {
             return nums;
         }
         int m = nums.length;
         int n = nums[0].length;
-        if(m * n != r * c){
+        if (m * n != r * c) {
             return nums;
         }
         int[][] ans = new int[r][c];
-        for(int x = 0; x < m * n; x++){
+        for (int x = 0; x < m * n; x++) {
             ans[x / c][x % c] = nums[x / n][x % n];
         }
         return ans;
@@ -4312,9 +4321,9 @@ public class ArrayAlgorithm {
 
     /**
      * 995. K 连续位的最小翻转次数
-     *
+     * <p>
      * 在仅包含 0 和 1 的数组 A 中，一次 K 位翻转包括选择一个长度为 K 的（连续）子数组，同时将子数组中的每个 0 更改为 1，而每个 1 更改为 0。
-     *
+     * <p>
      * 返回所需的 K 位翻转的最小次数，以便数组没有值为 0 的元素。如果不可能，返回 -1。
      *
      * @param A
@@ -4324,13 +4333,13 @@ public class ArrayAlgorithm {
     public int minKBitFlips(int[] A, int K) {
         int n = A.length;
         int ans = 0, revCnt = 0;
-        for(int i = 0; i < n; i++){
-            if(i >= K && A[i - K] > 1){
+        for (int i = 0; i < n; i++) {
+            if (i >= K && A[i - K] > 1) {
                 revCnt ^= 1;
                 A[i - K] -= 2;
             }
-            if(A[i] == revCnt){
-                if(i + K > n){
+            if (A[i] == revCnt) {
+                if (i + K > n) {
                     return -1;
                 }
                 ++ans;
@@ -4343,9 +4352,9 @@ public class ArrayAlgorithm {
 
     /**
      * 1004. 最大连续1的个数 III
-     *
+     * <p>
      * 给定一个由若干 0 和 1 组成的数组 A，我们最多可以将 K 个值从 0 变成 1 。
-     *
+     * <p>
      * 返回仅包含 1 的最长（连续）子数组的长度。
      *
      * @param A
@@ -4355,24 +4364,24 @@ public class ArrayAlgorithm {
     public int longestOnes(int[] A, int K) {
         int n = A.length;
         int[] P = new int[n + 1];
-        for(int i = 1; i <= n;i++){
-            P[i]=P[i - 1] + (1 - A[i - 1]);
+        for (int i = 1; i <= n; i++) {
+            P[i] = P[i - 1] + (1 - A[i - 1]);
         }
         int ans = 0;
-        for(int right = 0; right < n; right++){
-            int left = binarySearchLO(P,P[right + 1] - K);
-            ans = Math.max(ans,right - left + 1);
+        for (int right = 0; right < n; right++) {
+            int left = binarySearchLO(P, P[right + 1] - K);
+            ans = Math.max(ans, right - left + 1);
         }
         return ans;
     }
 
-    private int binarySearchLO(int[] P,int target){
-        int low = 0,high = P.length - 1;
-        while (low < high){
+    private int binarySearchLO(int[] P, int target) {
+        int low = 0, high = P.length - 1;
+        while (low < high) {
             int mid = (high - low) / 2 + low;
-            if(P[mid] < target){
+            if (P[mid] < target) {
                 low = mid + 1;
-            }else{
+            } else {
                 high = mid;
             }
         }
@@ -4381,36 +4390,36 @@ public class ArrayAlgorithm {
 
     /**
      * 697. 数组的度
-     *
+     * <p>
      * 给定一个非空且只包含非负数的整数数组 nums，数组的度的定义是指数组里任一元素出现频数的最大值。
-     *
+     * <p>
      * 你的任务是在 nums 中找到与 nums 拥有相同大小的度的最短连续子数组，返回其长度。
      *
      * @param nums
      * @return
      */
     public int findShortestSubArray(int[] nums) {
-        if(nums == null){
+        if (nums == null) {
             return 0;
         }
-        Map<Integer,int[]> map = new HashMap<>();
+        Map<Integer, int[]> map = new HashMap<>();
         int n = nums.length;
-        for(int i = 0; i < n; i++){
-            if(map.containsKey(nums[i])){
+        for (int i = 0; i < n; i++) {
+            if (map.containsKey(nums[i])) {
                 map.get(nums[i])[0]++;
                 map.get(nums[i])[2] = i;
-            }else{
-                map.put(nums[i],new int[]{1,i,i});
+            } else {
+                map.put(nums[i], new int[]{1, i, i});
             }
         }
-        int maxNum = 0,minLen = 0;
-        for(Map.Entry<Integer,int[]> entry : map.entrySet()){
+        int maxNum = 0, minLen = 0;
+        for (Map.Entry<Integer, int[]> entry : map.entrySet()) {
             int[] arr = entry.getValue();
-            if(maxNum < arr[0]){
+            if (maxNum < arr[0]) {
                 maxNum = arr[0];
                 minLen = arr[2] - arr[1] + 1;
-            }else if(maxNum == arr[0]){
-                if(minLen > arr[2] - arr[1] + 1){
+            } else if (maxNum == arr[0]) {
+                if (minLen > arr[2] - arr[1] + 1) {
                     minLen = arr[2] - arr[1] + 1;
                 }
             }
@@ -4420,9 +4429,9 @@ public class ArrayAlgorithm {
 
     /**
      * 1438. 绝对差不超过限制的最长连续子数组
-     *
+     * <p>
      * 给你一个整数数组 nums ，和一个表示限制的整数 limit，请你返回最长连续子数组的长度，该子数组中的任意两个元素之间的绝对差必须小于或者等于 limit 。
-     *
+     * <p>
      * 如果不存在满足条件的子数组，则返回 0 。
      *
      * @param nums
@@ -4435,25 +4444,25 @@ public class ArrayAlgorithm {
         int n = nums.length;
         int left = 0, right = 0;
         int ret = 0;
-        while(right < n){
-            while (!queMax.isEmpty() && queMax.peekLast() < nums[right]){
+        while (right < n) {
+            while (!queMax.isEmpty() && queMax.peekLast() < nums[right]) {
                 queMax.pollLast();
             }
-            while (!queMin.isEmpty() && queMin.peekLast() > nums[right]){
+            while (!queMin.isEmpty() && queMin.peekLast() > nums[right]) {
                 queMin.pollLast();
             }
             queMax.offerLast(nums[right]);
             queMin.offerLast(nums[right]);
-            while (!queMax.isEmpty() && !queMin.isEmpty() && queMax.peekFirst() - queMin.peekFirst() > limit){
-                if(nums[left] == queMin.peekFirst()){
+            while (!queMax.isEmpty() && !queMin.isEmpty() && queMax.peekFirst() - queMin.peekFirst() > limit) {
+                if (nums[left] == queMin.peekFirst()) {
                     queMin.pollFirst();
                 }
-                if(nums[left] == queMax.peekFirst()){
+                if (nums[left] == queMax.peekFirst()) {
                     queMax.pollFirst();
                 }
                 left++;
             }
-            ret = Math.max(ret,right - left + 1);
+            ret = Math.max(ret, right - left + 1);
             right++;
         }
         return ret;
@@ -4461,23 +4470,22 @@ public class ArrayAlgorithm {
 
     /**
      * 766. 托普利茨矩阵
-     *
+     * <p>
      * 给你一个 m x n 的矩阵 matrix 。如果这个矩阵是托普利茨矩阵，返回 true ；否则，返回 false 。
-     *
+     * <p>
      * 如果矩阵上每一条由左上到右下的对角线上的元素都相同，那么这个矩阵是 托普利茨矩阵 。
-     *
      *
      * @param matrix
      * @return
      */
     public boolean isToeplitzMatrix(int[][] matrix) {
-        if(matrix == null){
+        if (matrix == null) {
             return false;
         }
-        int m = matrix.length,n = matrix[0].length;
-        for(int i = 1; i < m; i++){
-            for(int j = 1; j < n; j++){
-                if(matrix[i][j] != matrix[i-1][j-1]){
+        int m = matrix.length, n = matrix[0].length;
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] != matrix[i - 1][j - 1]) {
                     return false;
                 }
             }
@@ -4487,36 +4495,36 @@ public class ArrayAlgorithm {
 
     /**
      * 896. 单调数列
-     *
+     * <p>
      * 如果数组是单调递增或单调递减的，那么它是单调的。
-     *
+     * <p>
      * 如果对于所有 i <= j，A[i] <= A[j]，那么数组 A 是单调递增的。 如果对于所有 i <= j，A[i]> = A[j]，那么数组 A 是单调递减的。
-     *
+     * <p>
      * 当给定的数组 A 是单调数组时返回 true，否则返回 false。
      *
      * @param A
      * @return
      */
     public boolean isMonotonic(int[] A) {
-        if(A == null){
+        if (A == null) {
             return false;
         }
-        if(A.length < 2){
+        if (A.length < 2) {
             return true;
         }
         boolean result = true;
         int upOrDown = 0;
-        for(int i = 1; i < A.length;i++){
-            if(upOrDown == 0){
-                if(A[i] > A[i-1]){
+        for (int i = 1; i < A.length; i++) {
+            if (upOrDown == 0) {
+                if (A[i] > A[i - 1]) {
                     upOrDown = 1;
-                }else if(A[i] < A[i-1]){
+                } else if (A[i] < A[i - 1]) {
                     upOrDown = 2;
                 }
-            }else{
-                if(upOrDown == 1 && A[i] < A[i-1]){
+            } else {
+                if (upOrDown == 1 && A[i] < A[i - 1]) {
                     return false;
-                }else if(upOrDown == 2 && A[i] > A[i-1]){
+                } else if (upOrDown == 2 && A[i] > A[i - 1]) {
                     return false;
                 }
             }
@@ -4526,7 +4534,7 @@ public class ArrayAlgorithm {
 
     /**
      * 338. 比特位计数
-     *
+     * <p>
      * 给定一个非负整数 num。对于 0 ≤ i ≤ num 范围中的每个数字 i ，计算其二进制数中的 1 的数目并将它们作为数组返回。
      *
      * @param num
@@ -4535,8 +4543,8 @@ public class ArrayAlgorithm {
     public int[] countBits(int num) {
         int[] bits = new int[num + 1];
         int hightBit = 0;
-        for(int i = 1; i <= num;i++){
-            if((i & (i - 1)) == 0){
+        for (int i = 1; i <= num; i++) {
+            if ((i & (i - 1)) == 0) {
                 hightBit = i;
             }
             bits[i] = bits[i - hightBit] + 1;
@@ -4547,9 +4555,9 @@ public class ArrayAlgorithm {
     /**
      * 73. 矩阵置零
      * 给定一个 m x n 的矩阵，如果一个元素为 0 ，则将其所在行和列的所有元素都设为 0 。请使用 原地 算法。
-     *
+     * <p>
      * 进阶：
-     *
+     * <p>
      * 一个直观的解决方案是使用  O(mn) 的额外空间，但这并不是一个好的解决方案。
      * 一个简单的改进方案是使用 O(m + n) 的额外空间，但这仍然不是最好的解决方案。
      * 你能想出一个仅使用常量空间的解决方案吗？
@@ -4557,30 +4565,291 @@ public class ArrayAlgorithm {
      * @param matrix
      */
     public void setZeroes(int[][] matrix) {
-        if(matrix == null){
+        if (matrix == null) {
             return;
         }
         int m = matrix.length, n = matrix[0].length;
         boolean flagCol0 = false;
-        for(int i = 0; i < m; i++){
-            if(matrix[i][0] == 0){
+        for (int i = 0; i < m; i++) {
+            if (matrix[i][0] == 0) {
                 flagCol0 = true;
             }
-            for(int j = 1; j < n; j++){
-                if(matrix[i][j] == 0){
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][j] == 0) {
                     matrix[i][0] = matrix[0][j] = 0;
                 }
             }
         }
-        for(int i = m - 1; i >= 0; i--){
-            for(int j = 1; j < n; j++){
-                if(matrix[i][0] == 0 || matrix[0][j] == 0){
+        for (int i = m - 1; i >= 0; i--) {
+            for (int j = 1; j < n; j++) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
                     matrix[i][j] = 0;
                 }
             }
-            if(flagCol0){
+            if (flagCol0) {
                 matrix[i][0] = 0;
             }
         }
+    }
+
+    /**
+     * 74. 搜索二维矩阵
+     * <p>
+     * 编写一个高效的算法来判断 m x n 矩阵中，是否存在一个目标值。该矩阵具有如下特性：
+     * <p>
+     * 每行中的整数从左到右按升序排列。
+     * 每行的第一个整数大于前一行的最后一个整数。
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public boolean searchMatrix(int[][] matrix, int target) {
+        if (matrix == null || matrix.length == 0 || matrix[0].length == 0) {
+            return false;
+        }
+        int m = matrix.length, n = matrix[0].length;
+        int low = 0, high = m * n - 1;
+        while (low <= high) {
+            int mid = (high - low) / 2 + low;
+            int x = matrix[mid / n][mid % n];
+            if (x < target) {
+                low = mid + 1;
+            } else if (x > target) {
+                high = mid - 1;
+            } else {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 90. 子集 II
+     * <p>
+     * 给你一个整数数组 nums ，其中可能包含重复元素，请你返回该数组所有可能的子集（幂集）。
+     * <p>
+     * 解集 不能 包含重复的子集。返回的解集中，子集可以按 任意顺序 排列。
+     *
+     * @param nums
+     * @return
+     */
+    private List<Integer> tSWD = new ArrayList<>();
+    private List<List<Integer>> ansSWD = new ArrayList<>();
+
+    public List<List<Integer>> subsetsWithDup(int[] nums) {
+        Arrays.sort(nums);
+        dfsSWD(false, 0, nums);
+        return ansSWD;
+    }
+
+    private void dfsSWD(boolean choosePre, int cur, int[] nums) {
+        if (cur == nums.length) {
+            ansSWD.add(new ArrayList<>(tSWD));
+            return;
+        }
+        dfsSWD(false, cur + 1, nums);
+        if (!choosePre && cur > 0 && nums[cur - 1] == nums[cur]) {
+            return;
+        }
+        tSWD.add(nums[cur]);
+        dfsSWD(true, cur + 1, nums);
+        tSWD.remove(tSWD.size() - 1);
+    }
+
+    /**
+     * 80. 删除有序数组中的重复项 II
+     * <p>
+     * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 最多出现两次 ，返回删除后数组的新长度。
+     * <p>
+     * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates_V2(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int n = nums.length;
+        if (n <= 2) {
+            return n;
+        }
+        int slow = 2, fast = 2;
+        while (fast < n) {
+            if (nums[slow - 2] != nums[fast]) {
+                nums[slow] = nums[fast];
+                slow++;
+            }
+            fast++;
+        }
+        return slow;
+    }
+
+    /**
+     * 81. 搜索旋转排序数组 II
+     * <p>
+     * 已知存在一个按非降序排列的整数数组 nums ，数组中的值不必互不相同。
+     * <p>
+     * 在传递给函数之前，nums 在预先未知的某个下标 k（0 <= k < nums.length）上进行了 旋转 ，使数组变为 [nums[k], nums[k+1], ..., nums[n-1], nums[0], nums[1], ..., nums[k-1]]（下标 从 0 开始 计数）。例如， [0,1,2,4,4,4,5,6,6,7] 在下标 5 处经旋转后可能变为 [4,5,6,6,7,0,1,2,4,4] 。
+     * <p>
+     * 给你 旋转后 的数组 nums 和一个整数 target ，请你编写一个函数来判断给定的目标值是否存在于数组中。如果 nums 中存在这个目标值 target ，则返回 true ，否则返回 false 。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public boolean search_v2(int[] nums, int target) {
+        int n = nums.length;
+        if (n == 0) {
+            return false;
+        }
+        if (n == 1) {
+            return nums[0] == target;
+        }
+        int l = 0, r = n - 1;
+        while (l <= r) {
+            int mid = (l + r) / 2;
+            if (nums[mid] == target) {
+                return true;
+            }
+            if (nums[l] == nums[mid] && nums[mid] == nums[r]) {
+                l++;
+                r--;
+            } else if (nums[l] <= nums[mid]) {
+                if (nums[l] <= target && target < nums[mid]) {
+                    r = mid - 1;
+                } else {
+                    l = mid + 1;
+                }
+            } else {
+                if (nums[mid] < target && target <= nums[n - 1]) {
+                    l = mid + 1;
+                } else {
+                    r = mid - 1;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * 154. 寻找旋转排序数组中的最小值 II
+     * 已知一个长度为 n 的数组，预先按照升序排列，经由 1 到 n 次 旋转 后，得到输入数组。例如，原数组 nums = [0,1,4,4,5,6,7] 在变化后可能得到：
+     * 若旋转 4 次，则可以得到 [4,5,6,7,0,1,4]
+     * 若旋转 7 次，则可以得到 [0,1,4,4,5,6,7]
+     * 注意，数组 [a[0], a[1], a[2], ..., a[n-1]] 旋转一次 的结果为数组 [a[n-1], a[0], a[1], a[2], ..., a[n-2]] 。
+     * 给你一个可能存在 重复 元素值的数组 nums ，它原来是一个升序排列的数组，并按上述情形进行了多次旋转。请你找出并返回数组中的 最小元素 。
+     *
+     * @param nums
+     * @return
+     */
+    public int findMin(int[] nums) {
+        if (nums == null) {
+            return 0;
+        }
+        int low = 0;
+        int high = nums.length - 1;
+        while (low < high) {
+            int pivot = low + (high - low) / 2;
+            if (nums[pivot] < nums[high]) {
+                high = pivot;
+            } else if (nums[pivot] > nums[high]) {
+                low = pivot + 1;
+            } else {
+                high -= 1;
+            }
+        }
+        return nums[low];
+    }
+
+    /**
+     * 179. 最大数
+     *
+     * 给定一组非负整数 nums，重新排列每个数的顺序（每个数不可拆分）使之组成一个最大的整数。
+     *
+     * 注意：输出结果可能非常大，所以你需要返回一个字符串而不是整数。
+     *
+     * @param nums
+     * @return
+     */
+    public String largestNumber(int[] nums) {
+        if(nums == null){
+            return null;
+        }
+        int n = nums.length;
+        Integer[] numsArr = new Integer[n];
+        for(int i = 0; i < n; i++){
+            numsArr[i] = nums[i];
+        }
+        Arrays.sort(numsArr,(x,y) -> {
+            long sx = 10, sy = 10;
+            while (sx <= x){
+                sx *= 10;
+            }
+            while (sy <= y){
+                sy *= 10;
+            }
+            return (int)(-sy * x - y + sx * y + x);
+        });
+        if(numsArr[0] == 0) {
+            return "0";
+        }
+        StringBuilder ret = new StringBuilder();
+        for(int num : numsArr){
+            ret.append(num);
+        }
+        return ret.toString();
+    }
+
+    /**
+     * 27. 移除元素
+     * 给你一个数组 nums 和一个值 val，你需要 原地 移除所有数值等于 val 的元素，并返回移除后数组的新长度。
+     *
+     * 不要使用额外的数组空间，你必须仅使用 O(1) 额外空间并 原地 修改输入数组。
+     *
+     * 元素的顺序可以改变。你不需要考虑数组中超出新长度后面的元素。
+     * @param nums
+     * @param val
+     * @return
+     */
+    public int removeElement(int[] nums, int val) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        int length = nums.length;
+        int slow = 0,fast = 0;
+        while (fast < length){
+            if(nums[fast] != val){
+                nums[slow] = nums[fast];
+                slow++;
+            }
+            fast++;
+        }
+        return slow;
+    }
+
+    /**
+     * 377. 组合总和 Ⅳ
+     *
+     * 给你一个由 不同 整数组成的数组 nums ，和一个目标整数 target 。请你从 nums 中找出并返回总和为 target 的元素组合的个数。
+     *
+     * 题目数据保证答案符合 32 位整数范围。
+     *
+     * @param nums
+     * @param target
+     * @return
+     */
+    public int combinationSum4(int[] nums, int target) {
+        int[] dp = new int[target + 1];
+        dp[0] = 1;
+        for (int i = 1; i <= target; i++) {
+            for (int num : nums) {
+                if (num <= i) {
+                    dp[i] += dp[i - num];
+                }
+            }
+        }
+        return dp[target];
     }
 }

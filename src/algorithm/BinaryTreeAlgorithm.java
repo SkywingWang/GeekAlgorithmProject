@@ -1566,4 +1566,63 @@ public class BinaryTreeAlgorithm {
             return x == y;
         }
     }
+
+    /**
+     * 783. 二叉搜索树节点最小距离
+     *
+     * 给你一个二叉搜索树的根节点 root ，返回 树中任意两不同节点值之间的最小差值 。
+     *
+     * @param root
+     * @return
+     */
+    int preMDIB,ansMDIB;
+    public int minDiffInBST(TreeNode root) {
+        ansMDIB = Integer.MAX_VALUE;
+        preMDIB = -1;
+        dfsMDIB(root);
+        return ansMDIB;
+    }
+
+    private void dfsMDIB(TreeNode root){
+        if(root == null){
+            return;
+        }
+        dfsMDIB(root.left);
+        if(preMDIB == -1){
+            preMDIB = root.val;
+        }else{
+            ansMDIB = Math.min(ansMDIB,root.val - preMDIB);
+            preMDIB = root.val;
+        }
+        dfsMDIB(root.right);
+    }
+
+    /**
+     * 897. 递增顺序搜索树
+     *
+     * 给你一棵二叉搜索树，请你 按中序遍历 将其重新排列为一棵递增顺序搜索树，使树中最左边的节点成为树的根节点，并且每个节点没有左子节点，只有一个右子节点。
+     *
+     * @param root
+     * @return
+     */
+    public TreeNode increasingBST(TreeNode root) {
+        List<Integer> res = new ArrayList<>();
+        inorderIBST(root,res);
+        TreeNode dummyNode = new TreeNode(-1);
+        TreeNode currNode = dummyNode;
+        for(int value : res){
+            currNode.right = new TreeNode(value);
+            currNode = currNode.right;
+        }
+        return dummyNode.right;
+    }
+
+    private void inorderIBST(TreeNode node,List<Integer> res){
+        if(node == null){
+            return;
+        }
+        inorderIBST(node.left,res);
+        res.add(node.val);
+        inorderIBST(node.right,res);
+    }
 }

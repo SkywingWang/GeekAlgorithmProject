@@ -21,25 +21,30 @@ public class StringAlgorithm {
      * 输入为非空字符串且只包含数字 1 和 0。
      */
     public String addBinary(String a, String b) {
-        if (a == null || a.length() == 0)
+        if (a == null || a.length() == 0) {
             return b;
-        if (b == null || b.length() == 0)
+        }
+        if (b == null || b.length() == 0) {
             return a;
+        }
         StringBuilder result = new StringBuilder();
         int i = 1;
         int isCarry = 0;
         while (a.length() - i >= 0 || b.length() - i >= 0) {
             int sum = isCarry;
-            if (a.length() - i >= 0)
+            if (a.length() - i >= 0) {
                 sum = sum + (a.charAt(a.length() - i) - '0');
-            if (b.length() - i >= 0)
+            }
+            if (b.length() - i >= 0) {
                 sum = sum + (b.charAt(b.length() - i) - '0');
+            }
             isCarry = sum / 2;
             result.append(sum % 2);
             i++;
         }
-        if (isCarry == 1)
+        if (isCarry == 1) {
             result.append(isCarry);
+        }
         return result.reverse().toString();
     }
 
@@ -50,8 +55,9 @@ public class StringAlgorithm {
      * 给定字符串，返回字符串中最后一个单词的长度，空格隔开
      */
     public int lengthOfLastWord(String s) {
-        if (s == null || s.length() == 0)
+        if (s == null || s.length() == 0) {
             return 0;
+        }
         int i = s.length() - 1;
         char space = new Character(' ');
         while (i >= 0) {
@@ -82,7 +88,7 @@ public class StringAlgorithm {
      * J 中的字母不重复，J 和 S中的所有字符都是字母。字母区分大小写，因此"a"和"A"是不同类型的石头。
      */
     public int numJewelsInStones(String J, String S) {
-        if (J == null || "".equals(J) || S == null || "".equals(S)){
+        if (J == null || "".equals(J) || S == null || "".equals(S)) {
             return 0;
         }
         char[] tmpJ = J.toCharArray();
@@ -94,7 +100,7 @@ public class StringAlgorithm {
         int count = 0;
         char[] tmpS = S.toCharArray();
         for (int i = 0; i < tmpS.length; i++) {
-            if (setJ.contains(tmpS[i])){
+            if (setJ.contains(tmpS[i])) {
                 count++;
             }
         }
@@ -110,8 +116,9 @@ public class StringAlgorithm {
      * @return
      */
     public String defangIPaddr(String address) {
-        if (address == null)
+        if (address == null) {
             return null;
+        }
         char[] addressChar = address.toCharArray();
         StringBuffer result = new StringBuffer();
         for (int i = 0; i < addressChar.length; i++) {
@@ -136,16 +143,17 @@ public class StringAlgorithm {
      * @return
      */
     public boolean isPalindrome(String s) {
-        if (s == null || "".equals(s))
+        if (s == null || "".equals(s)) {
             return true;
+        }
         int l = 0, r = s.length() - 1;
         s = s.toUpperCase();
         while (l < r) {
-            if (!Character.isLetterOrDigit(s.charAt(l)))
+            if (!Character.isLetterOrDigit(s.charAt(l))) {
                 l++;
-            else if (!Character.isLetterOrDigit(s.charAt(r)))
+            } else if (!Character.isLetterOrDigit(s.charAt(r))) {
                 r--;
-            else if (s.charAt(l) == s.charAt(r)) {
+            } else if (s.charAt(l) == s.charAt(r)) {
                 l++;
                 r--;
             } else {
@@ -169,12 +177,15 @@ public class StringAlgorithm {
      * @return
      */
     public boolean isIsomorphic(String s, String t) {
-        if (s == null && t == null)
+        if (s == null && t == null) {
             return true;
-        if (s == null || t == null)
+        }
+        if (s == null || t == null) {
             return false;
-        if (s.length() != t.length())
+        }
+        if (s.length() != t.length()) {
             return false;
+        }
         Map<Character, Character> sToTMap = new HashMap<>();
         Map<Character, Character> tToSMap = new HashMap<>();
         int length = s.length();
@@ -182,9 +193,9 @@ public class StringAlgorithm {
             if (!sToTMap.containsKey(s.charAt(i)) && !tToSMap.containsKey(t.charAt(i))) {
                 sToTMap.put(s.charAt(i), t.charAt(i));
                 tToSMap.put(t.charAt(i), s.charAt(i));
-            } else if (!sToTMap.containsKey(s.charAt(i)) || !tToSMap.containsKey(t.charAt(i)))
+            } else if (!sToTMap.containsKey(s.charAt(i)) || !tToSMap.containsKey(t.charAt(i))) {
                 return false;
-            else if (!sToTMap.get(s.charAt(i)).equals(t.charAt(i))) {
+            } else if (!sToTMap.get(s.charAt(i)).equals(t.charAt(i))) {
                 return false;
             }
         }
@@ -217,8 +228,9 @@ public class StringAlgorithm {
      * @return
      */
     public int[] maxDepthAfterSplit(String seq) {
-        if (seq == null || seq.length() == 0)
+        if (seq == null || seq.length() == 0) {
             return null;
+        }
         int[] ans = new int[seq.length()];
         int index = 0;
         int s = 0;
@@ -247,8 +259,9 @@ public class StringAlgorithm {
      * @return
      */
     public int myAtoi(String str) {
-        if (str == null || "".equals(str.trim()))
+        if (str == null || "".equals(str.trim())) {
             return 0;
+        }
         str = str.trim();
         char[] chars = str.toCharArray();
         int index = 0;
@@ -265,8 +278,9 @@ public class StringAlgorithm {
         while (index < chars.length && Character.isDigit(chars[index])) {
             int digit = chars[index] - '0';
             result = result * 10 + digit;
-            if (result > Integer.MAX_VALUE)
+            if (result > Integer.MAX_VALUE) {
                 return negative ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+            }
             index++;
         }
         return negative ? -(int) result : (int) result;
@@ -280,8 +294,9 @@ public class StringAlgorithm {
      * @return
      */
     public String reverseWords(String s) {
-        if (s == null || s.trim().length() == 0)
+        if (s == null || s.trim().length() == 0) {
             return "";
+        }
         s = s.trim();
         List<String> wordList = Arrays.asList(s.split("\\s+"));
         Collections.reverse(wordList);
@@ -289,8 +304,9 @@ public class StringAlgorithm {
     }
 
     public String reverseWords_2(String s) {
-        if (s == null || s.trim().length() == 0)
+        if (s == null || s.trim().length() == 0) {
             return "";
+        }
         s = s.trim();
         StringBuilder stringBuilder = new StringBuilder();
         Deque<String> d = new ArrayDeque<>();
@@ -326,8 +342,9 @@ public class StringAlgorithm {
      * @return
      */
     public int getMaxRepetitions(String s1, int n1, String s2, int n2) {
-        if (n1 == 0)
+        if (n1 == 0) {
             return 0;
+        }
         char[] c1 = s1.toCharArray();
         char[] c2 = s2.toCharArray();
         int l1 = s1.length();
@@ -369,10 +386,12 @@ public class StringAlgorithm {
      * @return
      */
     public String reverseLeftWords(String s, int n) {
-        if (s == null)
+        if (s == null) {
             return null;
-        if (n > s.length())
+        }
+        if (n > s.length()) {
             return s;
+        }
         return s.substring(n) + s.substring(0, n);
     }
 
@@ -385,10 +404,12 @@ public class StringAlgorithm {
      * @return
      */
     public boolean validPalindrome(String s) {
-        if (s == null || s.length() == 0)
+        if (s == null || s.length() == 0) {
             return false;
-        if (s.length() <= 2)
+        }
+        if (s.length() <= 2) {
             return true;
+        }
         int left = 0, right = s.length() - 1;
         while (left < right) {
             char c1 = s.charAt(left), c2 = s.charAt(right);
@@ -426,8 +447,9 @@ public class StringAlgorithm {
      * @return
      */
     public int findTheLongestSubstring(String s) {
-        if (s == null || s.length() == 0){
-            return 0;}
+        if (s == null || s.length() == 0) {
+            return 0;
+        }
         int n = s.length();
         int[] pos = new int[1 << 5];
         Arrays.fill(pos, -1);
@@ -463,13 +485,15 @@ public class StringAlgorithm {
      * @return
      */
     public String longestPalindrome(String s) {
-        if(s == null || s.length() < 1) return "";
+        if (s == null || s.length() < 1) {
+            return "";
+        }
         int start = 0, end = 0;
-        for(int i = 0; i < s.length(); i++){
-            int len1 = expandAroundCenter(s,i,i);
-            int len2 = expandAroundCenter(s,i,i+1);
-            int len = Math.max(len1,len2);
-            if(len > end - start){
+        for (int i = 0; i < s.length(); i++) {
+            int len1 = expandAroundCenter(s, i, i);
+            int len2 = expandAroundCenter(s, i, i + 1);
+            int len = Math.max(len1, len2);
+            if (len > end - start) {
                 start = i - (len - 1) / 2;
                 end = i + len / 2;
             }
@@ -488,7 +512,7 @@ public class StringAlgorithm {
 
     /**
      * 76. 最小覆盖子串
-     *
+     * <p>
      * 给你一个字符串 S、一个字符串 T，请在字符串 S 里面找出：包含 T 所有字符的最小子串。
      *
      * @param s
@@ -497,6 +521,7 @@ public class StringAlgorithm {
      */
     Map<Character, Integer> ori = new HashMap<Character, Integer>();
     Map<Character, Integer> cnt = new HashMap<Character, Integer>();
+
     public String minWindow(String s, String t) {
         int tLen = t.length();
         for (int i = 0; i < tLen; i++) {
@@ -526,7 +551,7 @@ public class StringAlgorithm {
         return ansL == -1 ? "" : s.substring(ansL, ansR);
     }
 
-    private boolean checkMinWindow(){
+    private boolean checkMinWindow() {
         Iterator iter = ori.entrySet().iterator();
         while (iter.hasNext()) {
             Map.Entry entry = (Map.Entry) iter.next();
@@ -541,33 +566,34 @@ public class StringAlgorithm {
 
     /**
      * 394. 字符串解码
-     *
+     * <p>
      * 给定一个经过编码的字符串，返回它解码后的字符串。
-     *
+     * <p>
      * 编码规则为: k[encoded_string]，表示其中方括号内部的 encoded_string 正好重复 k 次。注意 k 保证为正整数。
-     *
+     * <p>
      * 你可以认为输入字符串总是有效的；输入字符串中没有额外的空格，且输入的方括号总是符合格式要求的。
-     *
+     * <p>
      * 此外，你可以认为原始数据不包含数字，所有的数字只表示重复的次数 k ，例如不会出现像 3a 或 2[4] 的输入。
      *
      * @param s
      * @return
      */
     int ptrDecodeString;
+
     public String decodeString(String s) {
         LinkedList<String> stk = new LinkedList<>();
         ptrDecodeString = 0;
-        while (ptrDecodeString < s.length()){
+        while (ptrDecodeString < s.length()) {
             char cur = s.charAt(ptrDecodeString);
-            if(Character.isDigit(cur)){
+            if (Character.isDigit(cur)) {
                 String digits = getDigitsDecodeString(s);
                 stk.addLast(digits);
-            }else if(Character.isLetter(cur) || cur == '['){
+            } else if (Character.isLetter(cur) || cur == '[') {
                 stk.addLast(String.valueOf(s.charAt(ptrDecodeString++)));
-            }else{
+            } else {
                 ++ptrDecodeString;
                 LinkedList<String> sub = new LinkedList<>();
-                while (!"[".equals(stk.peekLast())){
+                while (!"[".equals(stk.peekLast())) {
                     sub.addLast(stk.removeLast());
                 }
                 Collections.reverse(sub);
@@ -575,7 +601,7 @@ public class StringAlgorithm {
                 int repTime = Integer.parseInt(stk.removeLast());
                 StringBuffer t = new StringBuffer();
                 String o = getStringDecodeString(sub);
-                while (repTime-- > 0){
+                while (repTime-- > 0) {
                     t.append(o);
                 }
                 stk.addLast(t.toString());
@@ -584,17 +610,17 @@ public class StringAlgorithm {
         return getStringDecodeString(stk);
     }
 
-    private String getDigitsDecodeString(String s){
+    private String getDigitsDecodeString(String s) {
         StringBuffer ret = new StringBuffer();
-        while (Character.isDigit(s.charAt(ptrDecodeString))){
+        while (Character.isDigit(s.charAt(ptrDecodeString))) {
             ret.append(s.charAt(ptrDecodeString++));
         }
         return ret.toString();
     }
 
-    private String getStringDecodeString(LinkedList<String> v){
+    private String getStringDecodeString(LinkedList<String> v) {
         StringBuffer ret = new StringBuffer();
-        for(String s:v){
+        for (String s : v) {
             ret.append(s);
         }
         return ret.toString();
@@ -603,11 +629,11 @@ public class StringAlgorithm {
     /**
      * 126. 单词接龙 II
      * 给定两个单词（beginWord 和 endWord）和一个字典 wordList，找出所有从 beginWord 到 endWord 的最短转换序列。转换需遵循如下规则：
-     *
+     * <p>
      * 每次转换只能改变一个字母。
      * 转换过程中的中间单词必须是字典中的单词。
      * 说明:
-     *
+     * <p>
      * 如果不存在这样的转换序列，返回一个空列表。
      * 所有单词具有相同的长度。
      * 所有单词只由小写字母组成。
@@ -620,33 +646,33 @@ public class StringAlgorithm {
      * @return
      */
     private static final int INF = 1 << 20;
-    private Map<String,Integer> wordId = new HashMap<>();
+    private Map<String, Integer> wordId = new HashMap<>();
     private ArrayList<String> idWord = new ArrayList<>();
     private ArrayList<Integer>[] edges;
 
     public List<List<String>> findLadders(String beginWord, String endWord, List<String> wordList) {
         int id = 0;
-        for(String word : wordList){
-            if(!wordId.containsKey(word)){
-                wordId.put(word,id++);
+        for (String word : wordList) {
+            if (!wordId.containsKey(word)) {
+                wordId.put(word, id++);
                 idWord.add(word);
             }
         }
-        if(!wordId.containsKey(endWord)){
+        if (!wordId.containsKey(endWord)) {
             return new ArrayList<>();
         }
-        if(!wordId.containsKey(beginWord)){
-            wordId.put(beginWord,id++);
+        if (!wordId.containsKey(beginWord)) {
+            wordId.put(beginWord, id++);
             idWord.add(beginWord);
         }
 
         edges = new ArrayList[idWord.size()];
-        for(int i = 0; i < idWord.size();i++){
+        for (int i = 0; i < idWord.size(); i++) {
             edges[i] = new ArrayList<>();
         }
-        for(int i = 0; i < idWord.size();i++){
-            for(int j = i + 1; j < idWord.size();j++){
-                if(transformCheck(idWord.get(i),idWord.get(j))){
+        for (int i = 0; i < idWord.size(); i++) {
+            for (int j = i + 1; j < idWord.size(); j++) {
+                if (transformCheck(idWord.get(i), idWord.get(j))) {
                     edges[i].add(j);
                     edges[j].add(i);
                 }
@@ -655,7 +681,7 @@ public class StringAlgorithm {
         int dest = wordId.get(endWord);
         List<List<String>> res = new ArrayList<>();
         int[] cost = new int[id];
-        for(int i = 0 ; i < id; i++){
+        for (int i = 0; i < id; i++) {
             cost[i] = INF;
         }
 
@@ -665,21 +691,22 @@ public class StringAlgorithm {
         q.add(tmpBegin);
         cost[wordId.get(beginWord)] = 0;
 
-        while (!q.isEmpty()){
+        while (!q.isEmpty()) {
             ArrayList<Integer> now = q.poll();
             int last = now.get(now.size() - 1);
-            if(last == dest){
+            if (last == dest) {
                 ArrayList<String> tmp = new ArrayList<>();
-                for(int index : now){
+                for (int index : now) {
                     tmp.add(idWord.get(index));
                 }
                 res.add(tmp);
-            } else{
-                for(int i = 0 ; i < edges[last].size();i++){
+            } else {
+                for (int i = 0; i < edges[last].size(); i++) {
                     int to = edges[last].get(i);
-                    if(cost[last] + 1 <= cost[to]){
+                    if (cost[last] + 1 <= cost[to]) {
                         cost[to] = cost[last] + 1;
-                        ArrayList<Integer> tmp = new ArrayList<>(now); tmp.add(to);
+                        ArrayList<Integer> tmp = new ArrayList<>(now);
+                        tmp.add(to);
                         q.add(tmp);
                     }
                 }
@@ -688,10 +715,10 @@ public class StringAlgorithm {
         return res;
     }
 
-    private boolean transformCheck(String str1,String str2){
+    private boolean transformCheck(String str1, String str2) {
         int differences = 0;
-        for(int i = 0; i < str1.length() && differences < 2; i++){
-            if(str1.charAt(i) != str2.charAt(i)){
+        for (int i = 0; i < str1.length() && differences < 2; i++) {
+            if (str1.charAt(i) != str2.charAt(i)) {
                 ++differences;
             }
         }
@@ -700,34 +727,35 @@ public class StringAlgorithm {
 
     /**
      * 990. 等式方程的可满足性
-     *
+     * <p>
      * 给定一个由表示变量之间关系的字符串方程组成的数组，每个字符串方程 equations[i] 的长度为 4，并采用两种不同的形式之一："a==b" 或 "a!=b"。在这里，a 和 b 是小写字母（不一定不同），表示单字母变量名。
-     *
+     * <p>
      * 只有当可以将整数分配给变量名，以便满足所有给定的方程时才返回 true，否则返回 false。 
      *
      * @param equations
      * @return
      */
     public boolean equationsPossible(String[] equations) {
-        if(equations == null || equations.length == 0)
+        if (equations == null || equations.length == 0) {
             return false;
+        }
         int length = equations.length;
         int[] parent = new int[26];
-        for(int i = 0; i < 26; i++){
+        for (int i = 0; i < 26; i++) {
             parent[i] = i;
         }
-        for(String str : equations){
-            if(str.charAt(1) == '='){
+        for (String str : equations) {
+            if (str.charAt(1) == '=') {
                 int index1 = str.charAt(0) - 'a';
                 int index2 = str.charAt(3) - 'a';
-                union(parent,index1,index2);
+                union(parent, index1, index2);
             }
         }
-        for(String str : equations){
-            if(str.charAt(1) == '!'){
+        for (String str : equations) {
+            if (str.charAt(1) == '!') {
                 int index1 = str.charAt(0) - 'a';
                 int index2 = str.charAt(3) - 'a';
-                if(find(parent,index1) == find(parent,index2)){
+                if (find(parent, index1) == find(parent, index2)) {
                     return false;
                 }
             }
@@ -735,12 +763,12 @@ public class StringAlgorithm {
         return true;
     }
 
-    private void union(int[] parent, int index1, int index2){
-        parent[find(parent,index1)] = find(parent,index2);
+    private void union(int[] parent, int index1, int index2) {
+        parent[find(parent, index1)] = find(parent, index2);
     }
 
-    private int find(int[] parent,int index){
-        while (parent[index] != index){
+    private int find(int[] parent, int index) {
+        while (parent[index] != index) {
             parent[index] = parent[parent[index]];
             index = parent[index];
         }
@@ -749,9 +777,8 @@ public class StringAlgorithm {
 
     /**
      * 面试题46. 把数字翻译成字符串
-     *
+     * <p>
      * 给定一个数字，我们按照如下规则把它翻译为字符串：0 翻译成 “a” ，1 翻译成 “b”，……，11 翻译成 “l”，……，25 翻译成 “z”。一个数字可能有多个翻译。请编程实现一个函数，用来计算一个数字有多少种不同的翻译方法。
-     *
      *
      * @param num
      * @return
@@ -759,34 +786,35 @@ public class StringAlgorithm {
     public int translateNum(int num) {
         String src = String.valueOf(num);
         int p = 0, q = 0, r = 1;
-        for(int i = 0; i < src.length(); i++){
+        for (int i = 0; i < src.length(); i++) {
             p = q;
             q = r;
             r = 0;
-            r+= q;
-            if(i== 0)
+            r += q;
+            if (i == 0) {
                 continue;
-            String pre = src.substring(i-1,i+1);
-            if(pre.compareTo("25") <= 0 && pre.compareTo("10") >= 0)
+            }
+            String pre = src.substring(i - 1, i + 1);
+            if (pre.compareTo("25") <= 0 && pre.compareTo("10") >= 0) {
                 r += p;
+            }
         }
         return r;
     }
 
     /**
      * 10. 正则表达式匹配
-     *
+     * <p>
      * 给你一个字符串 s 和一个字符规律 p，请你来实现一个支持 '.' 和 '*' 的正则表达式匹配。
-     *
+     * <p>
      * '.' 匹配任意单个字符
      * '*' 匹配零个或多个前面的那一个元素
      * 所谓匹配，是要涵盖 整个 字符串 s的，而不是部分字符串。
-     *
+     * <p>
      * 说明:
-     *
+     * <p>
      * s 可能为空，且只包含从 a-z 的小写字母。
      * p 可能为空，且只包含从 a-z 的小写字母，以及字符 . 和 *。
-     *
      *
      * @param s
      * @param p
@@ -796,18 +824,18 @@ public class StringAlgorithm {
         int m = s.length();
         int n = p.length();
 
-        boolean[][] f = new boolean[m+1][n+1];
+        boolean[][] f = new boolean[m + 1][n + 1];
         f[0][0] = true;
-        for(int i = 0; i <= m; i++){
-            for(int j = 1; j <= n; j++){
-                if(p.charAt(j - 1) == '*'){
-                    f[i][j] = f[i][j-2];
-                    if(matches(s,p,i,j-1)){
-                        f[i][j] = f[i][j] || f[i-1][j];
+        for (int i = 0; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (p.charAt(j - 1) == '*') {
+                    f[i][j] = f[i][j - 2];
+                    if (matches(s, p, i, j - 1)) {
+                        f[i][j] = f[i][j] || f[i - 1][j];
                     }
-                }else {
-                    if(matches(s,p,i,j)){
-                        f[i][j] = f[i - 1][j-1];
+                } else {
+                    if (matches(s, p, i, j)) {
+                        f[i][j] = f[i - 1][j - 1];
                     }
                 }
             }
@@ -815,18 +843,19 @@ public class StringAlgorithm {
         return f[m][n];
     }
 
-    private boolean matches(String s,String p,int i,int j){
-        if(i == 0)
+    private boolean matches(String s, String p, int i, int j) {
+        if (i == 0) {
             return false;
-        if(p.charAt(j - 1) == '.')
+        }
+        if (p.charAt(j - 1) == '.') {
             return true;
+        }
         return s.charAt(i - 1) == p.charAt(j - 1);
     }
 
     /**
-     *
      * 面试题 16.18. 模式匹配
-     *
+     * <p>
      * 你有两个字符串，即pattern和value。 pattern字符串由字母"a"和"b"组成，用于描述字符串中的模式。
      * 例如，字符串"catcatgocatgo"匹配模式"aabab"（其中"cat"是"a"，"go"是"b"），
      * 该字符串也匹配像"a"、"ab"和"b"这样的模式。但需注意"a"和"b"不能同时表示相同的字符串。
@@ -838,58 +867,58 @@ public class StringAlgorithm {
      */
     public boolean patternMatching(String pattern, String value) {
         int count_a = 0, count_b = 0;
-        for(char ch: pattern.toCharArray()){
-            if(ch == 'a'){
+        for (char ch : pattern.toCharArray()) {
+            if (ch == 'a') {
                 ++count_a;
-            }else{
+            } else {
                 ++count_b;
             }
         }
-        if(count_a < count_b){
+        if (count_a < count_b) {
             int temp = count_a;
             count_a = count_b;
             count_b = temp;
             char[] array = pattern.toCharArray();
-            for(int i = 0; i < array.length; i++){
+            for (int i = 0; i < array.length; i++) {
                 array[i] = array[i] == 'a' ? 'b' : 'a';
             }
             pattern = new String(array);
         }
-        if(value.length() == 0){
+        if (value.length() == 0) {
             return count_b == 0;
         }
-        if(pattern.length() == 0){
+        if (pattern.length() == 0) {
             return false;
         }
-        for(int len_a = 0; count_a * len_a <= value.length(); ++len_a){
-            int rest = value.length() -  count_a * len_a;
-            if((count_b == 0 && rest == 0)|| (count_b != 0 && rest % count_b == 0)){
-                int len_b = (count_b == 0 ? 0:rest/count_b);
+        for (int len_a = 0; count_a * len_a <= value.length(); ++len_a) {
+            int rest = value.length() - count_a * len_a;
+            if ((count_b == 0 && rest == 0) || (count_b != 0 && rest % count_b == 0)) {
+                int len_b = (count_b == 0 ? 0 : rest / count_b);
                 int pos = 0;
                 boolean correct = true;
-                String value_a = "",value_b = "";
-                for(char ch : pattern.toCharArray()){
-                    if(ch == 'a'){
-                        String sub = value.substring(pos,pos + len_a);
-                        if(value_a.length() == 0){
+                String value_a = "", value_b = "";
+                for (char ch : pattern.toCharArray()) {
+                    if (ch == 'a') {
+                        String sub = value.substring(pos, pos + len_a);
+                        if (value_a.length() == 0) {
                             value_a = sub;
-                        }else if(!value_a.equals(sub)){
+                        } else if (!value_a.equals(sub)) {
                             correct = false;
                             break;
                         }
                         pos += len_a;
-                    }else {
-                        String sub = value.substring(pos,pos + len_b);
-                        if(value_b.length() == 0){
+                    } else {
+                        String sub = value.substring(pos, pos + len_b);
+                        if (value_b.length() == 0) {
                             value_b = sub;
-                        }else if(!value_b.equals(sub)){
+                        } else if (!value_b.equals(sub)) {
                             correct = false;
                             break;
                         }
                         pos += len_b;
                     }
                 }
-                if(correct && !value_a.equals(value_b)){
+                if (correct && !value_a.equals(value_b)) {
                     return true;
                 }
             }
@@ -899,9 +928,9 @@ public class StringAlgorithm {
 
     /**
      * 67. 二进制求和
-     *
+     * <p>
      * 给你两个二进制字符串，返回它们的和（用二进制表示）。
-     *
+     * <p>
      * 输入为 非空 字符串且只包含数字 1 和 0。
      *
      * @param a
@@ -909,44 +938,48 @@ public class StringAlgorithm {
      * @return
      */
     public String addBinary_V2(String a, String b) {
-        if(a == null || "".trim().equals(a))
+        if (a == null || "".trim().equals(a)) {
             return b;
-        if(b == null || "".trim().equals(b))
+        }
+        if (b == null || "".trim().equals(b)) {
             return a;
-        int n = Math.max(a.length(),b.length()),carry = 0;
+        }
+        int n = Math.max(a.length(), b.length()), carry = 0;
         StringBuffer resultSB = new StringBuffer();
-        for(int i = 0; i < n; i++){
-            carry += i < a.length() ? (a.charAt(a.length() - 1 -i) - '0') : 0;
+        for (int i = 0; i < n; i++) {
+            carry += i < a.length() ? (a.charAt(a.length() - 1 - i) - '0') : 0;
             carry += i < b.length() ? (b.charAt(b.length() - 1 - i) - '0') : 0;
-            resultSB.append((char)(carry % 2 + '0'));
+            resultSB.append((char) (carry % 2 + '0'));
             carry /= 2;
         }
-        if(carry > 0)
+        if (carry > 0) {
             resultSB.append('1');
+        }
         resultSB.reverse();
         return resultSB.toString();
     }
 
     /**
      * 139. 单词拆分
-     *
+     * <p>
      * 给定一个非空字符串 s 和一个包含非空单词列表的字典 wordDict，判定 s 是否可以被空格拆分为一个或多个在字典中出现的单词。
-     *
+     * <p>
      * 说明：
-     *
+     * <p>
      * 拆分时可以重复使用字典中的单词。
      * 你可以假设字典中没有重复的单词。
-     *
      *
      * @param s
      * @param wordDict
      * @return
      */
     public boolean wordBreak(String s, List<String> wordDict) {
-        if(s==null || "".equals(s))
+        if (s == null || "".equals(s)) {
             return true;
-        if(wordDict == null || wordDict.size() == 0)
+        }
+        if (wordDict == null || wordDict.size() == 0) {
             return false;
+        }
         Set<String> wordDictSet = new HashSet(wordDict);
         boolean[] dp = new boolean[s.length() + 1];
         dp[0] = true;
@@ -963,9 +996,9 @@ public class StringAlgorithm {
 
     /**
      * 44. 通配符匹配
-     *
-     *  给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
-     *
+     * <p>
+     * 给定一个字符串 (s) 和一个字符模式 (p) ，实现一个支持 '?' 和 '*' 的通配符匹配。
+     * <p>
      * '?' 可以匹配任何单个字符。
      * '*' 可以匹配任意字符串（包括空字符串）。
      * 两个字符串完全匹配才算匹配成功。
@@ -977,20 +1010,21 @@ public class StringAlgorithm {
     public boolean isMatchC(String s, String p) {
         int m = s.length();
         int n = p.length();
-        boolean[][] dp = new boolean[m+1][n+1];
+        boolean[][] dp = new boolean[m + 1][n + 1];
         dp[0][0] = true;
-        for(int i = 1; i <= n; i++){
-            if(p.charAt(i - 1) == '*'){
+        for (int i = 1; i <= n; i++) {
+            if (p.charAt(i - 1) == '*') {
                 dp[0][i] = true;
 
-            }else
+            } else {
                 break;
+            }
         }
-        for(int i = 1; i <= m; i++){
-            for(int j = 1; j <= n; j++){
-                if(p.charAt(j - 1)=='*'){
-                    dp[i][j] = dp[i][j - 1] || dp[i-1][j];
-                }else if(p.charAt(j - 1) == '?' || s.charAt(i - 1) == p.charAt(j - 1)){
+        for (int i = 1; i <= m; i++) {
+            for (int j = 1; j <= n; j++) {
+                if (p.charAt(j - 1) == '*') {
+                    dp[i][j] = dp[i][j - 1] || dp[i - 1][j];
+                } else if (p.charAt(j - 1) == '?' || s.charAt(i - 1) == p.charAt(j - 1)) {
                     dp[i][j] = dp[i - 1][j - 1];
                 }
             }
@@ -1012,24 +1046,25 @@ public class StringAlgorithm {
     public int respace(String[] dictionary, String sentence) {
         int n = sentence.length();
         Trie root = new Trie();
-        for(String word : dictionary){
+        for (String word : dictionary) {
             root.insert(word);
         }
         int[] dp = new int[n + 1];
-        Arrays.fill(dp,Integer.MAX_VALUE);
+        Arrays.fill(dp, Integer.MAX_VALUE);
         dp[0] = 0;
-        for(int i = 1; i <= n; i++){
-            dp[i] = dp[i-1] + 1;
+        for (int i = 1; i <= n; i++) {
+            dp[i] = dp[i - 1] + 1;
             Trie curPos = root;
-            for(int j = i; j >= 1;j--){
+            for (int j = i; j >= 1; j--) {
                 int t = sentence.charAt(j - 1) - 'a';
-                if(curPos.next[t] == null)
+                if (curPos.next[t] == null) {
                     break;
-                else if(curPos.next[t].isEnd){
-                    dp[i] = Math.min(dp[i],dp[j-1]);
+                } else if (curPos.next[t].isEnd) {
+                    dp[i] = Math.min(dp[i], dp[j - 1]);
                 }
-                if(dp[i]==0)
+                if (dp[i] == 0) {
                     break;
+                }
                 curPos = curPos.next[t];
             }
         }
@@ -1037,9 +1072,8 @@ public class StringAlgorithm {
     }
 
     /**
-     *
      * 97. 交错字符串
-     *
+     * <p>
      * 给定三个字符串 s1, s2, s3, 验证 s3 是否是由 s1 和 s2 交错组成的。
      *
      * @param s1
@@ -1048,77 +1082,80 @@ public class StringAlgorithm {
      * @return
      */
     public boolean isInterleave(String s1, String s2, String s3) {
-        if(s1 == null || s2 == null || s3 == null || s1.length() == 0 || s2.length() == 0 || s3.length() == 0 || s3.length() != s1.length() + s2.length())
+        if (s1 == null || s2 == null || s3 == null || s1.length() == 0 || s2.length() == 0 || s3.length() == 0 || s3.length() != s1.length() + s2.length()) {
             return false;
-        int s1Index = 0,s2Index = 0, s3Index = 0;
-        int s1Length = s1.length(),s2Length = s2.length(),s3Length = s3.length();
+        }
+        int s1Index = 0, s2Index = 0, s3Index = 0;
+        int s1Length = s1.length(), s2Length = s2.length(), s3Length = s3.length();
 
         boolean[][] f = new boolean[s1Length + 1][s2Length + 1];
         f[0][0] = true;
-        for(int i = 0; i <= s1Length; i++){
-            for(int j = 0; j <= s2Length; j++){
+        for (int i = 0; i <= s1Length; i++) {
+            for (int j = 0; j <= s2Length; j++) {
                 int p = i + j - 1;
-                if(i > 0)
-                    f[i][j] = f[i][j] || (f[i-1][j] && s1.charAt(i - 1) == s3.charAt(p));
-                if(j > 0)
-                    f[i][j] = f[i][j] || (f[i][j-1] && s2.charAt(j-1) == s3.charAt(p));
+                if (i > 0) {
+                    f[i][j] = f[i][j] || (f[i - 1][j] && s1.charAt(i - 1) == s3.charAt(p));
+                }
+                if (j > 0) {
+                    f[i][j] = f[i][j] || (f[i][j - 1] && s2.charAt(j - 1) == s3.charAt(p));
+                }
             }
         }
         return f[s1Length][s2Length];
     }
 
     /**
-     *
      * 312. 戳气球
-     *
+     * <p>
      * 有 n 个气球，编号为0 到 n-1，每个气球上都标有一个数字，这些数字存在数组 nums 中。
-     *
+     * <p>
      * 现在要求你戳破所有的气球。如果你戳破气球 i ，就可以获得 nums[left] * nums[i] * nums[right] 个硬币。 这里的 left 和 right 代表和 i 相邻的两个气球的序号。注意当你戳破了气球 i 后，气球 left 和气球 right 就变成了相邻的气球。
-     *
+     * <p>
      * 求所能获得硬币的最大数量。
-     *
      *
      * @param nums
      * @return
      */
     public int[][] rec;
     public int[] val;
+
     public int maxCoins(int[] nums) {
         int n = nums.length;
         val = new int[n + 2];
-        for(int i = 1; i <= n ; i++){
-            val[i] = nums[i-1];
+        for (int i = 1; i <= n; i++) {
+            val[i] = nums[i - 1];
         }
         val[0] = val[n + 1] = 1;
-        rec = new int[n+2][n+2];
-        for(int i = 0; i <= n + 1; i++){
-            Arrays.fill(rec[i],-1);
+        rec = new int[n + 2][n + 2];
+        for (int i = 0; i <= n + 1; i++) {
+            Arrays.fill(rec[i], -1);
         }
-        return solveMaxConins(0,n + 1);
+        return solveMaxConins(0, n + 1);
     }
 
-    private int solveMaxConins(int left,int right){
-        if(left >= right - 1)
+    private int solveMaxConins(int left, int right) {
+        if (left >= right - 1) {
             return 0;
-        if(rec[left][right] != -1)
+        }
+        if (rec[left][right] != -1) {
             return rec[left][right];
-        for(int i = left + 1; i < right; i++){
+        }
+        for (int i = left + 1; i < right; i++) {
             int sum = val[left] * val[i] * val[right];
-            sum += solveMaxConins(left,i) + solveMaxConins(i,right);
-            rec[left][right] = Math.max(rec[left][right],sum);
+            sum += solveMaxConins(left, i) + solveMaxConins(i, right);
+            rec[left][right] = Math.max(rec[left][right], sum);
         }
         return rec[left][right];
     }
 
     /**
      * 1486. 数组异或操作
-     *
+     * <p>
      * 给你两个整数，n 和 start 。
-     *
+     * <p>
      * 数组 nums 定义为：nums[i] = start + 2*i（下标从 0 开始）且 n == nums.length 。
-     *
+     * <p>
      * 请返回 nums 中所有元素按位异或（XOR）后得到的结果。
-     *
      *
      * @param n
      * @param start
@@ -1126,7 +1163,7 @@ public class StringAlgorithm {
      */
     public int xorOperation(int n, int start) {
         int result = start;
-        for(int i = 1; i < n ; i ++){
+        for (int i = 1; i < n; i++) {
             start += 2;
             result ^= start;
         }
@@ -1135,30 +1172,31 @@ public class StringAlgorithm {
 
     /**
      * 95. 不同的二叉搜索树 II
-     *
+     * <p>
      * 给定一个整数 n，生成所有由 1 ... n 为节点所组成的 二叉搜索树 。
      *
      * @param n
      * @return
      */
     public List<TreeNode> generateTrees(int n) {
-        if( n == 0)
+        if (n == 0) {
             return new LinkedList<TreeNode>();
-        return generateTrees(1,n);
+        }
+        return generateTrees(1, n);
     }
 
-    private List<TreeNode> generateTrees(int start,int end){
+    private List<TreeNode> generateTrees(int start, int end) {
         List<TreeNode> allTrees = new LinkedList<TreeNode>();
-        if(start > end){
+        if (start > end) {
             allTrees.add(null);
             return allTrees;
         }
 
-        for(int i = start; i <= end; i++){
-            List<TreeNode> leftTrees = generateTrees(start,i - 1);
-            List<TreeNode> rightTrees = generateTrees(i + 1,end);
-            for(TreeNode left:leftTrees){
-                for(TreeNode right : rightTrees){
+        for (int i = start; i <= end; i++) {
+            List<TreeNode> leftTrees = generateTrees(start, i - 1);
+            List<TreeNode> rightTrees = generateTrees(i + 1, end);
+            for (TreeNode left : leftTrees) {
+                for (TreeNode right : rightTrees) {
                     TreeNode currTree = new TreeNode(i);
                     currTree.left = left;
                     currTree.right = right;
@@ -1172,24 +1210,24 @@ public class StringAlgorithm {
 
     /**
      * 392. 判断子序列
-     *
+     * <p>
      * 给定字符串 s 和 t ，判断 s 是否为 t 的子序列。
-     *
+     * <p>
      * 你可以认为 s 和 t 中仅包含英文小写字母。字符串 t 可能会很长（长度 ~= 500,000），而 s 是个短字符串（长度 <=100）。
-     *
+     * <p>
      * 字符串的一个子序列是原始字符串删除一些（也可以不删除）字符而不改变剩余字符相对位置形成的新字符串。（例如，"ace"是"abcde"的一个子序列，而"aec"不是）。
-     *
      *
      * @param s
      * @param t
      * @return
      */
     public boolean isSubsequence(String s, String t) {
-        if(s == null  || t == null)
+        if (s == null || t == null) {
             return false;
+        }
         int sIndex = 0, tIndex = 0;
-        while (sIndex < s.length() && tIndex < t.length()){
-            if(s.charAt(sIndex) == t.charAt(tIndex)){
+        while (sIndex < s.length() && tIndex < t.length()) {
+            if (s.charAt(sIndex) == t.charAt(tIndex)) {
                 sIndex++;
             }
             tIndex++;
@@ -1197,7 +1235,7 @@ public class StringAlgorithm {
         return sIndex == s.length();
     }
 
-    public void testStr(String fileStr){
+    public void testStr(String fileStr) {
         String[] str = fileStr.split("\\.");
         System.out.println(str[fileStr.split("\\.").length - 1]);
     }
@@ -1205,9 +1243,9 @@ public class StringAlgorithm {
     /**
      * 415. 字符串相加
      * 给定两个字符串形式的非负整数 num1 和num2 ，计算它们的和。
-     *
+     * <p>
      * 注意：
-     *
+     * <p>
      * num1 和num2 的长度都小于 5100.
      * num1 和num2 都只包含数字 0-9.
      * num1 和num2 都不包含任何前导零。
@@ -1218,19 +1256,22 @@ public class StringAlgorithm {
      * @return
      */
     public String addStrings(String num1, String num2) {
-        if(num1 == null && num2 == null)
+        if (num1 == null && num2 == null) {
             return null;
-        if(num1 == null)
+        }
+        if (num1 == null) {
             return num2;
-        if(num2 == null)
+        }
+        if (num2 == null) {
             return num1;
+        }
         StringBuffer result = new StringBuffer();
         int i = num1.length() - 1;
         int j = num2.length() - 1;
         int add = 0;
-        while (i >= 0 || j >= 0 || add != 0){
-            int x = i >= 0?num1.charAt(i) - '0' : 0;
-            int y = j >= 0?num2.charAt(j) - '0' : 0;
+        while (i >= 0 || j >= 0 || add != 0) {
+            int x = i >= 0 ? num1.charAt(i) - '0' : 0;
+            int y = j >= 0 ? num2.charAt(j) - '0' : 0;
             int r = x + y + add;
             result.append(r % 10);
             add = r / 10;
@@ -1244,34 +1285,37 @@ public class StringAlgorithm {
 
     /**
      * 336. 回文对
-     *
+     * <p>
      * 给定一组 互不相同 的单词， 找出所有不同 的索引对(i, j)，使得列表中的两个单词， words[i] + words[j] ，可拼接成回文串。
      *
      * @param words
      * @return
      */
     List<PalindromeNode> palindromeNodeTree = new ArrayList<>();
+
     public List<List<Integer>> palindromePairs(String[] words) {
-        if(words == null || words.length == 0)
+        if (words == null || words.length == 0) {
             return null;
+        }
         palindromeNodeTree.add(new PalindromeNode());
         int n = words.length;
-        for(int i = 0; i < n;i++)
-            insertPalindromePairs(words[i],i);
+        for (int i = 0; i < n; i++) {
+            insertPalindromePairs(words[i], i);
+        }
         List<List<Integer>> ret = new ArrayList<>();
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             int m = words[i].length();
-            for(int j = 0; j <= m; j++){
-                if(isPalindromePairs(words[i],j,m-1)){
-                    int leftId = findWordPalindromePairs(words[i],0,j - 1);
-                    if(leftId != -1 && leftId != i){
-                        ret.add(Arrays.asList(i,leftId));
+            for (int j = 0; j <= m; j++) {
+                if (isPalindromePairs(words[i], j, m - 1)) {
+                    int leftId = findWordPalindromePairs(words[i], 0, j - 1);
+                    if (leftId != -1 && leftId != i) {
+                        ret.add(Arrays.asList(i, leftId));
                     }
                 }
-                if(j != 0 && isPalindromePairs(words[i],0,j-1)){
-                    int rightId = findWordPalindromePairs(words[i],j,m-1);
-                    if(rightId != -1 && rightId != i){
-                        ret.add(Arrays.asList(rightId,i));
+                if (j != 0 && isPalindromePairs(words[i], 0, j - 1)) {
+                    int rightId = findWordPalindromePairs(words[i], j, m - 1);
+                    if (rightId != -1 && rightId != i) {
+                        ret.add(Arrays.asList(rightId, i));
                     }
                 }
             }
@@ -1279,11 +1323,11 @@ public class StringAlgorithm {
         return ret;
     }
 
-    private void insertPalindromePairs(String s,int id){
+    private void insertPalindromePairs(String s, int id) {
         int len = s.length(), add = 0;
-        for(int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             int x = s.charAt(i) - 'a';
-            if(palindromeNodeTree.get(add).ch[x] == 0){
+            if (palindromeNodeTree.get(add).ch[x] == 0) {
                 palindromeNodeTree.add(new PalindromeNode());
                 palindromeNodeTree.get(add).ch[x] = palindromeNodeTree.size() - 1;
             }
@@ -1292,22 +1336,23 @@ public class StringAlgorithm {
         palindromeNodeTree.get(add).flag = id;
     }
 
-    private boolean isPalindromePairs(String s,int left,int right){
+    private boolean isPalindromePairs(String s, int left, int right) {
         int len = right - left + 1;
-        for(int i = 0; i < len / 2; i++){
-            if(s.charAt(left + i) != s.charAt(right - i)){
+        for (int i = 0; i < len / 2; i++) {
+            if (s.charAt(left + i) != s.charAt(right - i)) {
                 return false;
             }
         }
         return true;
     }
 
-    public int findWordPalindromePairs(String s,int left, int right){
+    public int findWordPalindromePairs(String s, int left, int right) {
         int add = 0;
-        for(int i = right; i >= left; i--){
+        for (int i = right; i >= left; i--) {
             int x = s.charAt(i) - 'a';
-            if(palindromeNodeTree.get(add).ch[x] == 0)
+            if (palindromeNodeTree.get(add).ch[x] == 0) {
                 return -1;
+            }
             add = palindromeNodeTree.get(add).ch[x];
         }
         return palindromeNodeTree.get(add).flag;
@@ -1315,9 +1360,9 @@ public class StringAlgorithm {
 
     /**
      * 93. 复原IP地址
-     *
+     * <p>
      * 给定一个只包含数字的字符串，复原它并返回所有可能的 IP 地址格式。
-     *
+     * <p>
      * 有效的 IP 地址正好由四个整数（每个整数位于 0 到 255 之间组成），整数之间用 '.' 分隔。
      *
      * @param s
@@ -1326,66 +1371,70 @@ public class StringAlgorithm {
     static final int SEG_COUNT = 4;
     List<String> ansRestoreIpAddresses = new ArrayList<>();
     int[] segments = new int[SEG_COUNT];
+
     public List<String> restoreIpAddresses(String s) {
         segments = new int[SEG_COUNT];
-        dfsRestoreIpAddress(s,0,0);
+        dfsRestoreIpAddress(s, 0, 0);
         return ansRestoreIpAddresses;
     }
 
-    private void dfsRestoreIpAddress(String s,int segId,int segStart){
-        if(segId == SEG_COUNT){
-            if(segStart == s.length()){
+    private void dfsRestoreIpAddress(String s, int segId, int segStart) {
+        if (segId == SEG_COUNT) {
+            if (segStart == s.length()) {
                 StringBuffer ipAddr = new StringBuffer();
-                for(int i = 0; i < SEG_COUNT; i++){
+                for (int i = 0; i < SEG_COUNT; i++) {
                     ipAddr.append(segments[i]);
-                    if(i != SEG_COUNT - 1)
+                    if (i != SEG_COUNT - 1) {
                         ipAddr.append('.');
+                    }
                 }
                 ansRestoreIpAddresses.add(ipAddr.toString());
             }
             return;
         }
-        if(segStart == s.length())
+        if (segStart == s.length()) {
             return;
+        }
 
-        if(s.charAt(segStart) == '0'){
+        if (s.charAt(segStart) == '0') {
             segments[segId] = 0;
-            dfsRestoreIpAddress(s,segId + 1,segStart + 1);
+            dfsRestoreIpAddress(s, segId + 1, segStart + 1);
         }
         int addr = 0;
-        for(int segEnd = segStart; segEnd < s.length(); segEnd++){
+        for (int segEnd = segStart; segEnd < s.length(); segEnd++) {
             addr = addr * 10 + (s.charAt(segEnd) - '0');
-            if(addr > 0 && addr <= 0xFF){
+            if (addr > 0 && addr <= 0xFF) {
                 segments[segId] = addr;
-                dfsRestoreIpAddress(s,segId + 1, segEnd + 1);
-            }else
+                dfsRestoreIpAddress(s, segId + 1, segEnd + 1);
+            } else {
                 break;
+            }
         }
     }
 
     /**
      * 696. 计数二进制子串
-     *
+     * <p>
      * 给定一个字符串 s，计算具有相同数量0和1的非空(连续)子字符串的数量，并且这些子字符串中的所有0和所有1都是组合在一起的。
-     *
+     * <p>
      * 重复出现的子串要计算它们出现的次数。
-     *
      *
      * @param s
      * @return
      */
     public int countBinarySubstrings(String s) {
-        if(s == null || "".equals(s))
+        if (s == null || "".equals(s)) {
             return 0;
-        int ptr = 0, n = s.length(), last = 0,ans = 0;
-        while (ptr < n){
+        }
+        int ptr = 0, n = s.length(), last = 0, ans = 0;
+        while (ptr < n) {
             char c = s.charAt(ptr);
             int count = 0;
-            while (ptr < n && s.charAt(ptr) == c){
+            while (ptr < n && s.charAt(ptr) == c) {
                 ptr++;
                 count++;
             }
-            ans += Math.min(count,last);
+            ans += Math.min(count, last);
             last = count;
         }
         return ans;
@@ -1393,7 +1442,7 @@ public class StringAlgorithm {
 
     /**
      * 43. 字符串相乘
-     *
+     * <p>
      * 给定两个以字符串形式表示的非负整数 num1 和 num2，返回 num1 和 num2 的乘积，它们的乘积也表示为字符串形式。
      *
      * @param num1
@@ -1401,25 +1450,25 @@ public class StringAlgorithm {
      * @return
      */
     public String multiply(String num1, String num2) {
-        if(num1.equals("0") || num2.equals("0")){
+        if (num1.equals("0") || num2.equals("0")) {
             return "0";
         }
         int m = num1.length(), n = num2.length();
         int[] ansArr = new int[m + n];
-        for(int i = m - 1; i >= 0; i--){
+        for (int i = m - 1; i >= 0; i--) {
             int x = num1.charAt(i) - '0';
-            for(int j = n - 1; j >= 0; j--){
+            for (int j = n - 1; j >= 0; j--) {
                 int y = num2.charAt(j) - '0';
                 ansArr[i + j + 1] += x * y;
             }
         }
-        for(int i = m + n - 1; i > 0; i--){
+        for (int i = m + n - 1; i > 0; i--) {
             ansArr[i - 1] += ansArr[i] / 10;
             ansArr[i] %= 10;
         }
         int index = ansArr[0] == 0 ? 1 : 0;
         StringBuffer ans = new StringBuffer();
-        while (index < m + n){
+        while (index < m + n) {
             ans.append(ansArr[index]);
             index++;
         }
@@ -1428,20 +1477,19 @@ public class StringAlgorithm {
 
     /**
      * 647. 回文子串
-     *
+     * <p>
      * 给定一个字符串，你的任务是计算这个字符串中有多少个回文子串。
-     *
+     * <p>
      * 具有不同开始位置或结束位置的子串，即使是由相同的字符组成，也会被视作不同的子串。
-     *
      *
      * @param s
      * @return
      */
     public int countSubstrings(String s) {
         int n = s.length(), ans = 0;
-        for(int i = 0; i < 2 * n - 1; i++){
-            int l = i / 2, r= i / 2 + i % 2;
-            while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)){
+        for (int i = 0; i < 2 * n - 1; i++) {
+            int l = i / 2, r = i / 2 + i % 2;
+            while (l >= 0 && r < n && s.charAt(l) == s.charAt(r)) {
                 l--;
                 r++;
                 ans++;
@@ -1451,36 +1499,35 @@ public class StringAlgorithm {
     }
 
     /**
-     *
      * @param s
      * @return
      */
     public boolean repeatedSubstringPattern(String s) {
-        return kmpRepeatedSubstringPattern(s + s,s);
+        return kmpRepeatedSubstringPattern(s + s, s);
     }
 
-    public boolean kmpRepeatedSubstringPattern(String query,String pattern){
+    public boolean kmpRepeatedSubstringPattern(String query, String pattern) {
         int n = query.length();
         int m = pattern.length();
         int[] fail = new int[m];
         Arrays.fill(fail, -1);
-        for(int i = 1; i < m; i++){
+        for (int i = 1; i < m; i++) {
             int j = fail[i - 1];
-            while (j != -1 && pattern.charAt(j + 1) != pattern.charAt(i)){
+            while (j != -1 && pattern.charAt(j + 1) != pattern.charAt(i)) {
                 j = fail[j];
             }
-            if(pattern.charAt(j+1)==pattern.charAt(i)){
-                fail[i] = j+ 1;
+            if (pattern.charAt(j + 1) == pattern.charAt(i)) {
+                fail[i] = j + 1;
             }
         }
         int match = -1;
-        for(int i = 1; i < n - 1; i++){
-            while (match != -1 && pattern.charAt(match + 1) != query.charAt(i)){
+        for (int i = 1; i < n - 1; i++) {
+            while (match != -1 && pattern.charAt(match + 1) != query.charAt(i)) {
                 match = fail[match];
             }
-            if(pattern.charAt(match + 1) == query.charAt(i)){
+            if (pattern.charAt(match + 1) == query.charAt(i)) {
                 match++;
-                if(match == m - 1){
+                if (match == m - 1) {
                     return true;
                 }
             }
@@ -1490,9 +1537,9 @@ public class StringAlgorithm {
 
     /**
      * 17. 电话号码的字母组合
-     *
+     * <p>
      * 给定一个仅包含数字 2-9 的字符串，返回所有它能表示的字母组合。
-     *
+     * <p>
      * 给出数字到字母的映射如下（与电话按键相同）。注意 1 不对应任何字母。
      *
      * @param digits
@@ -1500,10 +1547,10 @@ public class StringAlgorithm {
      */
     public List<String> letterCombinations(String digits) {
         List<String> combinations = new ArrayList<>();
-        if(digits.length() == 0){
+        if (digits.length() == 0) {
             return combinations;
         }
-        Map<Character,String> phoneMap = new HashMap<Character, String>(){{
+        Map<Character, String> phoneMap = new HashMap<Character, String>() {{
             put('2', "abc");
             put('3', "def");
             put('4', "ghi");
@@ -1513,20 +1560,20 @@ public class StringAlgorithm {
             put('8', "tuv");
             put('9', "wxyz");
         }};
-        backtrackLetterCombinations(combinations,phoneMap,digits,0,new StringBuffer());
+        backtrackLetterCombinations(combinations, phoneMap, digits, 0, new StringBuffer());
         return combinations;
     }
 
-    private void backtrackLetterCombinations(List<String> combinations, Map<Character,String> phoneMap, String digits,int index,StringBuffer combination){
-        if(index == digits.length()){
+    private void backtrackLetterCombinations(List<String> combinations, Map<Character, String> phoneMap, String digits, int index, StringBuffer combination) {
+        if (index == digits.length()) {
             combinations.add(combination.toString());
-        }else{
+        } else {
             char digit = digits.charAt(index);
             String letters = phoneMap.get(digit);
             int lettersCount = letters.length();
-            for(int i = 0; i < lettersCount; i++){
+            for (int i = 0; i < lettersCount; i++) {
                 combination.append(letters.charAt(i));
-                backtrackLetterCombinations(combinations,phoneMap,digits,index + 1,combination);
+                backtrackLetterCombinations(combinations, phoneMap, digits, index + 1, combination);
                 combination.deleteCharAt(index);
             }
         }
@@ -1534,34 +1581,34 @@ public class StringAlgorithm {
 
     /**
      * 657. 机器人能否返回原点
-     *
+     * <p>
      * 在二维平面上，有一个机器人从原点 (0, 0) 开始。给出它的移动顺序，判断这个机器人在完成移动后是否在 (0, 0) 处结束。
-     *
+     * <p>
      * 移动顺序由字符串表示。字符 move[i] 表示其第 i 次移动。机器人的有效动作有 R（右），L（左），U（上）和 D（下）。如果机器人在完成所有动作后返回原点，则返回 true。否则，返回 false。
-     *
+     * <p>
      * 注意：机器人“面朝”的方向无关紧要。 “R” 将始终使机器人向右移动一次，“L” 将始终向左移动等。此外，假设每次移动机器人的移动幅度相同。
-     *
      *
      * @param moves
      * @return
      */
     public boolean judgeCircle(String moves) {
-        if(moves == null || moves.length() == 0)
+        if (moves == null || moves.length() == 0) {
             return true;
+        }
         int lr = 0, ud = 0;
-        for(int i = 0 ; i < moves.length();i ++){
+        for (int i = 0; i < moves.length(); i++) {
             char c = moves.charAt(i);
-            if(c == 'L'){
+            if (c == 'L') {
                 lr++;
-            }else if(c == 'R'){
+            } else if (c == 'R') {
                 lr--;
-            }else if(c == 'U'){
+            } else if (c == 'U') {
                 ud++;
-            }else if(c == 'D'){
+            } else if (c == 'D') {
                 ud--;
             }
         }
-        if(lr == 0 && ud == 0){
+        if (lr == 0 && ud == 0) {
             return true;
         }
         return false;
@@ -1570,6 +1617,7 @@ public class StringAlgorithm {
     /**
      * 557. 反转字符串中的单词 III
      * 给定一个字符串，你需要反转字符串中每个单词的字符顺序，同时仍保留空格和单词的初始顺序。
+     *
      * @param s
      * @return
      */
@@ -1596,7 +1644,7 @@ public class StringAlgorithm {
 
     /**
      * 剑指 Offer 20. 表示数值的字符串
-     *
+     * <p>
      * 请实现一个函数用来判断字符串是否表示数值（包括整数和小数）。例如，字符串"+100"、"5e2"、"-123"、"3.1416"、"-1E-16"、"0123"都表示数值，但"12e"、"1a3.14"、"1.2.3"、"+-5"及"12e+5.4"都不是。
      *
      * @param s
@@ -1672,7 +1720,7 @@ public class StringAlgorithm {
         return state == State.STATE_INTEGER || state == State.STATE_POINT || state == State.STATE_FRACTION || state == State.STATE_EXP_NUMBER || state == State.STATE_END;
     }
 
-    public CharType toCharType(char ch){
+    public CharType toCharType(char ch) {
         if (ch >= '0' && ch <= '9') {
             return CharType.CHAR_NUMBER;
         } else if (ch == 'e' || ch == 'E') {
@@ -1713,18 +1761,19 @@ public class StringAlgorithm {
     /**
      * 344. 反转字符串
      * 编写一个函数，其作用是将输入的字符串反转过来。输入字符串以字符数组 char[] 的形式给出。
-     *
+     * <p>
      * 不要给另外的数组分配额外的空间，你必须原地修改输入数组、使用 O(1) 的额外空间解决这一问题。
-     *
+     * <p>
      * 你可以假设数组中的所有字符都是 ASCII 码表中的可打印字符。
      *
      * @param s
      */
     public void reverseString(char[] s) {
-        if(s == null){
-            return;}
+        if (s == null) {
+            return;
+        }
         int n = s.length;
-        for(int left = 0,right = n - 1; left < right; left++,right--){
+        for (int left = 0, right = n - 1; left < right; left++, right--) {
             char tmp = s[left];
             s[left] = s[right];
             s[right] = tmp;
@@ -1734,33 +1783,33 @@ public class StringAlgorithm {
     /**
      * 1002. 查找常用字符
      * 给定仅有小写字母组成的字符串数组 A，返回列表中的每个字符串中都显示的全部字符（包括重复字符）组成的列表。例如，如果一个字符在每个字符串中出现 3 次，但不是 4 次，则需要在最终答案中包含该字符 3 次。
-     *
+     * <p>
      * 你可以按任意顺序返回答案。
      *
      * @param A
      * @return
      */
     public List<String> commonChars(String[] A) {
-        if(A == null){
+        if (A == null) {
             return null;
         }
         int[] minfreq = new int[26];
-        Arrays.fill(minfreq,Integer.MAX_VALUE);
-        for(String word:A){
+        Arrays.fill(minfreq, Integer.MAX_VALUE);
+        for (String word : A) {
             int[] freq = new int[26];
             int length = word.length();
-            for(int i = 0; i < length; i++){
+            for (int i = 0; i < length; i++) {
                 char ch = word.charAt(i);
                 ++freq[ch - 'a'];
             }
-            for(int i = 0;i < 26;i++){
-                minfreq[i] = Math.min(minfreq[i],freq[i]);
+            for (int i = 0; i < 26; i++) {
+                minfreq[i] = Math.min(minfreq[i], freq[i]);
             }
         }
         List<String> ans = new ArrayList<>();
-        for(int i = 0; i < 26; i++){
-            for(int j = 0; j < minfreq[i];j++){
-                ans.add(String.valueOf((char)(i + 'a')));
+        for (int i = 0; i < 26; i++) {
+            for (int j = 0; j < minfreq[i]; j++) {
+                ans.add(String.valueOf((char) (i + 'a')));
             }
         }
         return ans;
@@ -1768,9 +1817,9 @@ public class StringAlgorithm {
 
     /**
      * 844. 比较含退格的字符串
-     *
+     * <p>
      * 给定 S 和 T 两个字符串，当它们分别被输入到空白的文本编辑器后，判断二者是否相等，并返回结果。 # 代表退格字符。
-     *
+     * <p>
      * 注意：如果对空文本输入退格字符，文本继续为空。
      *
      * @param S
@@ -1778,37 +1827,37 @@ public class StringAlgorithm {
      * @return
      */
     public boolean backspaceCompare(String S, String T) {
-        int i = S.length() - 1,j = T.length() - 1;
+        int i = S.length() - 1, j = T.length() - 1;
         int skipS = 0, skipT = 0;
-        while (i >= 0 || j >= 0){
-            while (i >= 0){
-                if(S.charAt(i) == '#'){
+        while (i >= 0 || j >= 0) {
+            while (i >= 0) {
+                if (S.charAt(i) == '#') {
                     skipS++;
                     i--;
-                }else if(skipS > 0){
+                } else if (skipS > 0) {
                     skipS--;
                     i--;
-                }else{
+                } else {
                     break;
                 }
             }
-            while (j >= 0){
-                if(T.charAt(j) == '#'){
+            while (j >= 0) {
+                if (T.charAt(j) == '#') {
                     skipT++;
                     j--;
-                }else if(skipT > 0){
+                } else if (skipT > 0) {
                     skipT--;
                     j--;
-                }else{
+                } else {
                     break;
                 }
             }
-            if(i >= 0 && j >= 0){
-                if(S.charAt(i) != T.charAt(j)){
+            if (i >= 0 && j >= 0) {
+                if (S.charAt(i) != T.charAt(j)) {
                     return false;
                 }
-            }else{
-                if(i >= 0 || j >=0){
+            } else {
+                if (i >= 0 || j >= 0) {
                     return false;
                 }
             }
@@ -1820,9 +1869,9 @@ public class StringAlgorithm {
 
     /**
      * 925. 长按键入
-     *
+     * <p>
      * 你的朋友正在使用键盘输入他的名字 name。偶尔，在键入字符 c 时，按键可能会被长按，而字符可能被输入 1 次或多次。
-     *
+     * <p>
      * 你将会检查键盘输入的字符 typed。如果它对应的可能是你的朋友的名字（其中一些字符可能被长按），那么就返回 True。
      *
      * @param name
@@ -1831,13 +1880,13 @@ public class StringAlgorithm {
      */
     public boolean isLongPressedName(String name, String typed) {
         int i = 0, j = 0;
-        while (j < typed.length()){
-            if(i < name.length() && name.charAt(i) == typed.charAt(j)){
+        while (j < typed.length()) {
+            if (i < name.length() && name.charAt(i) == typed.charAt(j)) {
                 i++;
                 j++;
-            }else if(j > 0 && typed.charAt(j) == typed.charAt(j - 1)){
+            } else if (j > 0 && typed.charAt(j) == typed.charAt(j - 1)) {
                 j++;
-            }else{
+            } else {
                 return false;
             }
         }
@@ -1846,7 +1895,7 @@ public class StringAlgorithm {
 
     /**
      * 763. 划分字母区间
-     *
+     * <p>
      * 字符串 S 由小写字母组成。我们要把这个字符串划分为尽可能多的片段，
      * 同一个字母只会出现在其中的一个片段。返回一个表示每个字符串片段的长度的列表。
      *
@@ -1855,19 +1904,19 @@ public class StringAlgorithm {
      */
 
     public List<Integer> partitionLabels(String S) {
-        if(S == null){
+        if (S == null) {
             return null;
         }
         int[] last = new int[26];
         int length = S.length();
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             last[S.charAt(i) - 'a'] = i;
         }
         List<Integer> partition = new ArrayList<>();
-        int start = 0,end = 0;
-        for(int i = 0; i < length; i++){
-            end = Math.max(end,last[S.charAt(i) - 'a']);
-            if(i == end){
+        int start = 0, end = 0;
+        for (int i = 0; i < length; i++) {
+            end = Math.max(end, last[S.charAt(i) - 'a']);
+            if (i == end) {
                 partition.add(end - start + 1);
                 start = end + 1;
             }
@@ -1877,13 +1926,13 @@ public class StringAlgorithm {
 
     /**
      * 127. 单词接龙
-     *
+     * <p>
      * 给定两个单词（beginWord 和 endWord）和一个字典，找到从 beginWord 到 endWord 的最短转换序列的长度。转换需遵循如下规则：
-     *
+     * <p>
      * 每次转换只能改变一个字母。
      * 转换过程中的中间单词必须是字典中的单词。
      * 说明:
-     *
+     * <p>
      * 如果不存在这样的转换序列，返回 0。
      * 所有单词具有相同的长度。
      * 所有单词只由小写字母组成。
@@ -1895,32 +1944,32 @@ public class StringAlgorithm {
      * @param wordList
      * @return
      */
-    Map<String,Integer> wordIdLadderLength = new HashMap<>();
+    Map<String, Integer> wordIdLadderLength = new HashMap<>();
     List<List<Integer>> edgeLadderLength = new ArrayList<>();
     int nodeNumLadderLength = 0;
 
     public int ladderLength(String beginWord, String endWord, List<String> wordList) {
-        for(String word : wordList){
+        for (String word : wordList) {
             addEdgeLadderLength(word);
         }
         addEdgeLadderLength(beginWord);
-        if(!wordIdLadderLength.containsKey(endWord)){
+        if (!wordIdLadderLength.containsKey(endWord)) {
             return 0;
         }
         int[] dis = new int[nodeNumLadderLength];
-        Arrays.fill(dis,Integer.MAX_VALUE);
+        Arrays.fill(dis, Integer.MAX_VALUE);
         int beginId = wordIdLadderLength.get(beginWord), endId = wordIdLadderLength.get(endWord);
         dis[beginId] = 0;
 
         Queue<Integer> que = new LinkedList<>();
         que.offer(beginId);
-        while (!que.isEmpty()){
+        while (!que.isEmpty()) {
             int x = que.poll();
-            if(x == endId){
+            if (x == endId) {
                 return dis[endId] / 2 + 1;
             }
-            for(int it : edgeLadderLength.get(x)){
-                if(dis[it] == Integer.MAX_VALUE){
+            for (int it : edgeLadderLength.get(x)) {
+                if (dis[it] == Integer.MAX_VALUE) {
                     dis[it] = dis[x] + 1;
                     que.offer(it);
                 }
@@ -1929,12 +1978,12 @@ public class StringAlgorithm {
         return 0;
     }
 
-    private void addEdgeLadderLength(String word){
+    private void addEdgeLadderLength(String word) {
         addWordLadderLength(word);
         int id1 = wordIdLadderLength.get(word);
         char[] array = word.toCharArray();
         int length = array.length;
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             char tmp = array[i];
             array[i] = '*';
             String newWord = new String(array);
@@ -1946,18 +1995,18 @@ public class StringAlgorithm {
         }
     }
 
-    private void addWordLadderLength(String word){
-        if(!wordIdLadderLength.containsKey(word)){
-            wordIdLadderLength.put(word,nodeNumLadderLength++);
+    private void addWordLadderLength(String word) {
+        if (!wordIdLadderLength.containsKey(word)) {
+            wordIdLadderLength.put(word, nodeNumLadderLength++);
             edgeLadderLength.add(new ArrayList<Integer>());
         }
     }
 
     /**
      * 1370. 上升下降字符串
-     *
+     * <p>
      * 给你一个字符串 s ，请你根据下面的算法重新构造字符串：
-     *
+     * <p>
      * 从 s 中选出 最小 的字符，将它 接在 结果字符串的后面。
      * 从 s 剩余字符中选出 最小 的字符，且该字符比上一个添加的字符大，将它 接在 结果字符串后面。
      * 重复步骤 2 ，直到你没法从 s 中选择字符。
@@ -1966,7 +2015,7 @@ public class StringAlgorithm {
      * 重复步骤 5 ，直到你没法从 s 中选择字符。
      * 重复步骤 1 到 6 ，直到 s 中所有字符都已经被选过。
      * 在任何一步中，如果最小或者最大字符不止一个 ，你可以选择其中任意一个，并将其添加到结果字符串。
-     *
+     * <p>
      * 请你返回将 s 中字符重新排序后的 结果字符串 。
      *
      * @param s
@@ -1974,14 +2023,14 @@ public class StringAlgorithm {
      */
     public String sortString(String s) {
         int[] num = new int[26];
-        for(int i = 0; i < s.length();i++){
+        for (int i = 0; i < s.length(); i++) {
             num[s.charAt(i) - 'a']++;
         }
         StringBuffer ret = new StringBuffer();
-        while (ret.length() < s.length()){
-            for(int i = 0; i < 26; i++){
-                if(num[i] > 0){
-                    ret.append((char)(i + 'a'));
+        while (ret.length() < s.length()) {
+            for (int i = 0; i < 26; i++) {
+                if (num[i] > 0) {
+                    ret.append((char) (i + 'a'));
                     num[i]--;
                 }
             }
@@ -1998,28 +2047,27 @@ public class StringAlgorithm {
 
     /**
      * 767. 重构字符串
-     *
+     * <p>
      * 给定一个字符串S，检查是否能重新排布其中的字母，使得两相邻的字符不同。
-     *
+     * <p>
      * 若可行，输出任意可行的结果。若不可行，返回空字符串。
-     *
      *
      * @param S
      * @return
      */
     public String reorganizeString(String S) {
-        if(S==null||S.length()<2){
+        if (S == null || S.length() < 2) {
             return S;
         }
         int[] counts = new int[26];
         int maxCount = 0;
         int length = S.length();
-        for(int i = 0; i < length; i++){
+        for (int i = 0; i < length; i++) {
             char c = S.charAt(i);
             counts[c - 'a']++;
-            maxCount = Math.max(maxCount,counts[c - 'a']);
+            maxCount = Math.max(maxCount, counts[c - 'a']);
         }
-        if(maxCount > (length + 1) / 2){
+        if (maxCount > (length + 1) / 2) {
             return "";
         }
         PriorityQueue<Character> queue = new PriorityQueue<>(new Comparator<Character>() {
@@ -2028,13 +2076,13 @@ public class StringAlgorithm {
                 return counts[o2 - 'a'] - counts[o1 - 'a'];
             }
         });
-        for(char c = 'a'; c<= 'z';c++){
-            if(counts[c - 'a' ] > 0){
+        for (char c = 'a'; c <= 'z'; c++) {
+            if (counts[c - 'a'] > 0) {
                 queue.offer(c);
             }
         }
         StringBuffer sb = new StringBuffer();
-        while (queue.size() > 1){
+        while (queue.size() > 1) {
             char letter1 = queue.poll();
             char letter2 = queue.poll();
             sb.append(letter1);
@@ -2042,14 +2090,14 @@ public class StringAlgorithm {
             int index1 = letter1 - 'a', index2 = letter2 - 'a';
             counts[index1]--;
             counts[index2]--;
-            if(counts[index1] > 0){
+            if (counts[index1] > 0) {
                 queue.offer(letter1);
             }
-            if(counts[index2] > 0){
+            if (counts[index2] > 0) {
                 queue.offer(letter2);
             }
         }
-        if(queue.size() > 0){
+        if (queue.size() > 0) {
             sb.append(queue.poll());
         }
         return sb.toString();
@@ -2057,7 +2105,7 @@ public class StringAlgorithm {
 
     /**
      * 49. 字母异位词分组
-     *
+     * <p>
      * 给定一个字符串数组，将字母异位词组合在一起。字母异位词指字母相同，但排列不同的字符串。
      *
      * @param strs
@@ -2078,9 +2126,9 @@ public class StringAlgorithm {
 
     /**
      * 290. 单词规律
-     *
+     * <p>
      * 给定一种规律 pattern 和一个字符串 str ，判断 str 是否遵循相同的规律。
-     *
+     * <p>
      * 这里的 遵循 指完全匹配，例如， pattern 里的每个字母和字符串 str 中的每个非空单词之间存在着双向连接的对应规律。
      *
      * @param pattern
@@ -2088,26 +2136,26 @@ public class StringAlgorithm {
      * @return
      */
     public boolean wordPattern(String pattern, String s) {
-        if(pattern == null || s == null || pattern.equals("") || s.equals("")){
+        if (pattern == null || s == null || pattern.equals("") || s.equals("")) {
             return true;
         }
-        char[]patternArray = pattern.toCharArray();
+        char[] patternArray = pattern.toCharArray();
         String[] sArray = s.split(" ");
-        if(patternArray.length != sArray.length){
+        if (patternArray.length != sArray.length) {
             return false;
         }
-        Map<Character,String> charMap = new HashMap<>();
+        Map<Character, String> charMap = new HashMap<>();
         Set<String> sSet = new HashSet<>();
-        for(int i = 0;i < patternArray.length;i++){
-            if(charMap.containsKey(patternArray[i])){
-                if(!charMap.get(patternArray[i]).equals(sArray[i])){
+        for (int i = 0; i < patternArray.length; i++) {
+            if (charMap.containsKey(patternArray[i])) {
+                if (!charMap.get(patternArray[i]).equals(sArray[i])) {
                     return false;
                 }
-            }else{
-                if(sSet.contains(sArray[i])){
+            } else {
+                if (sSet.contains(sArray[i])) {
                     return false;
                 }
-                charMap.put(patternArray[i],sArray[i]);
+                charMap.put(patternArray[i], sArray[i]);
                 sSet.add(sArray[i]);
             }
         }
@@ -2117,46 +2165,48 @@ public class StringAlgorithm {
     /**
      * 389. 找不同
      * 给定两个字符串 s 和 t，它们只包含小写字母。
-     *
+     * <p>
      * 字符串 t 由字符串 s 随机重排，然后在随机位置添加一个字母。
-     *
+     * <p>
      * 请找出在 t 中被添加的字母。
+     *
      * @param s
      * @param t
      * @return
      */
     public char findTheDifference(String s, String t) {
-        if(t == null || t.length() == 0){
+        if (t == null || t.length() == 0) {
             return ' ';
         }
-        if(s == null || s.length()==0){
+        if (s == null || s.length() == 0) {
             return t.charAt(0);
         }
-        Map<Character,Integer> sMap = new HashMap<>();
-        for(int i = 0;i < s.length();i++){
-            sMap.put(s.charAt(i),sMap.getOrDefault(s.charAt(i),0) + 1);
+        Map<Character, Integer> sMap = new HashMap<>();
+        for (int i = 0; i < s.length(); i++) {
+            sMap.put(s.charAt(i), sMap.getOrDefault(s.charAt(i), 0) + 1);
         }
-        for(int i = 0;i < t.length();i++){
-            if(sMap.containsKey(t.charAt(i))){
+        for (int i = 0; i < t.length(); i++) {
+            if (sMap.containsKey(t.charAt(i))) {
                 int num = sMap.get(t.charAt(i));
-                if(num == 0){
+                if (num == 0) {
                     return t.charAt(i);
-                }else{
+                } else {
                     num--;
-                    sMap.put(t.charAt(i),num);
+                    sMap.put(t.charAt(i), num);
                 }
-            }else{
+            } else {
                 return t.charAt(i);
             }
         }
         return ' ';
     }
+
     public char findTheDifference_v2(String s, String t) {
         int ret = 0;
-        for(int i = 0; i < s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             ret ^= s.charAt(i);
         }
-        for(int i = 0; i < t.length(); i++){
+        for (int i = 0; i < t.length(); i++) {
             ret ^= t.charAt(i);
         }
         return (char) ret;
@@ -2165,24 +2215,25 @@ public class StringAlgorithm {
     /**
      * 316. 去除重复字母
      * 给你一个字符串 s ，请你去除字符串中重复的字母，使得每个字母只出现一次。需保证 返回结果的字典序最小（要求不能打乱其他字符的相对位置）。
+     *
      * @param s
      * @return
      */
     public String removeDuplicateLetters(String s) {
         boolean[] vis = new boolean[26];
         int[] num = new int[26];
-        for(int i = 0; i < s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             num[s.charAt(i) - 'a']++;
         }
         StringBuffer sb = new StringBuffer();
-        for(int i = 0; i < s.length(); i++){
+        for (int i = 0; i < s.length(); i++) {
             char ch = s.charAt(i);
-            if(!vis[ch - 'a']){
-                while (sb.length() > 0 && sb.charAt(sb.length() - 1) > ch){
-                    if(num[sb.charAt(sb.length() - 1) - 'a'] > 0){
+            if (!vis[ch - 'a']) {
+                while (sb.length() > 0 && sb.charAt(sb.length() - 1) > ch) {
+                    if (num[sb.charAt(sb.length() - 1) - 'a'] > 0) {
                         vis[sb.charAt(sb.length() - 1) - 'a'] = false;
                         sb.deleteCharAt(sb.length() - 1);
-                    }else{
+                    } else {
                         break;
                     }
                 }
@@ -2197,29 +2248,30 @@ public class StringAlgorithm {
     /**
      * 387. 字符串中的第一个唯一字符
      * 给定一个字符串，找到它的第一个不重复的字符，并返回它的索引。如果不存在，则返回 -1。
+     *
      * @param s
      * @return
      */
     public int firstUniqChar(String s) {
-        if(s == null || s.length() == 0){
+        if (s == null || s.length() == 0) {
             return -1;
         }
-        int []cArray = new int[26];
-        for(int i = 0; i < s.length();i++){
+        int[] cArray = new int[26];
+        for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            if(cArray[c - 'a'] > 0){
+            if (cArray[c - 'a'] > 0) {
                 cArray[c - 'a'] = -1;
-            }else if(cArray[c - 'a'] == 0){
+            } else if (cArray[c - 'a'] == 0) {
                 cArray[c - 'a'] = i + 1;
             }
         }
         int result = Integer.MAX_VALUE;
-        for(int i = 0;i < cArray.length;i++){
-            if(cArray[i] >= 0 && cArray[i] < result){
+        for (int i = 0; i < cArray.length; i++) {
+            if (cArray[i] >= 0 && cArray[i] < result) {
                 result = cArray[i];
             }
         }
-        if(result == Integer.MAX_VALUE){
+        if (result == Integer.MAX_VALUE) {
             return -1;
         }
         return result - 1;
@@ -2227,15 +2279,15 @@ public class StringAlgorithm {
 
     /**
      * 830. 较大分组的位置
-     *
+     * <p>
      * 在一个由小写字母构成的字符串 s 中，包含由一些连续的相同字符所构成的分组。
-     *
+     * <p>
      * 例如，在字符串 s = "abbxxxxzyy" 中，就含有 "a", "bb", "xxxx", "z" 和 "yy" 这样的一些分组。
-     *
+     * <p>
      * 分组可以用区间 [start, end] 表示，其中 start 和 end 分别表示该分组的起始和终止位置的下标。上例中的 "xxxx" 分组用区间表示为 [3,6] 。
-     *
+     * <p>
      * 我们称所有包含大于或等于三个连续字符的分组为 较大分组 。
-     *
+     * <p>
      * 找到每一个 较大分组 的区间，按起始位置下标递增顺序排序后，返回结果。
      *
      * @param s
@@ -2245,13 +2297,13 @@ public class StringAlgorithm {
         List<List<Integer>> ret = new ArrayList<>();
         int n = s.length();
         int num = 1;
-        for(int i = 0; i < n; i++){
-            if(i == n - 1|| s.charAt(i) != s.charAt(i + 1)){
-                if(num >= 3){
-                    ret.add(Arrays.asList(i-num + 1,i));
+        for (int i = 0; i < n; i++) {
+            if (i == n - 1 || s.charAt(i) != s.charAt(i + 1)) {
+                if (num >= 3) {
+                    ret.add(Arrays.asList(i - num + 1, i));
                 }
                 num = 1;
-            }else{
+            } else {
                 num++;
             }
         }
@@ -2261,9 +2313,9 @@ public class StringAlgorithm {
     /**
      * 1202. 交换字符串中的元素
      * 给你一个字符串 s，以及该字符串中的一些「索引对」数组 pairs，其中 pairs[i] = [a, b] 表示字符串中的两个索引（编号从 0 开始）。
-     *
+     * <p>
      * 你可以 任意多次交换 在 pairs 中任意一对索引处的字符。
-     *
+     * <p>
      * 返回在经过若干次交换后，s 可以变成的按字典序最小的字符串。
      *
      * @param s
@@ -2271,29 +2323,29 @@ public class StringAlgorithm {
      * @return
      */
     public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
-        if(pairs == null || pairs.size() == 0){
+        if (pairs == null || pairs.size() == 0) {
             return s;
         }
         int len = s.length();
         UnionFindStrSwap unionFindStrSwap = new UnionFindStrSwap(len);
-        for(List<Integer> pair : pairs){
+        for (List<Integer> pair : pairs) {
             int index1 = pair.get(0);
             int index2 = pair.get(1);
-            unionFindStrSwap.union(index1,index2);
+            unionFindStrSwap.union(index1, index2);
         }
         char[] charArray = s.toCharArray();
-        Map<Integer,PriorityQueue<Character>> hashMap = new HashMap<>(len);
-        for(int i = 0; i < len;i++){
+        Map<Integer, PriorityQueue<Character>> hashMap = new HashMap<>(len);
+        for (int i = 0; i < len; i++) {
             int root = unionFindStrSwap.find(i);
-            if(hashMap.containsKey(root)){
+            if (hashMap.containsKey(root)) {
                 hashMap.get(root).offer(charArray[i]);
-            }else{
-                hashMap.computeIfAbsent(root,key -> new PriorityQueue<>()).offer(charArray[i]);
+            } else {
+                hashMap.computeIfAbsent(root, key -> new PriorityQueue<>()).offer(charArray[i]);
             }
         }
 
         StringBuilder stringBuilder = new StringBuilder();
-        for(int i = 0; i < len; i++){
+        for (int i = 0; i < len; i++) {
             int root = unionFindStrSwap.find(i);
             stringBuilder.append(hashMap.get(root).poll());
         }
@@ -2302,54 +2354,57 @@ public class StringAlgorithm {
 
     /**
      * 839. 相似字符串组
-     *
+     * <p>
      * 如果交换字符串 X 中的两个不同位置的字母，使得它和字符串 Y 相等，那么称 X 和 Y 两个字符串相似。如果这两个字符串本身是相等的，那它们也是相似的。
-     *
+     * <p>
      * 例如，"tars" 和 "rats" 是相似的 (交换 0 与 2 的位置)； "rats" 和 "arts" 也是相似的，但是 "star" 不与 "tars"，"rats"，或 "arts" 相似。
-     *
+     * <p>
      * 总之，它们通过相似性形成了两个关联组：{"tars", "rats", "arts"} 和 {"star"}。注意，"tars" 和 "arts" 是在同一组中，即使它们并不相似。形式上，对每个组而言，要确定一个单词在组中，只需要这个词和该组中至少一个单词相似。
-     *
+     * <p>
      * 给你一个字符串列表 strs。列表中的每个字符串都是 strs 中其它所有字符串的一个字母异位词。请问 strs 中有多少个相似字符串组？
      *
      * @param strs
      * @return
      */
     int[] fNG;
+
     public int numSimilarGroups(String[] strs) {
         int n = strs.length;
         int m = strs[0].length();
         fNG = new int[n];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             fNG[i] = i;
         }
-        for(int i =0; i < n; i++){
-            for(int j = i + 1; j < n; j++){
+        for (int i = 0; i < n; i++) {
+            for (int j = i + 1; j < n; j++) {
                 int fi = findNG(i), fj = findNG(j);
-                if(fi == fj){
+                if (fi == fj) {
                     continue;
                 }
-                if(checkNG(strs[i],strs[j],m)){
+                if (checkNG(strs[i], strs[j], m)) {
                     fNG[fi] = fj;
                 }
             }
         }
         int ret = 0;
-        for(int i = 0; i < n; i++){
-            if(fNG[i] == i){
+        for (int i = 0; i < n; i++) {
+            if (fNG[i] == i) {
                 ret++;
             }
         }
         return ret;
     }
-    private int findNG(int x){
+
+    private int findNG(int x) {
         return fNG[x] == x ? x : (fNG[x] = findNG(fNG[x]));
     }
-    private boolean checkNG(String a,String b,int len){
+
+    private boolean checkNG(String a, String b, int len) {
         int num = 0;
-        for(int i = 0; i < len; i++){
-            if(a.charAt(i) != b.charAt(i)){
+        for (int i = 0; i < len; i++) {
+            if (a.charAt(i) != b.charAt(i)) {
                 num++;
-                if(num > 2){
+                if (num > 2) {
                     return false;
                 }
             }
@@ -2359,9 +2414,9 @@ public class StringAlgorithm {
 
     /**
      * 424. 替换后的最长重复字符
-     *
+     * <p>
      * 给你一个仅由大写英文字母组成的字符串，你可以将任意位置上的字符替换成另外的字符，总共可最多替换 k 次。在执行上述操作后，找到包含重复字母的最长子串的长度。
-     *
+     * <p>
      * 注意：字符串长度 和 k 不会超过 104。
      *
      * @param s
@@ -2369,17 +2424,17 @@ public class StringAlgorithm {
      * @return
      */
     public int characterReplacement(String s, int k) {
-        if(s == null || "".equals(s)){
+        if (s == null || "".equals(s)) {
             return 0;
         }
         int[] num = new int[26];
         int n = s.length();
         int maxn = 0;
-        int left = 0,right = 0;
-        while(right < n){
-            num[s.charAt(right) - 'A'] ++;
-            maxn = Math.max(maxn,num[s.charAt(right) - 'A']);
-            if(right - left + 1 - maxn > k){
+        int left = 0, right = 0;
+        while (right < n) {
+            num[s.charAt(right) - 'A']++;
+            maxn = Math.max(maxn, num[s.charAt(right) - 'A']);
+            if (right - left + 1 - maxn > k) {
                 num[s.charAt(left) - 'A']--;
                 left++;
             }
@@ -2390,15 +2445,15 @@ public class StringAlgorithm {
 
     /**
      * 1208. 尽可能使字符串相等
-     *
+     * <p>
      * 给你两个长度相同的字符串，s 和 t。
-     *
+     * <p>
      * 将 s 中的第 i 个字符变到 t 中的第 i 个字符需要 |s[i] - t[i]| 的开销（开销可能为 0），也就是两个字符的 ASCII 码值的差的绝对值。
-     *
+     * <p>
      * 用于变更字符串的最大预算是 maxCost。在转化字符串时，总开销应当小于等于该预算，这也意味着字符串的转化可能是不完全的。
-     *
+     * <p>
      * 如果你可以将 s 的子字符串转化为它在 t 中对应的子字符串，则返回可以转化的最大长度。
-     *
+     * <p>
      * 如果 s 中没有子字符串可以转化成 t 中对应的子字符串，则返回 0。
      *
      * @param s
@@ -2409,24 +2464,24 @@ public class StringAlgorithm {
     public int equalSubstring(String s, String t, int maxCost) {
         int n = s.length();
         int[] accDiff = new int[n + 1];
-        for(int i = 0; i < n; i++){
+        for (int i = 0; i < n; i++) {
             accDiff[i + 1] = accDiff[i] + Math.abs(s.charAt(i) - t.charAt(i));
         }
         int maxLength = 0;
-        for(int i = 1 ; i <= n;i++){
-            int start = binarySearchES(accDiff,i,accDiff[i] - maxCost);
-            maxLength = Math.max(maxLength,i - start);
+        for (int i = 1; i <= n; i++) {
+            int start = binarySearchES(accDiff, i, accDiff[i] - maxCost);
+            maxLength = Math.max(maxLength, i - start);
         }
         return maxLength;
     }
 
-    private int binarySearchES(int[] accDiff,int endIndex,int target){
-        int low = 0,high = endIndex;
-        while (low < high){
-            int mid = (high - low)/2 + low;
-            if(accDiff[mid] < target){
+    private int binarySearchES(int[] accDiff, int endIndex, int target) {
+        int low = 0, high = endIndex;
+        while (low < high) {
+            int mid = (high - low) / 2 + low;
+            if (accDiff[mid] < target) {
                 low = mid + 1;
-            }else{
+            } else {
                 high = mid;
             }
         }
@@ -2435,13 +2490,13 @@ public class StringAlgorithm {
 
     /**
      * 1423. 可获得的最大点数
-     *
+     * <p>
      * 几张卡牌 排成一行，每张卡牌都有一个对应的点数。点数由整数数组 cardPoints 给出。
-     *
+     * <p>
      * 每次行动，你可以从行的开头或者末尾拿一张卡牌，最终你必须正好拿 k 张卡牌。
-     *
+     * <p>
      * 你的点数就是你拿到手中的所有卡牌的点数之和。
-     *
+     * <p>
      * 给你一个整数数组 cardPoints 和整数 k，请你返回可以获得的最大点数。
      *
      * @param cardPoints
@@ -2452,20 +2507,20 @@ public class StringAlgorithm {
         int n = cardPoints.length;
         int windowSize = n - k;
         int sum = 0;
-        for(int i = 0; i < windowSize; i++){
+        for (int i = 0; i < windowSize; i++) {
             sum += cardPoints[i];
         }
         int minSum = sum;
-        for(int i = windowSize; i < n; i++){
+        for (int i = windowSize; i < n; i++) {
             sum += cardPoints[i] - cardPoints[i - windowSize];
-            minSum = Math.min(minSum,sum);
+            minSum = Math.min(minSum, sum);
         }
         return Arrays.stream(cardPoints).sum() - minSum;
     }
 
     /**
      * 395. 至少有 K 个重复字符的最长子串
-     *
+     * <p>
      * 给你一个字符串 s 和一个整数 k ，请你找出 s 中的最长子串， 要求该子串中的每一字符出现次数都不少于 k 。返回这一子串的长度。
      *
      * @param s
@@ -2474,39 +2529,39 @@ public class StringAlgorithm {
      */
     public int longestSubstring(String s, int k) {
         int n = s.length();
-        return dfsLS(s,0,n-1,k);
+        return dfsLS(s, 0, n - 1, k);
     }
 
-    private int dfsLS(String s,int l,int r,int k){
+    private int dfsLS(String s, int l, int r, int k) {
         int[] cnt = new int[26];
-        for(int i = l; i <= r; i++){
+        for (int i = l; i <= r; i++) {
             cnt[s.charAt(i) - 'a']++;
         }
         char split = 0;
-        for(int i = 0; i < 26; i++){
-            if(cnt[i] > 0 && cnt[i] < k){
-                split = (char)(i + 'a');
+        for (int i = 0; i < 26; i++) {
+            if (cnt[i] > 0 && cnt[i] < k) {
+                split = (char) (i + 'a');
                 break;
             }
         }
-        if(split == 0){
+        if (split == 0) {
             return r - l + 1;
         }
         int i = l;
         int ret = 0;
-        while (i <= r){
-            while (i <= r && s.charAt(i) == split){
+        while (i <= r) {
+            while (i <= r && s.charAt(i) == split) {
                 i++;
             }
-            if(i > r){
+            if (i > r) {
                 break;
             }
             int start = i;
-            while (i <= r && s.charAt(i) != split){
+            while (i <= r && s.charAt(i) != split) {
                 i++;
             }
-            int length = dfsLS(s,start,i-1,k);
-            ret = Math.max(ret,length);
+            int length = dfsLS(s, start, i - 1, k);
+            ret = Math.max(ret, length);
         }
         return ret;
     }
@@ -2514,9 +2569,9 @@ public class StringAlgorithm {
 
     /**
      * 131. 分割回文串
-     *
+     * <p>
      * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是 回文串 。返回 s 所有可能的分割方案。
-     *
+     * <p>
      * 回文串 是正着读和反着读都一样的字符串。
      *
      * @param s
@@ -2526,35 +2581,37 @@ public class StringAlgorithm {
     List<List<String>> retPartition = new ArrayList<>();
     List<String> ansPartition = new ArrayList<>();
     int nPartition;
+
     public List<List<String>> partition(String s) {
         nPartition = s.length();
         fPartition = new int[nPartition][nPartition];
-        dfsPartition(s,0);
+        dfsPartition(s, 0);
         return retPartition;
     }
 
-    private void dfsPartition(String s,int i){
-        if(i==nPartition){
+    private void dfsPartition(String s, int i) {
+        if (i == nPartition) {
             retPartition.add(new ArrayList<>(ansPartition));
             return;
         }
-        for(int j = i; j < nPartition;j++){
-            if(isPalindromePartition(s,i,j) == 1){
-                ansPartition.add(s.substring(i,j+1));
-                dfsPartition(s,j+1);
+        for (int j = i; j < nPartition; j++) {
+            if (isPalindromePartition(s, i, j) == 1) {
+                ansPartition.add(s.substring(i, j + 1));
+                dfsPartition(s, j + 1);
                 ansPartition.remove(ansPartition.size() - 1);
             }
         }
     }
-    private int isPalindromePartition(String s,int i,int j){
-        if(fPartition[i][j] !=0){
+
+    private int isPalindromePartition(String s, int i, int j) {
+        if (fPartition[i][j] != 0) {
             return fPartition[i][j];
         }
-        if(i >= j){
+        if (i >= j) {
             fPartition[i][j] = 1;
-        }else if(s.charAt(i) == s.charAt(j)){
-            fPartition[i][j] = isPalindromePartition(s,i + 1,j - 1);
-        }else{
+        } else if (s.charAt(i) == s.charAt(j)) {
+            fPartition[i][j] = isPalindromePartition(s, i + 1, j - 1);
+        } else {
             fPartition[i][j] = -1;
         }
         return fPartition[i][j];
@@ -2562,37 +2619,37 @@ public class StringAlgorithm {
 
     /**
      * 132. 分割回文串 II
-     *
+     * <p>
      * 给你一个字符串 s，请你将 s 分割成一些子串，使每个子串都是回文。
-     *
+     * <p>
      * 返回符合要求的 最少分割次数 。
      *
      * @param s
      * @return
      */
     public int minCut(String s) {
-        if(s == null || s.length() == 0){
+        if (s == null || s.length() == 0) {
             return 0;
         }
         int n = s.length();
-        boolean[][] g = new  boolean[n][n];
-        for(int i = 0; i < n; i++){
-            Arrays.fill(g[i],true);
+        boolean[][] g = new boolean[n][n];
+        for (int i = 0; i < n; i++) {
+            Arrays.fill(g[i], true);
         }
-        for(int i = n - 1; i>= 0; i--){
-            for(int j = i + 1; j < n;j++){
+        for (int i = n - 1; i >= 0; i--) {
+            for (int j = i + 1; j < n; j++) {
                 g[i][j] = s.charAt(i) == s.charAt(j) && g[i + 1][j - 1];
             }
         }
         int[] f = new int[n];
-        Arrays.fill(f,Integer.MAX_VALUE);
-        for(int i = 0; i < n; i++){
-            if(g[0][i]){
+        Arrays.fill(f, Integer.MAX_VALUE);
+        for (int i = 0; i < n; i++) {
+            if (g[0][i]) {
                 f[i] = 0;
-            }else{
-                for(int j = 0; j < i;j++){
-                    if(g[j + 1][i]){
-                        f[i] = Math.min(f[i],f[j] + 1);
+            } else {
+                for (int j = 0; j < i; j++) {
+                    if (g[j + 1][i]) {
+                        f[i] = Math.min(f[i], f[j] + 1);
                     }
                 }
             }
@@ -2602,11 +2659,11 @@ public class StringAlgorithm {
 
     /**
      * 1047. 删除字符串中的所有相邻重复项
-     *
+     * <p>
      * 给出由小写字母组成的字符串 S，重复项删除操作会选择两个相邻且相同的字母，并删除它们。
-     *
+     * <p>
      * 在 S 上反复执行重复项删除操作，直到无法继续删除。
-     *
+     * <p>
      * 在完成所有重复项删除操作后返回最终的字符串。答案保证唯一。
      *
      * @param S
@@ -2615,12 +2672,12 @@ public class StringAlgorithm {
     public String removeDuplicates(String S) {
         StringBuffer stack = new StringBuffer();
         int top = -1;
-        for(int i = 0; i < S.length(); i++){
+        for (int i = 0; i < S.length(); i++) {
             char ch = S.charAt(i);
-            if(top >= 0 && stack.charAt(top) == ch){
+            if (top >= 0 && stack.charAt(top) == ch) {
                 stack.deleteCharAt(top);
                 --top;
-            }else{
+            } else {
                 stack.append(ch);
                 ++top;
             }
@@ -2630,11 +2687,11 @@ public class StringAlgorithm {
 
     /**
      * 115. 不同的子序列
-     *
+     * <p>
      * 给定一个字符串 s 和一个字符串 t ，计算在 s 的子序列中 t 出现的个数。
-     *
+     * <p>
      * 字符串的一个 子序列 是指，通过删除一些（也可以不删除）字符且不干扰剩余字符相对位置所组成的新字符串。（例如，"ACE" 是 "ABCDE" 的一个子序列，而 "AEC" 不是）
-     *
+     * <p>
      * 题目数据保证答案符合 32 位带符号整数范围。
      *
      * @param s
@@ -2642,28 +2699,245 @@ public class StringAlgorithm {
      * @return
      */
     public int numDistinct(String s, String t) {
-        if(s == null || t == null){
+        if (s == null || t == null) {
             return 0;
         }
         int m = s.length(), n = t.length();
-        if(m < n){
+        if (m < n) {
             return 0;
         }
         int[][] dp = new int[m + 1][n + 1];
-        for(int i = 0; i <= m; i++){
+        for (int i = 0; i <= m; i++) {
             dp[i][n] = 1;
         }
-        for(int i = m - 1; i >= 0;i--){
+        for (int i = m - 1; i >= 0; i--) {
             char sChar = s.charAt(i);
-            for(int j = n - 1; j >= 0;j--){
+            for (int j = n - 1; j >= 0; j--) {
                 char tChar = t.charAt(j);
-                if(sChar == tChar){
+                if (sChar == tChar) {
                     dp[i][j] = dp[i + 1][j + 1] + dp[i + 1][j];
-                }else{
+                } else {
                     dp[i][j] = dp[i + 1][j];
                 }
             }
         }
         return dp[0][0];
+    }
+
+    /**
+     * 1143. 最长公共子序列
+     * <p>
+     * 给定两个字符串 text1 和 text2，返回这两个字符串的最长 公共子序列 的长度。如果不存在 公共子序列 ，返回 0 。
+     * 一个字符串的 子序列 是指这样一个新的字符串：它是由原字符串在不改变字符的相对顺序的情况下删除某些字符（也可以不删除任何字符）后组成的新字符串。
+     * 例如，"ace" 是 "abcde" 的子序列，但 "aec" 不是 "abcde" 的子序列。
+     * 两个字符串的 公共子序列 是这两个字符串所共同拥有的子序列。
+     *
+     * @param text1
+     * @param text2
+     * @return
+     */
+    public int longestCommonSubsequence(String text1, String text2) {
+        if (text1 == null || text2 == null) {
+            return 0;
+        }
+        int m = text1.length(), n = text2.length();
+        int[][] dp = new int[m + 1][n + 1];
+        for (int i = 1; i <= m; i++) {
+            char c1 = text1.charAt(i - 1);
+            for (int j = 1; j <= n; j++) {
+                char c2 = text2.charAt(j - 1);
+                if (c1 == c2) {
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                } else {
+                    dp[i][j] = Math.max(dp[i - 1][j], dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+    /**
+     * 87. 扰乱字符串
+     * <p>
+     * 使用下面描述的算法可以扰乱字符串 s 得到字符串 t ：
+     * 如果字符串的长度为 1 ，算法停止
+     * 如果字符串的长度 > 1 ，执行下述步骤：
+     * 在一个随机下标处将字符串分割成两个非空的子字符串。即，如果已知字符串 s ，则可以将其分成两个子字符串 x 和 y ，且满足 s = x + y 。
+     * 随机 决定是要「交换两个子字符串」还是要「保持这两个子字符串的顺序不变」。即，在执行这一步骤之后，s 可能是 s = x + y 或者 s = y + x 。
+     * 在 x 和 y 这两个子字符串上继续从步骤 1 开始递归执行此算法。
+     * 给你两个 长度相等 的字符串 s1 和 s2，判断 s2 是否是 s1 的扰乱字符串。如果是，返回 true ；否则，返回 false 。
+     *
+     * @param s1
+     * @param s2
+     * @return
+     */
+    int[][][] memoIS;
+    String s1IS, s2IS;
+
+    public boolean isScramble(String s1, String s2) {
+        int length = s1.length();
+        this.memoIS = new int[length][length][length + 1];
+        this.s1IS = s1;
+        this.s2IS = s2;
+        return dfsIS(0, 0, length);
+    }
+
+    private boolean dfsIS(int i1, int i2, int length) {
+        if (memoIS[i1][i2][length] != 0) {
+            return memoIS[i1][i2][length] == 1;
+        }
+        if (s1IS.substring(i1, i1 + length).equals(s2IS.substring(i2, i2 + length))) {
+            memoIS[i1][i2][length] = -1;
+            return true;
+        }
+        if (!checkIfSimilarIS(i1, i2, length)) {
+            memoIS[i1][i2][length] = -1;
+            return false;
+        }
+
+        // 枚举分割位置
+        for (int i = 1; i < length; ++i) {
+            // 不交换的情况
+            if (dfsIS(i1, i2, i) && dfsIS(i1 + i, i2 + i, length - i)) {
+                memoIS[i1][i2][length] = 1;
+                return true;
+            }
+            // 交换的情况
+            if (dfsIS(i1, i2 + length - i, i) && dfsIS(i1 + i, i2, length - i)) {
+                memoIS[i1][i2][length] = 1;
+                return true;
+            }
+        }
+
+        memoIS[i1][i2][length] = -1;
+        return false;
+    }
+
+    private boolean checkIfSimilarIS(int i1, int i2, int length) {
+        Map<Character, Integer> freq = new HashMap<Character, Integer>();
+        for (int i = i1; i < i1 + length; ++i) {
+            char c = s1IS.charAt(i);
+            freq.put(c, freq.getOrDefault(c, 0) + 1);
+        }
+        for (int i = i2; i < i2 + length; ++i) {
+            char c = s2IS.charAt(i);
+            freq.put(c, freq.getOrDefault(c, 0) - 1);
+        }
+        for (Map.Entry<Character, Integer> entry : freq.entrySet()) {
+            int value = entry.getValue();
+            if (value != 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * 26. 删除有序数组中的重复项
+     * <p>
+     * 给你一个有序数组 nums ，请你 原地 删除重复出现的元素，使每个元素 只出现一次 ，返回删除后数组的新长度。
+     * <p>
+     * 不要使用额外的数组空间，你必须在 原地 修改输入数组 并在使用 O(1) 额外空间的条件下完成。
+     *
+     * @param nums
+     * @return
+     */
+    public int removeDuplicates(int[] nums) {
+        int n = nums.length;
+        if (n == 0) {
+            return 0;
+        }
+        int fast = 1, slow = 1;
+        while (fast < n) {
+            if (nums[fast] != nums[fast - 1]) {
+                nums[slow] = nums[fast];
+                slow++;
+            }
+            fast++;
+        }
+        return slow;
+    }
+
+    /**
+     * 28. 实现 strStr()
+     *
+     * 实现 strStr() 函数。
+     *
+     * 给你两个字符串 haystack 和 needle ，请你在 haystack 字符串中找出 needle 字符串出现的第一个位置（下标从 0 开始）。如果不存在，则返回  -1 。
+     *
+     * @param haystack
+     * @param needle
+     * @return
+     */
+    public int strStr(String haystack, String needle) {
+        if(haystack == null || needle == null){
+            return -1;
+        }
+        int n = haystack.length(), m = needle.length();
+        if(m == 0){
+            return 0;
+        }
+        int[] pi = new int[m];
+        for(int i = 1,j = 0; i < m; i++){
+            while (j > 0 && needle.charAt(i) != needle.charAt(j)){
+                j = pi[j-1];
+            }
+            if(needle.charAt(i) == needle.charAt(j)){
+                j++;
+            }
+            pi[i] = j;
+        }
+        for(int i = 0,j = 0; i < n; i++){
+            while (j > 0 && haystack.charAt(i) != needle.charAt(j)){
+                j = pi[j - 1];
+            }
+            if(haystack.charAt(i) == needle.charAt(j)){
+                j++;
+            }
+            if(j == m){
+                return i - m + 1;
+            }
+        }
+        return -1;
+    }
+
+    /**
+     * 91. 解码方法
+     *
+     * 一条包含字母 A-Z 的消息通过以下映射进行了 编码 ：
+     *
+     * 'A' -> 1
+     * 'B' -> 2
+     * ...
+     * 'Z' -> 26
+     * 要 解码 已编码的消息，所有数字必须基于上述映射的方法，反向映射回字母（可能有多种方法）。例如，"11106" 可以映射为：
+     *
+     * "AAJF" ，将消息分组为 (1 1 10 6)
+     * "KJF" ，将消息分组为 (11 10 6)
+     * 注意，消息不能分组为  (1 11 06) ，因为 "06" 不能映射为 "F" ，这是由于 "6" 和 "06" 在映射中并不等价。
+     *
+     * 给你一个只含数字的 非空 字符串 s ，请计算并返回 解码 方法的 总数 。
+     *
+     * 题目数据保证答案肯定是一个 32 位 的整数。
+     *
+     * @param s
+     * @return
+     */
+    public int numDecodings(String s) {
+        if(s == null){
+            return 0;
+        }
+        int n = s.length();
+        int[] f = new int[n + 1];
+        f[0] = 1;
+        for(int i = 1; i <= n;i++){
+            if(s.charAt(i - 1) != '0'){
+                f[i] += f[i - 1];
+            }
+            if (i > 1 && s.charAt(i - 2) != '0' && ((s.charAt(i - 2) - '0') * 10 + (s.charAt(i - 1) - '0') <= 26)) {
+                f[i] += f[i - 2];
+            }
+        }
+        return f[n];
     }
 }
