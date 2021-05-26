@@ -4540,4 +4540,526 @@ public class VariousAlgorithm {
         }
         return false;
     }
+
+    /**
+     * 403. 青蛙过河
+     *
+     * 一只青蛙想要过河。 假定河流被等分为若干个单元格，并且在每一个单元格内都有可能放有一块石子（也有可能没有）。 青蛙可以跳上石子，但是不可以跳入水中。
+     *
+     * 给你石子的位置列表 stones（用单元格序号 升序 表示）， 请判定青蛙能否成功过河（即能否在最后一步跳至最后一块石子上）。
+     *
+     * 开始时， 青蛙默认已站在第一块石子上，并可以假定它第一步只能跳跃一个单位（即只能从单元格 1 跳至单元格 2 ）。
+     *
+     * 如果青蛙上一步跳跃了 k 个单位，那么它接下来的跳跃距离只能选择为 k - 1、k 或 k + 1 个单位。 另请注意，青蛙只能向前方（终点的方向）跳跃。
+     *
+     * @param stones
+     * @return
+     */
+    private Boolean[][] recCC;
+    public boolean canCross(int[] stones) {
+        int n = stones.length;
+        recCC = new Boolean[n][n];
+        return dfsCC(stones,0,0);
+    }
+    private boolean dfsCC(int[] stones,int i,int lastDis){
+        if(i == stones.length - 1){
+            return true;
+        }
+        if(recCC[i][lastDis] != null){
+            return recCC[i][lastDis];
+        }
+        for(int curDis = lastDis - 1; curDis <= lastDis + 1; curDis++){
+            if(curDis > 0){
+                int j = Arrays.binarySearch(stones,i + 1,stones.length,curDis + stones[i]);
+                if(j >= 0 && dfsCC(stones,j,curDis)){
+                    return recCC[i][lastDis] = true;
+                }
+            }
+        }
+        return recCC[i][lastDis] = false;
+    }
+
+    /**
+     * 137. 只出现一次的数字 II
+     *
+     * 给你一个整数数组 nums ，除某个元素仅出现 一次 外，其余每个元素都恰出现 三次 。请你找出并返回那个只出现了一次的元素。
+     *
+     * @param nums
+     * @return
+     */
+    public int singleNumber(int[] nums) {
+        if(nums == null || nums.length == 0){
+            return 0;
+        }
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int num : nums){
+            map.put(num,map.getOrDefault(num,0) + 1);
+        }
+        for(Map.Entry<Integer,Integer> entry : map.entrySet()){
+            if(map.get(entry.getKey()) == 1){
+                return entry.getKey();
+            }
+        }
+        return 0;
+    }
+
+    /**
+     * 554. 砖墙
+     *
+     * 你的面前有一堵矩形的、由 n 行砖块组成的砖墙。这些砖块高度相同（也就是一个单位高）但是宽度不同。每一行砖块的宽度之和应该相等。
+     *
+     * 你现在要画一条 自顶向下 的、穿过 最少 砖块的垂线。如果你画的线只是从砖块的边缘经过，就不算穿过这块砖。你不能沿着墙的两个垂直边缘之一画线，这样显然是没有穿过一块砖的。
+     *
+     * 给你一个二维数组 wall ，该数组包含这堵墙的相关信息。其中，wall[i] 是一个代表从左至右每块砖的宽度的数组。你需要找出怎样画才能使这条线 穿过的砖块数量最少 ，并且返回 穿过的砖块数量 。
+     *
+     * @param wall
+     * @return
+     */
+    public int leastBricks(List<List<Integer>> wall) {
+        Map<Integer,Integer> map = new HashMap<>();
+        for(List<Integer> width:wall){
+            int n = width.size();
+            int sum = 0;
+            for(int i = 0; i < n - 1; i++){
+                sum += width.get(i);
+                map.put(sum,map.getOrDefault(sum,0) + 1);
+            }
+        }
+        int maxCnt = 0;
+        for(Map.Entry<Integer,Integer> entry : map.entrySet()){
+            maxCnt = Math.max(maxCnt,entry.getValue());
+        }
+        return wall.size() - maxCnt;
+    }
+
+    /**
+     * 7. 整数反转
+     *
+     * 给你一个 32 位的有符号整数 x ，返回将 x 中的数字部分反转后的结果。
+     *
+     * 如果反转后整数超过 32 位的有符号整数的范围 [−231,  231 − 1] ，就返回 0。
+     *
+     * 假设环境不允许存储 64 位整数（有符号或无符号）。
+     *
+     * @param x
+     * @return
+     */
+    public int reverse(int x) {
+        long result = 0;
+        boolean isPlus = true;
+        if(x < 0){
+            isPlus = false;
+            x = -x;
+        }
+        while (x > 0){
+            result = result * 10 + x % 10;
+            x /= 10;
+        }
+        if(isPlus && result <= Integer.MAX_VALUE){
+            return (int)result;
+        }else if(!isPlus && (-result >= Integer.MIN_VALUE)){
+            return (int)(-result);
+        }else{
+            return 0;
+        }
+    }
+
+    /**
+     * 1473. 粉刷房子 III
+     *
+     * 在一个小城市里，有 m 个房子排成一排，你需要给每个房子涂上 n 种颜色之一（颜色编号为 1 到 n ）。有的房子去年夏天已经涂过颜色了，所以这些房子不需要被重新涂色。
+     *
+     * 我们将连续相同颜色尽可能多的房子称为一个街区。（比方说 houses = [1,2,2,3,3,2,1,1] ，它包含 5 个街区  [{1}, {2,2}, {3,3}, {2}, {1,1}] 。）
+     *
+     * 给你一个数组 houses ，一个 m * n 的矩阵 cost 和一个整数 target ，其中：
+     *
+     * houses[i]：是第 i 个房子的颜色，0 表示这个房子还没有被涂色。
+     * cost[i][j]：是将第 i 个房子涂成颜色 j+1 的花费。
+     * 请你返回房子涂色方案的最小总花费，使得每个房子都被涂色后，恰好组成 target 个街区。如果没有可用的涂色方案，请返回 -1 。
+     *
+     * @param houses
+     * @param cost
+     * @param m
+     * @param n
+     * @param target
+     * @return
+     */
+    static final int INFTYMC = Integer.MAX_VALUE / 2;
+    public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
+// 将颜色调整为从 0 开始编号，没有被涂色标记为 -1
+        for (int i = 0; i < m; ++i) {
+            --houses[i];
+        }
+        // dp 所有元素初始化为极大值
+        int[][][] dp = new int[m][n][target];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                Arrays.fill(dp[i][j], INFTYMC);
+            }
+        }
+        int[][][] best = new int[m][target][3];
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < target; ++j) {
+                best[i][j][0] = best[i][j][2] = INFTYMC;
+                best[i][j][1] = -1;
+            }
+        }
+
+        for (int i = 0; i < m; ++i) {
+            for (int j = 0; j < n; ++j) {
+                if (houses[i] != -1 && houses[i] != j) {
+                    continue;
+                }
+
+                for (int k = 0; k < target; ++k) {
+                    if (i == 0) {
+                        if (k == 0) {
+                            dp[i][j][k] = 0;
+                        }
+                    } else {
+                        dp[i][j][k] = dp[i - 1][j][k];
+                        if (k > 0) {
+                            // 使用 best(i-1,k-1) 直接得到 dp(i,j,k) 的值
+                            int first = best[i - 1][k - 1][0];
+                            int firstIdx = best[i - 1][k - 1][1];
+                            int second = best[i - 1][k - 1][2];
+                            dp[i][j][k] = Math.min(dp[i][j][k], (j == firstIdx ? second : first));
+                        }
+                    }
+
+                    if (dp[i][j][k] != INFTYMC && houses[i] == -1) {
+                        dp[i][j][k] += cost[i][j];
+                    }
+
+                    // 用 dp(i,j,k) 更新 best(i,k)
+                    int first = best[i][k][0];
+                    int firstIdx = best[i][k][1];
+                    int second = best[i][k][2];
+                    if (dp[i][j][k] < first) {
+                        best[i][k][2] = first;
+                        best[i][k][0] = dp[i][j][k];
+                        best[i][k][1] = j;
+                    } else if (dp[i][j][k] < second) {
+                        best[i][k][2] = dp[i][j][k];
+                    }
+                }
+            }
+        }
+
+        int ans = INFTYMC;
+        for (int j = 0; j < n; ++j) {
+            ans = Math.min(ans, dp[m - 1][j][target - 1]);
+        }
+        return ans == INFTYMC ? -1 : ans;
+    }
+
+    /**
+     * 1720. 解码异或后的数组
+     *
+     * 未知 整数数组 arr 由 n 个非负整数组成。
+     *
+     * 经编码后变为长度为 n - 1 的另一个整数数组 encoded ，其中 encoded[i] = arr[i] XOR arr[i + 1] 。例如，arr = [1,0,2,1] 经编码后得到 encoded = [1,2,3] 。
+     *
+     * 给你编码后的数组 encoded 和原数组 arr 的第一个元素 first（arr[0]）。
+     *
+     * 请解码返回原数组 arr 。可以证明答案存在并且是唯一的。
+     *
+     * @param encoded
+     * @param first
+     * @return
+     */
+    public int[] decode(int[] encoded, int first) {
+        if(encoded == null || encoded.length == 0){
+            return null;
+        }
+        int n = encoded.length + 1;
+        int[] arr = new int[n];
+        arr[0] = first;
+        for(int i = 1; i < n; i++){
+            arr[i] = arr[i - 1] ^ encoded[i - 1];
+        }
+        return arr;
+    }
+
+    /**
+     * 1482. 制作 m 束花所需的最少天数
+     *
+     * 给你一个整数数组 bloomDay，以及两个整数 m 和 k 。
+     *
+     * 现需要制作 m 束花。制作花束时，需要使用花园中 相邻的 k 朵花 。
+     *
+     * 花园中有 n 朵花，第 i 朵花会在 bloomDay[i] 时盛开，恰好 可以用于 一束 花中。
+     *
+     * 请你返回从花园中摘 m 束花需要等待的最少的天数。如果不能摘到 m 束花则返回 -1 。
+     *
+     * @param bloomDay
+     * @param m
+     * @param k
+     * @return
+     */
+    public int minDays(int[] bloomDay, int m, int k) {
+        if (m > bloomDay.length / k) {
+            return -1;
+        }
+        int low = Integer.MAX_VALUE, high = 0;
+        int length = bloomDay.length;
+        for (int i = 0; i < length; i++) {
+            low = Math.min(low, bloomDay[i]);
+            high = Math.max(high, bloomDay[i]);
+        }
+        while (low < high) {
+            int days = (high - low) / 2 + low;
+            if (canMakeMD(bloomDay, days, m, k)) {
+                high = days;
+            } else {
+                low = days + 1;
+            }
+        }
+        return low;
+    }
+
+    public boolean canMakeMD(int[] bloomDay, int days, int m, int k) {
+        int bouquets = 0;
+        int flowers = 0;
+        int length = bloomDay.length;
+        for (int i = 0; i < length && bouquets < m; i++) {
+            if (bloomDay[i] <= days) {
+                flowers++;
+                if (flowers == k) {
+                    bouquets++;
+                    flowers = 0;
+                }
+            } else {
+                flowers = 0;
+            }
+        }
+        return bouquets >= m;
+    }
+
+    /**
+     * 872. 叶子相似的树
+     *
+     * 请考虑一棵二叉树上所有的叶子，这些叶子的值按从左到右的顺序排列形成一个 叶值序列 。
+     *
+     * 举个例子，如上图所示，给定一棵叶值序列为 (6, 7, 4, 9, 8) 的树。
+     *
+     * 如果有两棵二叉树的叶值序列是相同，那么我们就认为它们是 叶相似 的。
+     *
+     * 如果给定的两个根结点分别为 root1 和 root2 的树是叶相似的，则返回 true；否则返回 false 。
+     *
+     * @param root1
+     * @param root2
+     * @return
+     */
+    public boolean leafSimilar(TreeNode root1, TreeNode root2) {
+        List<Integer> seq1 = new ArrayList<>();
+        if(root1 != null){
+            dfsLS(root1,seq1);
+        }
+        List<Integer> seq2 = new ArrayList<>();
+        if(root2 != null){
+            dfsLS(root2,seq2);
+        }
+        return seq1.equals(seq2);
+    }
+
+    private void dfsLS(TreeNode node,List<Integer> seq){
+        if(node.left == null && node.right == null){
+            seq.add(node.val);
+        }else{
+            if(node.left != null){
+                dfsLS(node.left,seq);
+            }
+            if(node.right != null){
+                dfsLS(node.right,seq);
+            }
+        }
+    }
+
+    /**
+     * 1734. 解码异或后的排列
+     * 给你一个整数数组 perm ，它是前 n 个正整数的排列，且 n 是个 奇数 。
+     *
+     * 它被加密成另一个长度为 n - 1 的整数数组 encoded ，满足 encoded[i] = perm[i] XOR perm[i + 1] 。比方说，如果 perm = [1,3,2] ，那么 encoded = [2,1] 。
+     *
+     * 给你 encoded 数组，请你返回原始数组 perm 。题目保证答案存在且唯一。
+     * @param encoded
+     * @return
+     */
+    public int[] decode(int[] encoded) {
+        int n = encoded.length + 1;
+        int total = 0;
+        for(int i = 1; i <= n; i++){
+            total ^= i;
+        }
+        int odd = 0;
+        for(int i = 1; i < n - 1; i += 2){
+            odd ^= encoded[i];
+        }
+        int[] perm = new int[n];
+        perm[0] = total ^ odd;
+        for(int i = 0; i < n - 1; i++){
+            perm[i + 1] = perm[i] ^ encoded[i];
+        }
+        return perm;
+    }
+
+    /**
+     * 1738. 找出第 K 大的异或坐标值
+     *
+     * 给你一个二维矩阵 matrix 和一个整数 k ，矩阵大小为 m x n 由非负整数组成。
+     *
+     * 矩阵中坐标 (a, b) 的 值 可由对所有满足 0 <= i <= a < m 且 0 <= j <= b < n 的元素 matrix[i][j]（下标从 0 开始计数）执行异或运算得到。
+     *
+     * 请你找出 matrix 的所有坐标中第 k 大的值（k 的值从 1 开始计数）。
+     *
+     * @param matrix
+     * @param k
+     * @return
+     */
+    public int kthLargestValue(int[][] matrix, int k) {
+        int m = matrix.length, n = matrix[0].length;
+        int[][] pre = new int[m + 1][n + 1];
+        List<Integer> results = new ArrayList<>();
+        for(int i = 1 ; i <= m; i++){
+            for(int j = 1; j <= n; j++){
+                pre[i][j] = pre[i - 1][j] ^ pre[i][j - 1] ^ pre[i - 1][j - 1] ^ matrix[i - 1][j - 1];
+                results.add(pre[i][j]);
+            }
+        }
+        Collections.sort(results, new Comparator<Integer>() {
+            @Override
+            public int compare(Integer num1, Integer num2) {
+                return num2 - num1;
+            }
+        });
+        return results.get(k - 1);
+    }
+
+    /**
+     * 692. 前K个高频单词
+     *
+     * 给一非空的单词列表，返回前 k 个出现次数最多的单词。
+     *
+     * 返回的答案应该按单词出现频率由高到低排序。如果不同的单词有相同出现频率，按字母顺序排序。
+     *
+     * @param words
+     * @param k
+     * @return
+     */
+    public List<String> topKFrequent(String[] words, int k) {
+        Map<String,Integer> cnt = new HashMap<>();
+        for(String word:words){
+            cnt.put(word,cnt.getOrDefault(word,0) + 1);
+        }
+        List<String> rec = new ArrayList<>();
+        for(Map.Entry<String,Integer>entry : cnt.entrySet()){
+            rec.add(entry.getKey());
+        }
+        Collections.sort(rec, new Comparator<String>() {
+            @Override
+            public int compare(String o1, String o2) {
+                return cnt.get(o1).equals(cnt.get(o2)) ? o1.compareTo(o2):cnt.get(o2) - cnt.get(o1);
+            }
+        });
+        return rec.subList(0,k);
+    }
+
+    /**
+     * 1035. 不相交的线
+     *
+     * 在两条独立的水平线上按给定的顺序写下 nums1 和 nums2 中的整数。
+     *
+     * 现在，可以绘制一些连接两个数字 nums1[i] 和 nums2[j] 的直线，这些直线需要同时满足满足：
+     *
+     *  nums1[i] == nums2[j]
+     * 且绘制的直线不与任何其他连线（非水平线）相交。
+     * 请注意，连线即使在端点也不能相交：每个数字只能属于一条连线。
+     *
+     * 以这种方法绘制线条，并返回可以绘制的最大连线数。
+     *
+     * @param nums1
+     * @param nums2
+     * @return
+     */
+    public int maxUncrossedLines(int[] nums1, int[] nums2) {
+        int m = nums1.length,n = nums2.length;
+        int[][] dp = new int[m + 1][n + 1];
+        for(int i = 1; i <= m;i++){
+            int num1 = nums1[i - 1];
+            for(int j = 1; j <= n; j++){
+                int num2 = nums2[j - 1];
+                if(num1 == num2){
+                    dp[i][j] = dp[i - 1][j - 1] + 1;
+                }else {
+                    dp[i][j] = Math.max(dp[i - 1][j],dp[i][j - 1]);
+                }
+            }
+        }
+        return dp[m][n];
+    }
+
+
+    /**
+     * 664. 奇怪的打印机
+     * 有台奇怪的打印机有以下两个特殊要求：
+     *
+     * 打印机每次只能打印由 同一个字符 组成的序列。
+     * 每次可以在任意起始和结束位置打印新字符，并且会覆盖掉原来已有的字符。
+     * 给你一个字符串 s ，你的任务是计算这个打印机打印它需要的最少打印次数。
+     *
+     * @param s
+     * @return
+     */
+    public int strangePrinter(String s) {
+        int n = s.length();
+        int[][] f = new int[n][n];
+        for(int i = n - 1; i >= 0;i--){
+            f[i][i] = 1;
+            for(int j = i + 1; j < n; j++){
+                if(s.charAt(i) == s.charAt(j)){
+                    f[i][j] = f[i][j - 1];
+                }else{
+                    int minn = Integer.MAX_VALUE;
+                    for(int k = i; k < j;k++){
+                        minn = Math.min(minn,f[i][k] + f[k + 1][j]);
+                    }
+                    f[i][j] = minn;
+
+                }
+            }
+        }
+        return f[0][n - 1];
+    }
+
+
+    /**
+     * 1190. 反转每对括号间的子串
+     *
+     * 给出一个字符串 s（仅含有小写英文字母和括号）。
+     *
+     * 请你按照从括号内到外的顺序，逐层反转每对匹配括号中的字符串，并返回最终的结果。
+     *
+     * 注意，您的结果中 不应 包含任何括号。
+     *
+     * @param s
+     * @return
+     */
+    public String reverseParentheses(String s) {
+        Deque<String> stack = new LinkedList<>();
+        StringBuffer sb = new StringBuffer();
+        for(int i = 0; i < s.length(); i++){
+            char ch = s.charAt(i);
+            if(ch == '('){
+                stack.push(sb.toString());
+                sb.setLength(0);
+            }else if(ch == ')'){
+                sb.reverse();
+                sb.insert(0,stack.pop());
+            }else{
+                sb.append(ch);
+            }
+        }
+        return sb.toString();
+    }
 }

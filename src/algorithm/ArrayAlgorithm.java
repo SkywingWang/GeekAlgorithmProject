@@ -4875,4 +4875,214 @@ public class ArrayAlgorithm {
         }
         return root.val + rangeSumBST(root.left,low,high) + rangeSumBST(root.right,low,high);
     }
+
+    /**
+     * 740. 删除并获得点数
+     *
+     * 给你一个整数数组 nums ，你可以对它进行一些操作。
+     *
+     * 每次操作中，选择任意一个 nums[i] ，删除它并获得 nums[i] 的点数。之后，你必须删除每个等于 nums[i] - 1 或 nums[i] + 1 的元素。
+     *
+     * 开始你拥有 0 个点数。返回你能通过这些操作获得的最大点数。
+     *
+     * @param nums
+     * @return
+     */
+    public int deleteAndEarn(int[] nums) {
+        int maxVal = 0;
+        for (int val : nums) {
+            maxVal = Math.max(maxVal, val);
+        }
+        int[] sum = new int[maxVal + 1];
+        for (int val : nums) {
+            sum[val] += val;
+        }
+        return robDAE(sum);
+    }
+
+    public int robDAE(int[] nums) {
+        int size = nums.length;
+        int first = nums[0], second = Math.max(nums[0], nums[1]);
+        for (int i = 2; i < size; i++) {
+            int temp = second;
+            second = Math.max(first + nums[i], second);
+            first = temp;
+        }
+        return second;
+    }
+
+    /**
+     * 1310. 子数组异或查询
+     *
+     * 有一个正整数数组arr，现给你一个对应的查询数组queries，其中queries[i] = [Li,Ri]。
+     *
+     * 对于每个查询i，请你计算从Li到Ri的XOR值（即arr[Li] xor arr[Li+1] xor ... xor arr[Ri]）作为本次查询的结果。
+     *
+     * 并返回一个包含给定查询queries所有结果的数组。
+     *
+     * @param arr
+     * @param queries
+     * @return
+     */
+    public int[] xorQueries(int[] arr, int[][] queries) {
+        int n = arr.length;
+        int[] xors = new int[n + 1];
+        for(int i = 0; i < n; i++){
+            xors[i + 1] = xors[i] ^ arr[i];
+        }
+        int m = queries.length;
+        int[] ans = new int[m];
+        for(int i = 0; i < m; i++){
+            ans[i] = xors[queries[i][0]] ^ xors[queries[i][1] + 1];
+        }
+        return ans;
+    }
+
+    /**
+     * 1269. 停在原地的方案数
+     *
+     * 有一个长度为arrLen的数组，开始有一个指针在索引0 处。
+     *
+     * 每一步操作中，你可以将指针向左或向右移动 1 步，或者停在原地（指针不能被移动到数组范围外）。
+     *
+     * 给你两个整数steps 和arrLen ，请你计算并返回：在恰好执行steps次操作以后，指针仍然指向索引0 处的方案数。
+     *
+     * 由于答案可能会很大，请返回方案数 模10^9 + 7 后的结果。
+     *
+     * @param steps
+     * @param arrLen
+     * @return
+     */
+    public int numWays(int steps, int arrLen) {
+        final int MODULO = 1000000007;
+        int maxColumn = Math.min(arrLen - 1, steps);
+        int[] dp = new int[maxColumn + 1];
+        dp[0] = 1;
+        for(int i = 1; i <= steps; i++){
+            int[] dpNext = new int[maxColumn + 1];
+            for(int j = 0; j <= maxColumn; j++){
+                dpNext[j] = dp[j];
+                if(j - 1 >= 0){
+                    dpNext[j] = (dpNext[j] + dp[j - 1]) % MODULO;
+                }
+                if(j + 1 <= maxColumn){
+                    dpNext[j] = (dpNext[j] + dp[j + 1]) % MODULO;
+                }
+            }
+            dp = dpNext;
+        }
+        return dp[0];
+    }
+
+    /**
+     * 421. 数组中两个数的最大异或值
+     *
+     * 给你一个整数数组 nums ，返回 nums[i] XOR nums[j] 的最大运算结果，其中 0 ≤ i ≤ j < n 。
+     *
+     * 进阶：你可以在 O(n) 的时间解决这个问题吗？
+     *
+     * @param nums
+     * @return
+     */
+    static final int HIGH_BIT_FMXOR = 30;
+    public int findMaximumXOR(int[] nums) {
+        int x = 0;
+        for (int k = HIGH_BIT_FMXOR; k >= 0; --k) {
+            Set<Integer> seen = new HashSet<Integer>();
+            // 将所有的 pre^k(a_j) 放入哈希表中
+            for (int num : nums) {
+                // 如果只想保留从最高位开始到第 k 个二进制位为止的部分
+                // 只需将其右移 k 位
+                seen.add(num >> k);
+            }
+
+            // 目前 x 包含从最高位开始到第 k+1 个二进制位为止的部分
+            // 我们将 x 的第 k 个二进制位置为 1，即为 x = x*2+1
+            int xNext = x * 2 + 1;
+            boolean found = false;
+
+            // 枚举 i
+            for (int num : nums) {
+                if (seen.contains(xNext ^ (num >> k))) {
+                    found = true;
+                    break;
+                }
+            }
+
+            if (found) {
+                x = xNext;
+            } else {
+                // 如果没有找到满足等式的 a_i 和 a_j，那么 x 的第 k 个二进制位只能为 0
+                // 即为 x = x*2
+                x = xNext - 1;
+            }
+        }
+        return x;
+    }
+
+    /**
+     * 1707. 与数组中元素的最大异或值
+     *
+     * 给你一个由非负整数组成的数组 nums 。另有一个查询数组 queries ，其中 queries[i] = [xi, mi] 。
+     *
+     * 第 i 个查询的答案是 xi 和任何 nums 数组中不超过 mi 的元素按位异或（XOR）得到的最大值。换句话说，答案是 max(nums[j] XOR xi) ，其中所有 j 均满足 nums[j] <= mi 。如果 nums 中的所有元素都大于 mi，最终答案就是 -1 。
+     *
+     * 返回一个整数数组 answer 作为查询的答案，其中 answer.length == queries.length 且 answer[i] 是第 i 个查询的答案。
+     *
+     * 来源：力扣（LeetCode）
+     * 链接：https://leetcode-cn.com/problems/maximum-xor-with-an-element-from-array
+     * 著作权归领扣网络所有。商业转载请联系官方授权，非商业转载请注明出处。
+     *
+     * @param nums
+     * @param queries
+     * @return
+     */
+    public int[] maximizeXor(int[] nums, int[][] queries) {
+        TrieMXO trie = new TrieMXO();
+        for (int val : nums) {
+            trie.insert(val);
+        }
+        int numQ = queries.length;
+        int[] ans = new int[numQ];
+        for (int i = 0; i < numQ; ++i) {
+            ans[i] = trie.getMaxXorWithLimit(queries[i][0], queries[i][1]);
+        }
+        return ans;
+    }
+
+    private class TrieMXO{
+        static final int L = 30;
+        TrieMXO[] children = new TrieMXO[2];
+        int min = Integer.MAX_VALUE;
+
+        public void insert(int val){
+            TrieMXO node = this;
+            node.min = Math.min(node.min,val);
+            for(int i = L - 1; i >= 0;i--){
+                int bit = (val >> i) & 1;
+                if (node.children[bit] == null) {
+                    node.children[bit] = new TrieMXO();
+                }
+                node = node.children[bit];
+                node.min = Math.min(node.min, val);
+            }
+        }
+        public int getMaxXorWithLimit(int val, int limit) {
+            TrieMXO node = this;
+            if (node.min > limit) {
+                return -1;
+            }
+            int ans = 0;
+            for (int i = L - 1; i >= 0; --i) {
+                int bit = (val >> i) & 1;
+                if (node.children[bit ^ 1] != null && node.children[bit ^ 1].min <= limit) {
+                    ans |= 1 << i;
+                    bit ^= 1;
+                }
+                node = node.children[bit];
+            }
+            return ans;
+        }
+
+    }
 }

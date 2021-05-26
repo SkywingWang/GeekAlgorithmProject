@@ -1625,4 +1625,98 @@ public class BinaryTreeAlgorithm {
         res.add(node.val);
         inorderIBST(node.right,res);
     }
+
+    /**
+     * 993. 二叉树的堂兄弟节点
+     *
+     * 在二叉树中，根节点位于深度 0 处，每个深度为 k 的节点的子节点位于深度 k+1 处。
+     *
+     * 如果二叉树的两个节点深度相同，但 父节点不同 ，则它们是一对堂兄弟节点。
+     *
+     * 我们给出了具有唯一值的二叉树的根节点 root ，以及树中两个不同节点的值 x 和 y 。
+     *
+     * 只有与值 x 和 y 对应的节点是堂兄弟节点时，才返回 true 。否则，返回 false。
+     *
+     * @param root
+     * @param x
+     * @param y
+     * @return
+     */
+    private int xIC;
+    private TreeNode xParentIC;
+    private int xDepthIC;
+    private boolean xFoundIC = false;
+
+    private int yIC;
+    private TreeNode yParentIC;
+    private int yDepthIC;
+    private boolean yFoundIC = false;
+    public boolean isCousins(TreeNode root, int x, int y) {
+        this.xIC = x;
+        this.yIC = y;
+        dfsIC(root,0,null);
+        return xDepthIC == yDepthIC && xParentIC != yParentIC;
+    }
+    private void dfsIC(TreeNode node,int depth, TreeNode parent){
+        if(node == null){
+            return;
+        }
+        if(node.val == xIC){
+            xParentIC = parent;
+            xDepthIC = depth;
+            xFoundIC = true;
+        }else if(node.val == yIC){
+            yParentIC = parent;
+            yDepthIC = depth;
+            yFoundIC = true;
+        }
+        if(xFoundIC && yFoundIC){
+            return;
+        }
+        dfsIC(node.left,depth + 1,node);
+        if(xFoundIC && yFoundIC){
+            return;
+        }
+        dfsIC(node.right,depth + 1,node);
+    }
+
+    public boolean isCousinsV2(TreeNode root,int x, int y){
+        this.xIC = x;
+        this.yIC = y;
+        Queue<TreeNode> nodeQueue = new LinkedList<>();
+        Queue<Integer> depthQueue = new LinkedList<>();
+        nodeQueue.offer(root);
+        depthQueue.offer(0);
+        updateIC(root,null,0);
+        while (!nodeQueue.isEmpty()){
+            TreeNode node =nodeQueue.poll();
+            int depth = depthQueue.poll();
+            if(node.left != null){
+                nodeQueue.offer(node.left);
+                depthQueue.offer(depth + 1);
+                updateIC(node.left,node,depth + 1);
+            }
+            if(node.right != null){
+                nodeQueue.offer(node.right);
+                depthQueue.offer(depth + 1);
+                updateIC(node.right,node,depth + 1);
+            }
+            if(xFoundIC && yFoundIC){
+                break;
+            }
+        }
+        return xDepthIC == yDepthIC && xParentIC != yParentIC;
+    }
+
+    private void updateIC(TreeNode node, TreeNode parent, int depth){
+        if(node.val == xIC){
+            xParentIC = parent;
+            xDepthIC = depth;
+            xFoundIC = true;
+        }else if(node.val == yIC){
+            yParentIC = parent;
+            yDepthIC = depth;
+            yFoundIC = true;
+        }
+    }
 }
