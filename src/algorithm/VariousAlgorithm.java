@@ -5062,4 +5062,94 @@ public class VariousAlgorithm {
         }
         return sb.toString();
     }
+
+    /**
+     * 461. 汉明距离
+     * 两个整数之间的汉明距离指的是这两个数字对应二进制位不同的位置的数目。
+     *
+     * 给出两个整数 x 和 y，计算它们之间的汉明距离。
+     *
+     * 注意：
+     * 0 ≤ x, y < 231.
+     *
+     * @param x
+     * @param y
+     * @return
+     */
+    public int hammingDistance(int x, int y) {
+        int s = x ^ y,ret = 0;
+        while (s != 0){
+            ret += s & 1;
+            s >>= 1;
+        }
+        return ret;
+    }
+
+    /**
+     * 1074. 元素和为目标值的子矩阵数量
+     * 给出矩阵 matrix 和目标值 target，返回元素总和等于目标值的非空子矩阵的数量。
+     *
+     * 子矩阵 x1, y1, x2, y2 是满足 x1 <= x <= x2 且 y1 <= y <= y2 的所有单元 matrix[x][y] 的集合。
+     *
+     * 如果 (x1, y1, x2, y2) 和 (x1', y1', x2', y2') 两个子矩阵中部分坐标不同（如：x1 != x1'），那么这两个子矩阵也不同。
+     *
+     * @param matrix
+     * @param target
+     * @return
+     */
+    public int numSubmatrixSumTarget(int[][] matrix, int target) {
+        int ans = 0;
+        int m = matrix.length, n = matrix[0].length;
+        for(int i = 0; i < m; i++){
+            int[] sum = new int[n];
+            for(int j = i; j < m; j++){
+                for(int c = 0; c < n;c++){
+                    sum[c] += matrix[j][c];
+                }
+                ans += subArraySumNSST(sum,target);
+            }
+        }
+        return ans;
+    }
+
+    private int subArraySumNSST(int[] nums,int k){
+        Map<Integer,Integer> map = new HashMap<>();
+        map.put(0,1);
+        int count = 0,pre = 0;
+        for(int x : nums){
+            pre += x;
+            if(map.containsKey(pre - k)){
+                count += map.get(pre-k);
+            }
+            map.put(pre,map.getOrDefault(pre,0) + 1);
+        }
+        return count;
+    }
+
+    /**
+     * 231. 2 的幂
+     *
+     * 给你一个整数 n，请你判断该整数是否是 2 的幂次方。如果是，返回 true ；否则，返回 false 。
+     *
+     * 如果存在一个整数 x 使得 n == 2x ，则认为 n 是 2 的幂次方。
+     *
+     * @param n
+     * @return
+     */
+    public boolean isPowerOfTwo(int n) {
+        return n > 0 && (n & (n - 1)) == 0;
+    }
+
+    /**
+     * 342. 4的幂
+     * 给定一个整数，写一个函数来判断它是否是 4 的幂次方。如果是，返回 true ；否则，返回 false 。
+     *
+     * 整数 n 是 4 的幂次方需满足：存在整数 x 使得 n == 4x
+     *
+     * @param n
+     * @return
+     */
+    public boolean isPowerOfFour(int n) {
+        return n > 0 && (n & (n-1)) == 0 && (n & 0xaaaaaaaa) == 0;
+    }
 }
